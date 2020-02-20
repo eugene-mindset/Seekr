@@ -25,6 +25,3 @@
 - [ ] Allow users to create a new item listing
 - [ ] Send item listing from client to server
 - [ ] Save item listing to database
-- [ ] Allow users to delete an item listing
-- [ ] Send delete request from client to server
-- [ ] Delete item listing from database
