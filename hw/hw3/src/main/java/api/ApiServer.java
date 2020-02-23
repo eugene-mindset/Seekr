@@ -109,18 +109,21 @@ public final class ApiServer {
       ctx.status(200);
     });
   }
-
   private static void postReviewForCourse(ReviewDao reviewDao) {
     // client adds a review for a course (given its id) using HTTP POST request
     app.post("/courses/:id/reviews", ctx -> {
       Review review = ctx.bodyAsClass(Review.class);
-
-      reviewDao.add(review);
-
-      ctx.json(review);
-      ctx.contentType("application/json");
-
-      ctx.status(201);
+      try {
+        if(review.getCourseId() != Integer.parseInt(ctx.pathParam("id"))) {
+          throw new ApiError("id mismatch", 400);
+        }
+        reviewDao.add(review);
+        ctx.json(review);
+        ctx.contentType("application/json");
+        ctx.status(201);
+      } catch (DaoException ex) {
+        throw new ApiError(ex.getMessage(), 500); // server internal error
+      }
     });
   }
 }
