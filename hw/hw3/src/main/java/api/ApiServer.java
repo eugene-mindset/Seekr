@@ -113,7 +113,14 @@ public final class ApiServer {
   private static void postReviewForCourse(ReviewDao reviewDao) {
     // client adds a review for a course (given its id) using HTTP POST request
     app.post("/courses/:id/reviews", ctx -> {
-      // TODO: implement me
+      Review review = ctx.bodyAsClass(Review.class);
+
+      reviewDao.add(review);
+
+      ctx.json(review);
+      ctx.contentType("application/json");
+
+      ctx.status(201);
     });
   }
 }
