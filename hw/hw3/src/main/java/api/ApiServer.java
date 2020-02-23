@@ -103,7 +103,6 @@ public final class ApiServer {
   private static void getReviewsForCourse(ReviewDao reviewDao) {
     // handle HTTP Get request to retrieve all reviews for a course
     app.get("/courses/:id/reviews", ctx -> {
-      // TODO: implement me
       List<Review> reviews = reviewDao.findByCourseId(Integer.parseInt(ctx.pathParam("id")));
       ctx.json(reviews);
       ctx.status(200);
