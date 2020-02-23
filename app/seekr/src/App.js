@@ -2,54 +2,61 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Header from './components/layout/Header';
-import Items from './components/Items';
-import AddItem from './components/AddItem';
+import Items from './components/item/Items';
+import AddItem from './components/item/AddItem';
 import About from './components/pages/About';
-import uuid from 'uuid';
+import axios from 'axios';
 
 import './App.css';
 
 class App extends Component {
   state = {
-    items: [
-      {
-        id: uuid.v4(),
-        name: 'Test',
-        found: false
-      },
-      {
-        id: uuid.v4(),
-        name: 'Test2',
-        found: false
-      },
+    items: []
+  }
 
-    ]
+  componentDidMount() {
+    axios.get('/items')
+      .then(res =>
+        this.setState({items: res.data})
+      );
   }
 
   // Toggle state vars
   // Arrow function vs using .bind() for props
   markFound = (id) => {
-    this.setState({ items: this.state.items.map(item => {
-      if(item.id === id){
-        item.found = !item.found
-      }
-      return item;
-    }) });
+    const item = this.state.items.filter(item => {return item.id === id})[0];
+    
+    axios.put(`/items/${id}`, {
+      name: item.name,
+      found: !item.found
+    }).then(res => 
+      this.setState({ items: 
+        this.state.items.map(item => {
+            if(item.id === id){
+              item.found = !item.found
+            }
+            return item;
+          }) 
+        })
+      );
   }
 
   deleteItem = (id) => {
       // ...spread operator to get list of items make a copy
       // filter out all tha arent the item to remove the item, this is only front end so non persisting
-      this.setState({ items: [...this.state.items.filter(item => item.id !== id)]  })
+      axios.delete(`/items/${id}`)
+        .then(res => this.setState({ items: [...this.state.items.filter
+          (item => item.id !== id)]  })
+        );
   }
 
   addItem = (name) => {
-    const newItem = {
-      id: uuid.v4(),
+    axios.post('/items', {
       name: name,
       found: false
-    }
-    this.setState({ items: [...this.state.items, newItem] })
+    }).then(res => 
+      this.setState({ items: [...this.state.items, res.data] })
+    );
   }
 
   render() {

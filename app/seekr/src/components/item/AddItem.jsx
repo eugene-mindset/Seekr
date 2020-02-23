@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import PropTypes from 'prop-types';
 export class AddItem extends Component {
     state = {
         name: ''
@@ -34,6 +34,10 @@ export class AddItem extends Component {
             </form>
         )
     }
+}
+
+AddItem.propTypes = {
+    addItem: PropTypes.func.isRequired
 }
 
 export default AddItem

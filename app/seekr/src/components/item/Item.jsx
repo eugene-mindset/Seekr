@@ -37,7 +37,9 @@ const btnStyle = {
 }
 
 Item.propTypes = {
-    item: PropTypes.object.isRequired
+    item: PropTypes.object.isRequired,
+    markFound: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired
 }
 
 export default Item
