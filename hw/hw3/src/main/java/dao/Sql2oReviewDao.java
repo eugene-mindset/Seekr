@@ -1,6 +1,7 @@
 package dao;
 
 import exception.DaoException;
+import model.Course;
 import model.Review;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -48,7 +49,9 @@ public class Sql2oReviewDao implements ReviewDao {
 
   @Override
   public List<Review> findByCourseId(int courseId) {
-    // TODO: Implement me!
-    return null;
+    try (Connection conn = sql2o.open()) {
+      String sql = "SELECT * FROM Reviews WHERE courseId = " + courseId + ";";
+      return conn.createQuery(sql).executeAndFetch(Review.class);
+    }
   }
 }
