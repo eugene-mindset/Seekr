@@ -75,7 +75,7 @@ public class ApiServerTest {
 
   @Test
   public void getReviewsRequestReturns200() throws UnirestException {
-    final String URL = "http://127.0.0.1:7000/reviews";
+    final String URL = "http://127.0.0.1:7000/courses/1/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
     assertEquals(200, jsonResponse.getStatus());
 
@@ -83,16 +83,14 @@ public class ApiServerTest {
 
   @Test
   public void getReviewsRequestReturnsMultipleReviews() throws UnirestException {
-    final String URL = "http://127.0.0.1:7000/reviews";
+    final String URL = "http://127.0.0.1:7000/courses/1/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
     assertNotEquals(0, jsonResponse.getBody().getArray().length());
   }
 
   @Test
   public void getReviewsForNonExistingCourseReturnsEmptyList() throws UnirestException {
-    final String URL = "http://127.0.0.1:7000/reviews";
-    Map<String, Object> review = new HashMap<>();
-    review.put("courseId", 999);
+    final String URL = "http://127.0.0.1:7000/courses/999/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).queryString("courseId", 999).asJson();
     assertEquals(0, jsonResponse.getBody().getArray().length());
 
@@ -105,7 +103,7 @@ public class ApiServerTest {
     review.put("rating", 5);
     review.put("comment", "AWESOME");
 
-    final String URL = "http://127.0.0.1:7000/reviews";
+    final String URL = "http://127.0.0.1:7000/courses/1/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.post(URL)
             .body(gson.toJson(review)).asJson();
     assertEquals(201, jsonResponse.getStatus());
@@ -119,9 +117,8 @@ public class ApiServerTest {
     review.put("courseId", 1);
     review.put("rating", 5);
     review.put("comment", "werqwer");
-    review.put("id", 2);
 
-    final String URL = "http://127.0.0.1:7000/reviews";
+    final String URL = "http://127.0.0.1:7000/courses/2/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.post(URL)
             .body(gson.toJson(review)).asJson();
     assertEquals(400, jsonResponse.getStatus());
@@ -136,7 +133,7 @@ public class ApiServerTest {
     review.put("rating", 5);
     review.put("comment", "werqwer");
 
-    final String URL = "http://127.0.0.1:7000/reviews";
+    final String URL = "http://127.0.0.1:7000/courses/999/reviews";
     HttpResponse<JsonNode> jsonResponse = Unirest.post(URL)
             .body(gson.toJson(review)).asJson();
     assertEquals(500, jsonResponse.getStatus());
