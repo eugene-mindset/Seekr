@@ -1,0 +1,18 @@
+Running the app:
+
+Notes:
+API server served on http://localhost:5000
+React default serves on http://localhost:3000
+Need to have npm, nodejs, python installed
+Do not commit node_modules or python packages, they're huge
+
+Front end:
+1. cd seekr/
+2. npm start (might need to run `npm install` to get all the packages if it doesnt work)
+
+API server:
+1. Start up your virtual environment
+2. python app.py
+
+Database:
+1. (if not already started) sudo service mongodb start
