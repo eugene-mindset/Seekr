@@ -2,8 +2,8 @@
 
 ## Notes
 
-- API server served on http://localhost:5000
-- React default serves on http://localhost:3000
+- API server served on <http://localhost:5000>
+- React default serves on <http://localhost:3000>
 - Need to have npm, nodejs, python installed.
 - You can make a virtual environment in the repo so long as it is called venv or env. Git will ignore those files.
 
@@ -31,4 +31,3 @@
 
 1. Open terminal and head to /app
 2. Enter the command `mongod --dbpath=./data/db/`
-
