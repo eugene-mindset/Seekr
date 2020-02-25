@@ -3,8 +3,8 @@ Running the app:
 Notes:
 API server served on http://localhost:5000
 React default serves on http://localhost:3000
-Need to have npm, nodejs, python installed
-Do not commit node_modules or python packages, they're huge
+Need to have npm, nodejs, python installed.
+You can make a virtual environment in the repo so long as it is called venv or env. Git will ignore those files.
 
 Front end:
 1. cd app/seekr/
@@ -18,7 +18,7 @@ API server:
 
 Database:
 WINDOWS: 
-1. (if not already started) sudo service mongodb start
+1. Head to the location of your mongodb installation and run 'mongo.exe'
 
 MAC: 
 While in /app folder
