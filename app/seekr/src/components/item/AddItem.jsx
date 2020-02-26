@@ -21,13 +21,27 @@ export class AddItem extends Component {
                     type="text" 
                     name="name" 
                     style={{ flex: '10', padding: '5px' }}
-                    placeholder="Add Item..."
+                    placeholder="Add Item Name..."
+                    value={this.state.name}
+                    onChange={this.onChange}
+                />
+                <input 
+                    type="text" 
+                    name="description" 
+                    style={{ flex: '10', padding: '5px' }}
+                    placeholder="Add Item Description..."
                     value={this.state.name}
                     onChange={this.onChange}
                 />
                 <input 
                     type="submit" 
-                    value="Submit"
+                    value="List as Missing "
+                    className="btn"
+                    style={{ flex: '1' }}
+                />
+                <input 
+                    type="submit" 
+                    value="List as Found "
                     className="btn"
                     style={{ flex: '1' }}
                 />
