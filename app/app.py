@@ -30,12 +30,10 @@ def get_all_items():
 @app.route('/items/<name>', methods=['GET'])
 def get_item(name):
     items = mongo.db.items
-    item = items.find({'name' : name})
     output = []
 
-    while item:
+    for item in items.find({"name" : name}):
         output.append({'id': str(item['_id']), 'name' : item['name'], 'found': item['found']}) 
-    
 
     return jsonify(output)
 
