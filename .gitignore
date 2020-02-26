@@ -18,6 +18,8 @@ gradle-app.setting
 
 
 ## NODE.JS
+package.json
+package-lock.json
 
 # Logs
 logs
