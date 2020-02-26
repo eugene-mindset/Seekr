@@ -3,17 +3,24 @@ import PropTypes from 'prop-types';
 export class AddItem extends Component {
     state = {
         name: '',
+        found: false,
         desc: ''
     }
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.addItem(this.state.name);
-        this.setState({ name: '', desc: ''});
+        this.props.addItem(this.state.name, this.state.found, this.state.desc);
+        this.setState({ name: '', found: false, desc: ''});
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     
+    handleClick = (e) => {
+        e.preventDefault();
+        this.state.found = true;
+        this.props.addItem(this.state.name, this.state.found, this.state.desc);
+        this.setState({ name: '', found: false, desc: ''});
+    }
 
     render() {
         return (
@@ -40,13 +47,13 @@ export class AddItem extends Component {
                     value="List as Missing "
                     className="btn"
                     style={{ flex: '1' }}
-                    
                 />
                 <input 
                     type="submit" 
                     value="List as Found "
                     className="btn"
                     style={{ flex: '1' }}
+                    onClick={this.handleClick}
                 />
             </form>
         )
