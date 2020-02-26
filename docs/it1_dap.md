@@ -22,6 +22,6 @@
 - [ ] Have server figure out the best results to display from the database
 - [ ] Have server give client search results
 - [ ] Have client display search results
-- [ ] Allow users to create a new item listing
-- [ ] Send item listing from client to server
-- [ ] Save item listing to database
+- [x] Allow users to create a new item listing
+- [x] Send item listing from client to server
+- [x] Save item listing to database
