@@ -7,19 +7,18 @@ export class Item extends Component {
             background: '#f4f4f4',
             padding: '10px',
             borderBottom: '1px #ccc dotted',
-            textDecoration: this.props.item.found ?
-            'line-through' : 'none'
         }
     }
     
     render() {
-        const { id, name } = this.props.item;
+        const { id, name, found, desc } = this.props.item;
         return (
             <div style={this.getStyle()}>
                 <p>
-                    <input type="checkbox" onChange={this.props.markFound.bind(this, id)}/>{' '}
-                    { name }
+                    { name.concat(':') } { desc }
                     <button onClick={this.props.deleteItem.bind(this, id)} style={btnStyle}>x</button>
+                    <br />
+                    { found ? "Found item" : "Lost item" }
                 </p>
             </div>
         )

@@ -16,4 +16,5 @@ Items.propTypes = {
   markFound: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired
 }
+
 export default Items;
