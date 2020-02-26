@@ -6,7 +6,6 @@ import axios from 'axios';
 import SearchItem from './components/item/SearchItem';
 
 import './App.css';
-import { render } from 'react-dom';
 
 
 export default class Search extends React.Component {
@@ -41,11 +40,9 @@ export default class Search extends React.Component {
     }
 
     searchItem = (name) => {
-        axios.get('/items', {
-            name: name,
-            found: false
-        }).then(res =>
-            this.setState({ items: [...this.state.items, res.data] })
+        axios.get('/items/' + name).then(res =>
+            this.setState({ items: [res.data] })
+            // {console.log(res.data);}
         );
     }
 

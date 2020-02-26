@@ -7,10 +7,11 @@ export class SearchItem extends Component {
         name: ''
     }
 
+    onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
     onSubmit = (e) => {
         e.preventDefault();
         this.props.searchItem(this.state.name); // searchItem has a searchItem property that shows what item name is to be queried
-        this.setState({ name: '' }); // when you click to search, clear the form
     }
 
     render() {
