@@ -54,11 +54,11 @@ class App extends Component {
       );
   }
 
-  addItem = (name, desc) => {
+  addItem = (name) => {
     axios.post('/items', {
       name: name,
       found: false,
-      desc: desc,
+      desc: "desc"
     }).then(res =>
       this.setState({ items: [...this.state.items, res.data] })
     );

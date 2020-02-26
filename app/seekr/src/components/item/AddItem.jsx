@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 export class AddItem extends Component {
     state = {
         name: '',
-        found: false,
         desc: ''
     }
 
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addItem(this.state.name);
-        this.setState({ name: '', found: false, desc: ''});
+        this.setState({ name: '', desc: ''});
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
