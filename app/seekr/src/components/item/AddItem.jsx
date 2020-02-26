@@ -2,16 +2,19 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 export class AddItem extends Component {
     state = {
-        name: ''
+        name: '',
+        found: false,
+        desc: ''
     }
 
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addItem(this.state.name);
-        this.setState({ name: ''});
+        this.setState({ name: '', found: false, desc: ''});
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+    
 
     render() {
         return (
@@ -27,10 +30,10 @@ export class AddItem extends Component {
                 />
                 <input 
                     type="text" 
-                    name="description" 
+                    name="desc" 
                     style={{ flex: '10', padding: '5px' }}
                     placeholder="Add Item Description..."
-                    value={this.state.name}
+                    value={this.state.desc}
                     onChange={this.onChange}
                 />
                 <input 
@@ -38,6 +41,7 @@ export class AddItem extends Component {
                     value="List as Missing "
                     className="btn"
                     style={{ flex: '1' }}
+                    
                 />
                 <input 
                     type="submit" 
