@@ -9,7 +9,6 @@ export class AddItem extends Component {
     }
 
     onClick = (e) => {
-        e.preventDefault();
         this.setState({found: true});
     }
 
