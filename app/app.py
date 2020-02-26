@@ -12,7 +12,6 @@ mongo = PyMongo(app)
 CORS(app)
 
 #TODO Add return codes?
-#TODO Fix fields
 @app.route("/")
 def hello():
     return "Hello World!"
