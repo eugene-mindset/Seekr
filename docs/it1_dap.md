@@ -17,11 +17,11 @@
 - (Additional user stroy) As someone who lost something, I want to search listings to see if someone has found the item I am missing.
 
 ## Tasks
-- [ ] Create the search page
-- [ ] Take the search from the search field for server to use
-- [ ] Have server figure out the best results to display from the database
-- [ ] Have server give client search results
-- [ ] Have client display search results
-- [x] Allow users to create a new item listing
-- [x] Send item listing from client to server
-- [x] Save item listing to database
+- [X] Create the search page
+- [X] Take the search from the search field for server to use
+- [X] Have server figure out the best results to display from the database
+- [X] Have server give client search results
+- [X] Have client display search results
+- [X] Allow users to create a new item listing
+- [X] Send item listing from client to server
+- [X] Save item listing to database
