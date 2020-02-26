@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+
 export class AddItem extends Component {
     state = {
         name: '',
@@ -8,7 +9,8 @@ export class AddItem extends Component {
     }
 
     onClick = (e) => {
-        this.state.found = true;
+        e.preventDefault();
+        this.setState({found: true});
     }
 
     onSubmit = (e) => {

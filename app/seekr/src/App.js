@@ -47,12 +47,12 @@ class App extends Component {
     // ...spread operator to get list of items make a copy
     // filter out all tha arent the item to remove the item, this is only front end so non persisting
     axios.delete(`/items/${id}`)
-      .then(res => this.setState({
-        items: [...this.state.items.filter
-          (item => item.id !== id)]
-      })
-      );
-  }
+        .then(res => this.setState({
+            items: [...this.state.items.filter
+                (item => item.id !== id)]
+        })
+    );
+}
 
   addItem = (name, found, desc) => {
     axios.post('/items', {
