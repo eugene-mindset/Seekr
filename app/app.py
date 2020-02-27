@@ -12,7 +12,6 @@ mongo = PyMongo(app)
 CORS(app)
 
 #TODO Add return codes?
-#TODO Fix fields
 @app.route("/")
 def hello():
     return "Hello World!"
@@ -23,7 +22,7 @@ def get_all_items():
 
     output = []
     for item in items.find():
-        output.append({'_id': str(item['_id']), 'name' : item['name'], 'found': item['found'], 'desc': item['desc']})
+        output.append({'id': str(item['_id']), 'name' : item['name'], 'found': item['found'], 'desc': item['desc']})
 
     return jsonify(output)
 
@@ -48,7 +47,7 @@ def add_item():
     item_id = items.insert({'name' : name, 'found': found, 'desc':desc})
     new_item = items.find_one({'_id' : item_id})
 
-    output = {'_id': str(new_item['_id']), 'name' : new_item['name'], 'found': found, 'desc': new_item['desc']}
+    output = {'id': str(new_item['_id']), 'name' : new_item['name'], 'found': found, 'desc': new_item['desc']}
 
     return jsonify(output)
 
@@ -62,7 +61,7 @@ def update_item(id):
 
     items.find_one_and_update({'_id':ObjectId(id)}, {"$set": {"name": name, 'found': found, 'desc': desc}}, upsert=False)
     item = items.find_one({'_id' : ObjectId(id)})
-    output = {'_id': str(item['_id']), 'name' : item['name'], 'found': found, 'desc': item['desc']}
+    output = {'id': str(item['_id']), 'name' : item['name'], 'found': found, 'desc': item['desc']}
 
     return jsonify(output)
 
