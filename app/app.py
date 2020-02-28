@@ -11,7 +11,6 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/mongotask'
 mongo = PyMongo(app)
 CORS(app)
 
-#TODO Add return codes?
 @app.route("/")
 def hello():
     return "Hello World!"
@@ -24,7 +23,7 @@ def get_all_items():
     for item in items.find():
         output.append({'id': str(item['_id']), 'name' : item['name'], 'found': item['found'], 'desc': item['desc']})
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 @app.route('/items/<name>', methods=['GET'])
 def get_item(name):
@@ -34,7 +33,7 @@ def get_item(name):
     for item in items.find({"name" : name}):
         output.append({'id': str(item['_id']), 'name' : item['name'], 'found': item['found'], 'desc': item['desc']}) 
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 @app.route('/items', methods=['POST'])
 def add_item():
@@ -49,7 +48,7 @@ def add_item():
 
     output = {'id': str(new_item['_id']), 'name' : new_item['name'], 'found': found, 'desc': new_item['desc']}
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 @app.route('/items/<id>', methods=['PUT'])
 def update_item(id):
@@ -63,7 +62,7 @@ def update_item(id):
     item = items.find_one({'_id' : ObjectId(id)})
     output = {'id': str(item['_id']), 'name' : item['name'], 'found': found, 'desc': item['desc']}
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 @app.route('/items/<id>', methods=['DELETE'])
 def delete_item(id):
@@ -76,7 +75,7 @@ def delete_item(id):
     else:
         output = {'message': 'not deleted'}
 
-    return jsonify({'result' : output})
+    return jsonify({'result' : output}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
