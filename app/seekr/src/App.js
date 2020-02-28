@@ -6,7 +6,7 @@ import Items from './components/item/Items';
 import AddItem from './components/item/AddItem';
 import About from './components/pages/About';
 import axios from 'axios';
-import Search from './Search';
+import Search from './components/pages/Search';
 
 import './App.css';
 
@@ -77,7 +77,6 @@ class App extends Component {
               <React.Fragment>
                 <h1>Add item</h1>
                 <AddItem addItem={this.addItem} />
-                {/* <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} /> */}
               </React.Fragment>
             )} />
 
