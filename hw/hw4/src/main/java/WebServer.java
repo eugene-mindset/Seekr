@@ -50,6 +50,21 @@ public class WebServer {
       return null;
     }, new HandlebarsTemplateEngine());
 
+    get("/courses/:course/reviews", (req, res) -> {
+      Map<String, Object> model = new HashMap<>();
+      model.put("reviewList", reviewDao.findByCourseId(Integer.parseInt(req.params(":course"))));
+      return new ModelAndView(model, "reviews.hbs");
+    }, new HandlebarsTemplateEngine());
+
+    post("/courses/:course/reviews", (req, res) -> {
+      String course = req.params(":course");
+      String rating = req.queryParams("rating");
+      String comment = req.queryParams("comment");
+      reviewDao.add(new Review(Integer.parseInt(course), Integer.parseInt(rating), comment));
+      res.redirect("/courses/" + course + "/reviews");
+      return null;
+    }, new HandlebarsTemplateEngine());
+
 
     // TODO add more routes to implement the expected functionalities
     //  of the web application as per homework instructions.
