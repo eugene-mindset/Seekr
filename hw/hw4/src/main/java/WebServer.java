@@ -36,6 +36,12 @@ public class WebServer {
       return null;
     });
 
+    get("/signout", (req, res) -> {
+      res.removeCookie("username");
+      res.redirect("/");
+      return null;
+    });
+
     get("/courses", (req, res) -> {
       Map<String, Object> model = new HashMap<>();
       model.put("courseList", courseDao.findAll());
