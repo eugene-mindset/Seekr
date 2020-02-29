@@ -6,13 +6,12 @@ import dao.InMemoryCourseDao;
 import dao.InMemoryReviewDao;
 import dao.ReviewDao;
 import model.Course;
-import model.Review;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WebServer {
 
@@ -50,9 +49,17 @@ public class WebServer {
       return null;
     }, new HandlebarsTemplateEngine());
 
+    // redirect if not logged in
+    before("/courses",(req, res) -> {
+      if (req.cookie("username") == null) {
+        res.redirect("/");
+      }
+    });
+
 
     // TODO add more routes to implement the expected functionalities
     //  of the web application as per homework instructions.
+
 
     // TODO you will need to have at least one more template file: reviews.hbs, and
     //  you will probably need to modify the ones provided to you.
