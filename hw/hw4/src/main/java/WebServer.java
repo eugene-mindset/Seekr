@@ -6,13 +6,12 @@ import dao.InMemoryCourseDao;
 import dao.InMemoryReviewDao;
 import dao.ReviewDao;
 import model.Course;
-import model.Review;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WebServer {
 
@@ -56,9 +55,32 @@ public class WebServer {
       return null;
     }, new HandlebarsTemplateEngine());
 
+    // redirect if not logged in
+    before("/courses",(req, res) -> {
+      if (req.cookie("username") == null) {
+        res.redirect("/");
+      }
+    });
+
+    get("/courses/:course/reviews", (req, res) -> {
+      Map<String, Object> model = new HashMap<>();
+      model.put("reviewList", reviewDao.findByCourseId(Integer.parseInt(req.params(":course"))));
+      return new ModelAndView(model, "reviews.hbs");
+    }, new HandlebarsTemplateEngine());
+
+    post("/courses/:course/reviews", (req, res) -> {
+      String course = req.params(":course");
+      String rating = req.queryParams("rating");
+      String comment = req.queryParams("comment");
+      reviewDao.add(new Review(Integer.parseInt(course), Integer.parseInt(rating), comment));
+      res.redirect("/courses/" + course + "/reviews");
+      return null;
+    }, new HandlebarsTemplateEngine());
+
 
     // TODO add more routes to implement the expected functionalities
     //  of the web application as per homework instructions.
+
 
     // TODO you will need to have at least one more template file: reviews.hbs, and
     //  you will probably need to modify the ones provided to you.
