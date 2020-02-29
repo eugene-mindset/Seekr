@@ -62,7 +62,7 @@ public class WebServer {
         res.redirect("/");
       }
     });
-    
+
     before("/courses",(req, res) -> {
       if (req.cookie("username") == null) {
         res.redirect("/");
@@ -72,6 +72,8 @@ public class WebServer {
     get("/courses/:course/reviews", (req, res) -> {
       Map<String, Object> model = new HashMap<>();
       model.put("reviewList", reviewDao.findByCourseId(Integer.parseInt(req.params(":course"))));
+      String course = req.params(":course");
+      model.put("courseId", Integer.parseInt(course));
       return new ModelAndView(model, "reviews.hbs");
     }, new HandlebarsTemplateEngine());
 
