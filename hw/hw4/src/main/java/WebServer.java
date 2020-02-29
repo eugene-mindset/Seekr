@@ -6,6 +6,7 @@ import dao.InMemoryCourseDao;
 import dao.InMemoryReviewDao;
 import dao.ReviewDao;
 import model.Course;
+import model.Review;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
