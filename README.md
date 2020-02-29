@@ -1,3 +1,6 @@
+# Seekr: JHU OOSE PROJECT SPRING 2020
+[![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
+
 # Running the App
 
 ## Notes
@@ -7,7 +10,7 @@
 - Need to have npm, nodejs, python installed.
 - You can make a virtual environment in the repo so long as it is called venv or env. Git will ignore those files.
 
-## Front End (Node.js)
+## Front End (ReactJS)
 
 1. Open a new terminal and head to /app/seeker
 2. Enter the command `npm start` (might need to run `npm install` to get all the packages if it doesnt work)
