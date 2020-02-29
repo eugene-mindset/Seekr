@@ -57,6 +57,12 @@ public class WebServer {
     }, new HandlebarsTemplateEngine());
 
     // redirect if not logged in
+    before("/courses/*",(req, res) -> {
+      if (req.cookie("username") == null) {
+        res.redirect("/");
+      }
+    });
+    
     before("/courses",(req, res) -> {
       if (req.cookie("username") == null) {
         res.redirect("/");
