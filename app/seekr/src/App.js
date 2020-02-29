@@ -25,9 +25,8 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header />
-            <p>click on a link</p>
             {/* Add item */}
-            <Route path="/add" component={Add} />
+            <Route path="/add" component={AddItem} />
 
             {/* Search item */}
             <Route path="/search" component={Search} />
@@ -36,9 +35,10 @@ class App extends Component {
 
             <Route exact path="/" render={props => (
               <React.Fragment>
+                <h1>Click on tabs to choose correct path</h1>
                 <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
               </React.Fragment>
-            )} />
+            )}/>
           </div>
         </div>
       </Router>
