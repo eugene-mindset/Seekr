@@ -1,0 +1,1 @@
+[![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
