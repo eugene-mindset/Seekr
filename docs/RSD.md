@@ -31,7 +31,7 @@
 * As an admin of JHU Lost and Found at FastForwardJHU, I want to upload specific items that we have found.
 * As a user, I want to upload my contact information so someone else knows how to reach me for a lost/found item.
 * As a user, I want to log in with my jhed id, so I don’t have to make a new account.
-
+* As a user, I want to search through entries with tags so that it is faster to sort through entries.
 
 ## Software Architecture
 > Will this be a Web/desktop/mobile (all, or some other kind of) application? Would it conform to the Client-Server software architecture? 
