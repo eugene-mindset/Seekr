@@ -7,7 +7,7 @@
         {{/each}}
     </ul>
 
-    <form action="/courses/:course/reviews" method="post">
+    <form action="/courses/{{ reviewList.[0].[courseId] }}/reviews" method="post">
         <input type="text" placeholder="review rating" name="rating"/>
         <input type="text" placeholder="review comment" name="comment"/>
         <button>Submit</button>
