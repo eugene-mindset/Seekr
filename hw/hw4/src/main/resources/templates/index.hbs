@@ -3,6 +3,7 @@
 
     {{#if username}}
         <p>You are logged in as {{ username }}.</p>
+        <p>View <a href="courses">courses</a></p>
     {{else}}
         <form action="/" method="post">
             <input type="text" placeholder="username" name="username"/>
@@ -10,7 +11,7 @@
         </form>
     {{/if}}
 
-    <p>View <a href="courses">courses</a></p>
+
 
 {{/partial}}
 
