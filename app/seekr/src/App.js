@@ -8,6 +8,7 @@ import About from './components/pages/About';
 import axios from 'axios';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
+import GoogleMap from './components/pages/GoogleMap'
 
 import './App.css';
 
@@ -25,7 +26,6 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header />
-            <p>click on a link</p>
             {/* Add item */}
             <Route path="/add" component={Add} />
 
@@ -34,11 +34,14 @@ class App extends Component {
 
             <Route path="/about" component={About} />
 
+            <Route path ="/Map" component={GoogleMap} />
+
             <Route exact path="/" render={props => (
               <React.Fragment>
+                <h1>Click on tabs to choose correct path</h1>
                 <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
               </React.Fragment>
-            )} />
+            )}/>
           </div>
         </div>
       </Router>
