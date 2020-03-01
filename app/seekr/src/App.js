@@ -26,7 +26,7 @@ class App extends Component {
           <div className="container">
             <Header />
             {/* Add item */}
-            <Route path="/add" component={AddItem} />
+            <Route path="/add" component={Add} />
 
             {/* Search item */}
             <Route path="/search" component={Search} />
