@@ -3,10 +3,10 @@
 ## Objected Oriented Design
 
 ### UML Diagram
-![UML Diagram](./additional/uml1.png)
+![UML Diagram](./additional/)
 
 ## Wireframe
-![Wireframe](./additional/wireframe.png)
+![Wireframe](./additional/)
 
 
 ## Iteration Backlog
@@ -23,6 +23,7 @@
 - [ ] Allow user to supply location information when creating a listing
 - [ ] When displaying listings, show the location of where the item was found on a map
 - [ ] Allow users to add tags to items to help filter items out
+- [ ] Deploy on Heroku
 - [ ] Have tests for new and old code
 
 ## Retrospective
