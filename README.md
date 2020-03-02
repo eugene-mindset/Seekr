@@ -5,7 +5,7 @@
 
 ## Google Maps (For now)
 
-- Go to app/seekr and enter the command npm install --save google-maps-react to add the google maps api dependency
+- Go to app/seekr and enter the command `npm install --save google-maps-react` to add the google maps api dependency
 
 ## Notes
 
