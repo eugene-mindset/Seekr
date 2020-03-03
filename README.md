@@ -3,10 +3,6 @@
 
 # Running the App
 
-## Google Maps (For now)
-
-- Go to app/seekr and enter the command `npm install --save google-maps-react` to add the google maps api dependency
-
 ## Notes
 
 - API server served on <http://localhost:5000>
@@ -17,7 +13,10 @@
 ## Front End (ReactJS)
 
 1. Open a new terminal and head to /app/seeker
-2. Enter the command `npm start` (might need to run `npm install` to get all the packages if it doesnt work)
+2. Enter the command `npm install` to get the correct node modules and packages needed to run the front end.
+3. Enter the command `npm install --save google-maps-react` to add the google maps api dependency
+4. Enter the command `npm start` 
+
 
 ## API Server (Flask)
 
