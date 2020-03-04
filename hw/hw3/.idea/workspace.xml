@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="aa430173-eaa3-448b-8cd0-f7e6e8f27adf" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\Users\Shaurya Kumar\Desktop\New folder\2020-spring-group-Seekr\hw\hw3\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YBUmrPX01h8nIDHN5dmUqikRe0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../oose_lec07_coding" />
+    <property name="show.unlinked.gradle.project.popup" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa430173-eaa3-448b-8cd0-f7e6e8f27adf" name="Default Changelist" comment="" />
+      <created>1582415642901</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582415642901</updated>
+      <workItem from="1582415644862" duration="2939000" />
+      <workItem from="1582506484858" duration="4000" />
+      <workItem from="1582650455078" duration="110000" />
+      <workItem from="1582650578789" duration="36000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="741" y="295" key="FileChooserDialogImpl" timestamp="1582650612311">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="741" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1582650612311" />
+    <state x="656" y="364" key="com.intellij.ide.util.TipDialog" timestamp="1582650582167">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="656" y="364" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1582650582167" />
+    <state x="385" y="152" key="new project wizard" timestamp="1582650602544">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="385" y="152" key="new project wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1582650602544" />
+  </component>
+</project>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="639345ae-a606-4484-9246-bb5869ea0c83" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\Users\Shaurya Kumar\Desktop\New folder\2020-spring-group-Seekr\hw\hw4\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YUSHZOCAnvDe0fUh3uqksVode6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="show.unlinked.gradle.project.popup" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="WebServer" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="WebServer" />
+      <module name="hw04.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="639345ae-a606-4484-9246-bb5869ea0c83" name="Default Changelist" comment="" />
+      <created>1582995592301</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582995592301</updated>
+      <workItem from="1582995594308" duration="4927000" />
+      <workItem from="1583002343069" duration="1401000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="553" y="199" key="#Project_Structure" timestamp="1583002322314">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="553" y="199" key="#Project_Structure/0.0.1920.1080@0.0.1920.1080" timestamp="1583002322314" />
+    <state width="1878" height="295" key="GridCell.Tab.0.bottom" timestamp="1583014725526">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="295" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1583014725526" />
+    <state width="1878" height="295" key="GridCell.Tab.0.center" timestamp="1583014725525">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="295" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1583014725525" />
+    <state width="1878" height="295" key="GridCell.Tab.0.left" timestamp="1583014725525">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="295" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1583014725525" />
+    <state width="1878" height="295" key="GridCell.Tab.0.right" timestamp="1583014725526">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="295" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1583014725526" />
+  </component>
+</project>
