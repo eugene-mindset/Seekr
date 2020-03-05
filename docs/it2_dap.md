@@ -23,6 +23,6 @@
 - [ ] Add test code for search bar
 - [ ] Add location field for item listings
 - [ ] Allow user to supply location information when creating a listing
-- [ ] When displaying listings, show the location of where the item was found on a map
 - [ ] Deploy on Heroku
 - [ ] Have tests for new and old code
+- [ ] Set up continous integration with Travis CI
