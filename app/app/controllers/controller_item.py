@@ -17,7 +17,7 @@ def get_all_items():
     listOfItems = itemObj.findByName()
     output = []
     for i in listOfItems:
-        output.append(i.toTuple())
+        output.append(i.toDict())
     return jsonify(output), 200
 
 @items_router.route('/items/<name>', methods=['GET'])
@@ -27,7 +27,7 @@ def get_item(name):
     output = []
     listOfItems = itemObj.findByName(name)
     for i in listOfItems:
-        output.append(i.toTuple())
+        output.append(i.toDict())
     return jsonify(output), 200
 
 @items_router.route('/items', methods=['POST'])
@@ -42,7 +42,7 @@ def add_item():
     itemObj = ItemDao(items)
     item = Item(name = name, found = found, desc = desc)
     itemObj.insert(item)
-    return jsonify(item.toTuple()), 200
+    return jsonify(item.toDict()), 200
 
 @items_router.route('/items/<id>', methods=['PUT'])
 def update_item(id):
@@ -55,7 +55,7 @@ def update_item(id):
     itemObj = ItemDao(items)
     item = Item(id = id, name = name, found = found, desc = desc)
     itemObj.update(item)
-    return jsonify(item.toTuple()), 200
+    return jsonify(item.toDict()), 200
 
 @items_router.route('/items/<id>', methods=['DELETE'])
 def delete_item(id):

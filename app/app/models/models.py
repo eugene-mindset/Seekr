@@ -108,6 +108,6 @@ class Item:
             return False
         return True
     
-    def toTuple(self):
+    def toDict(self):
         output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
         return output
