@@ -14,14 +14,20 @@ def hello():
 def get_all_items():
     items = mongo.db.items
     itemObj = ItemDao(items)
-    output = itemObj.findByName()
+    listOfItems = itemObj.findByName()
+    output = []
+    for i in listOfItems:
+        output.append(i.toTuple())
     return jsonify(output), 200
 
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
     items = mongo.db.items
     itemObj = ItemDao(items)
-    output = itemObj.findByName(name)
+    output = []
+    listOfItems = itemObj.findByName(name)
+    for i in listOfItems:
+        output.append(i.toTuple())
     return jsonify(output), 200
 
 @items_router.route('/items', methods=['POST'])
@@ -34,8 +40,9 @@ def add_item():
 
     items = mongo.db.items
     itemObj = ItemDao(items)
-    output = itemObj.insert(name, found, desc)
-    return jsonify(output), 200
+    item = Item(name = name, found = found, desc = desc)
+    itemObj.insert(item)
+    return jsonify(item.toTuple()), 200
 
 @items_router.route('/items/<id>', methods=['PUT'])
 def update_item(id):
@@ -46,8 +53,9 @@ def update_item(id):
     desc = request.get_json()['desc']
 
     itemObj = ItemDao(items)
-    output = itemObj.update(id, name, found, desc)
-    return jsonify(output), 200
+    item = Item(id = id, name = name, found = found, desc = desc)
+    itemObj.update(item)
+    return jsonify(item.toTuple()), 200
 
 @items_router.route('/items/<id>', methods=['DELETE'])
 def delete_item(id):

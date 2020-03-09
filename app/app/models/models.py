@@ -1,6 +1,7 @@
 from app import mongo
 from abc import ABCMeta, abstractmethod
 from bson.objectid import ObjectId
+from flask import jsonify
 
 class DatabaseObject:
     def __init__(self, collection):
@@ -25,26 +26,33 @@ class ItemDao(DatabaseObject):
 
     def findById(self, id):
         item = self.collection.find_one({"_id" : ObjectId(id)})
-        return item
+        newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'])
+        return newItem
 
     def findByName(self, name=None):
-        output = []
+        listOfItems = []
         toSearch = self.collection.find() if name == None else self.collection.find({"name" : name})
         for item in toSearch:
-            output.append({'id': str(item['_id']), 'name' : item['name'], 'found': item['found'], 'desc': item['desc']}) 
-        return output
+            newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'])
+            listOfItems.append(newItem) 
+        return listOfItems
 
-    def insert(self, name, found, desc):
+    def insert(self, item):
+        name = item.getName()
+        found = item.getFound()
+        desc = item.getDesc()
         item_id = self.collection.insert({'name' : name, 'found': found, 'desc':desc})
         new_item = self.collection.find_one({'_id' : item_id})
-        output = {'id': str(new_item['_id']), 'name' : new_item['name'], 'found': found, 'desc': new_item['desc']}
-        return output
+        item.setId(str(new_item['_id']))
+        return item
 
-    def update(self, id, name, found, desc):
+    def update(self, item):
+        id = item.getId()
+        name = item.getName()
+        found = item.getFound()
+        desc = item.getDesc()
         self.collection.find_one_and_update({'_id':ObjectId(id)}, {"$set": {"name": name, 'found': found, 'desc': desc}}, upsert=False)
-        item = self.collection.find_one({'_id' : ObjectId(id)})
-        output = {'id': str(item['_id']), 'name' : item['name'], 'found': found, 'desc': item['desc']}
-        return output
+        return item
 
     def remove(self, id):
         returned = self.collection.delete_one({'_id': ObjectId(id)})
@@ -90,5 +98,16 @@ class Item:
         self.location = location
 
     def compareItems(self, otherItem):
-        #TODO implement comparator
+        if self.id != otherItem.id:
+            return False
+        if self.name != otherItem.name:
+            return False
+        if self.found != otherItem.found:
+            return False
+        if self.desc != otherItem.desc:
+            return False
         return True
+    
+    def toTuple(self):
+        output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
+        return output
