@@ -33,8 +33,9 @@ class ItemDao(DatabaseObject):
         listOfItems = []
         toSearch = self.collection.find() if name == None else self.collection.find({"name" : name})
         for item in toSearch:
-            newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'])
-            listOfItems.append(newItem) 
+            newItem = Item(str(item.get('_id')), item.get('name'), item.get('found'), item.get('desc'))
+            listOfItems.append(newItem)
+            
         return listOfItems
 
     def insert(self, item):
@@ -107,7 +108,13 @@ class Item:
         if self.desc != otherItem.desc:
             return False
         return True
+
+    def compareItem(self, otherItem, comparator=None):
+        if comparator is None:
+            return 1 if self == otherItem else 0
+
+        return 1
     
-    def toTuple(self):
+    def toDict(self):
         output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
         return output

@@ -31,7 +31,7 @@ export default class Search extends React.Component {
 
     searchItem = (name) => {
         this.setState({items:[]})
-        axios.get('/items/' + name).then(res =>
+        axios.get('/items/search=' + name).then(res =>
             res.data.map((item) => {
                 this.setState({ items: [...this.state.items, item] })
             })
