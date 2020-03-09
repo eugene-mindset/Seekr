@@ -24,7 +24,7 @@
 2. Create a virtual environment if haven't. This would be `virtualenv -p python3 env`
 3. Start up your virtual environment (windows is `.\env\Scripts\activate`, linux is  `source .\env\bin\activate`)
 4. With the virtual environment activated, `pip3 install -r requirements.txt`
-5. Enter the command `python app.py`
+5. Inside /app run start_server.sh
 
 ## Database (MongoDB)
 
