@@ -1,5 +1,6 @@
 # Seekr: JHU OOSE PROJECT SPRING 2020
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
+[![Python coverage](https://codecov.io/gh/jhu-oose/2020-spring-group-Seekr/branch/master/graph/badge.svg)](https://codecov.io/gh/jhu-oose/2020-spring-group-Seekr/)
 
 # Running the App
 
