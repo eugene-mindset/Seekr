@@ -21,4 +21,4 @@ matrix:
       install:
         - npm install --prefix app/seekr/
       script:
-        - npm test --prefix app/seekr/ a
+        - npm test --prefix app/seekr/ a -- --coverage
