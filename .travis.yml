@@ -6,6 +6,6 @@ install:
   - pip install -r app/requirements.txt
   - pip install codecov
 script:
-  - coverage run --source=app/ run_tests.py
+  - coverage run --source=app/ app/run_tests.py
 after_success:
   -codecov
