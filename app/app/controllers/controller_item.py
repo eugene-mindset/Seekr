@@ -1,21 +1,16 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from flask_cors import CORS
 
-app = Flask(__name__)
+from app import mongo
 
-app.config['MONGO_DBNAME'] = 'mydb'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/mongotask'
+items_router = Blueprint("items", __name__)
 
-mongo = PyMongo(app)
-CORS(app)
-
-@app.route("/")
+@items_router.route("/")
 def hello():
     return "Hello World!"
 
-@app.route('/items', methods=['GET'])
+@items_router.route('/items', methods=['GET'])
 def get_all_items():
     items = mongo.db.items
 
@@ -25,7 +20,7 @@ def get_all_items():
 
     return jsonify(output), 200
 
-@app.route('/items/<name>', methods=['GET'])
+@items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
     items = mongo.db.items
     output = []
@@ -35,7 +30,7 @@ def get_item(name):
 
     return jsonify(output), 200
 
-@app.route('/items', methods=['POST'])
+@items_router.route('/items', methods=['POST'])
 def add_item():
     items = mongo.db.items
 
@@ -50,7 +45,7 @@ def add_item():
 
     return jsonify(output), 200
 
-@app.route('/items/<id>', methods=['PUT'])
+@items_router.route('/items/<id>', methods=['PUT'])
 def update_item(id):
     items = mongo.db.items
 
@@ -64,7 +59,7 @@ def update_item(id):
 
     return jsonify(output), 200
 
-@app.route('/items/<id>', methods=['DELETE'])
+@items_router.route('/items/<id>', methods=['DELETE'])
 def delete_item(id):
     items = mongo.db.items
 
@@ -76,6 +71,3 @@ def delete_item(id):
         output = {'message': 'not deleted'}
 
     return jsonify({'result' : output}), 200
-
-if __name__ == '__main__':
-    app.run(debug=True)
