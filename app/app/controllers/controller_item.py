@@ -27,7 +27,7 @@ def get_all_items_sorted(query):
     itemObj = ItemDao(items)
     listOfItems = itemObj.findByName()
 
-    queriedItem = Item(name=query)
+    queriedItem = Item(name=query, desc="")
     scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 

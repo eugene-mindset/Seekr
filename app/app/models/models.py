@@ -109,9 +109,31 @@ class Item:
             return False
         return True
 
-    def compareItem(self, otherItem, comparator=None):
+    def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
-            return 1 if self == otherItem else 0
+            num = 0
+            denom = 0
+
+            setTokenName = set()
+            setTokenDesc = set()
+
+            if type(self.name) == str and type(otherItem.name) == str:
+                tokensName = self.name.lower().split() + otherItem.name.lower().split()
+                setTokenName = set(tokensName)
+                num += len(tokensName)
+
+            if type(self.desc) == str and type(otherItem.desc) == str:
+                tokensDesc = self.desc.lower().split() + otherItem.desc.lower().split()
+                setTokenDesc = set(tokensDesc)
+                num += len(tokensDesc)
+
+            denom = len(setTokenName.union(setTokenDesc))
+
+            result = (1 / denom) 
+
+            print(num, denom, otherItem.name, otherItem.desc, result)
+
+            return result
 
         return 1
     
