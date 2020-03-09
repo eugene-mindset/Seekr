@@ -2,18 +2,15 @@ from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_cors import CORS
-
-
+from .mongo_inst import mongo
 
 app = Flask(__name__)
 
-app.config['MONGO_DBNAME'] = 'mydb'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/mongotask'
-
-CORS(app)
-mongo = PyMongo(app)
-
-def create_app():
+#Configure app from object input and enable CORS
+def create_app(config_obj):
+    app.config.from_object(config_obj)
+    CORS(app)
+    mongo.init_app(app)
     register_blueprints(app)
     return app
 
