@@ -111,27 +111,32 @@ class Item:
 
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
-            num = 0
-            denom = 0
-
-            setTokenName = set()
-            setTokenDesc = set()
+            total = 0
+            unique = 0
+            
+            uniqueTokensSelf = set()
+            uniqueTokensOther = set()
 
             if type(self.name) == str and type(otherItem.name) == str:
-                tokensName = self.name.lower().split() + otherItem.name.lower().split()
-                setTokenName = set(tokensName)
-                num += len(tokensName)
+                uniqueTokensSelf = set(self.name.lower().split())
+                uniqueTokensOther = set(otherItem.name.lower().split())
 
+                setTokenName = uniqueTokensSelf.union(uniqueTokensOther)
+                total += len(uniqueTokensSelf) + len(uniqueTokensOther)
+
+            """
             if type(self.desc) == str and type(otherItem.desc) == str:
                 tokensDesc = self.desc.lower().split() + otherItem.desc.lower().split()
                 setTokenDesc = set(tokensDesc)
-                num += len(tokensDesc)
+                total += len(tokensDesc)
+            """
 
-            denom = len(setTokenName.union(setTokenDesc))
+            unique = len(uniqueTokensSelf.union(uniqueTokensOther))
+            matches = total - unique
 
-            result = (1 / denom) 
+            result = matches
 
-            print(num, denom, otherItem.name, otherItem.desc, result)
+            print(unique, total, otherItem.name, otherItem.desc, result)
 
             return result
 

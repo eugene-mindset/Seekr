@@ -63,7 +63,6 @@ export default class Add extends React.Component {
             <React.Fragment>
                 <h1>Add Item</h1>
                 <AddItem addItem={this.addItem} />  
-                <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
             </React.Fragment>
         );
     }
