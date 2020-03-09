@@ -97,7 +97,7 @@ class Item:
     def setLocation(self, location):
         self.location = location
 
-    def compareItems(self, otherItem):
+    def __eq__(self, otherItem):
         if self.id != otherItem.id:
             return False
         if self.name != otherItem.name:
