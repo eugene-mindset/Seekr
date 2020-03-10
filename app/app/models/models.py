@@ -33,8 +33,9 @@ class ItemDao(DatabaseObject):
         listOfItems = []
         toSearch = self.collection.find() if name == None else self.collection.find({"name" : name})
         for item in toSearch:
-            newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'])
-            listOfItems.append(newItem) 
+            newItem = Item(str(item.get('_id')), item.get('name'), item.get('found'), item.get('desc'))
+            listOfItems.append(newItem)
+            
         return listOfItems
 
     def insert(self, item):
@@ -97,7 +98,7 @@ class Item:
     def setLocation(self, location):
         self.location = location
 
-    def compareItems(self, otherItem):
+    def __eq__(self, otherItem):
         if self.id != otherItem.id:
             return False
         if self.name != otherItem.name:
@@ -107,6 +108,39 @@ class Item:
         if self.desc != otherItem.desc:
             return False
         return True
+
+    def compareItem(self, otherItem: 'Item', comparator=None):
+        if comparator is None:
+            total = 0
+            unique = 0
+            
+            uniqueTokensSelf = set()
+            uniqueTokensOther = set()
+
+            if type(self.name) == str and type(otherItem.name) == str:
+                uniqueTokensSelf = set(self.name.lower().split())
+                uniqueTokensOther = set(otherItem.name.lower().split())
+
+                setTokenName = uniqueTokensSelf.union(uniqueTokensOther)
+                total += len(uniqueTokensSelf) + len(uniqueTokensOther)
+
+            """
+            if type(self.desc) == str and type(otherItem.desc) == str:
+                tokensDesc = self.desc.lower().split() + otherItem.desc.lower().split()
+                setTokenDesc = set(tokensDesc)
+                total += len(tokensDesc)
+            """
+
+            unique = len(uniqueTokensSelf.union(uniqueTokensOther))
+            matches = total - unique
+
+            result = matches
+
+            print(unique, total, otherItem.name, otherItem.desc, result)
+
+            return result
+
+        return 1
     
     def toDict(self):
         output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}

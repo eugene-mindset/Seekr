@@ -9,6 +9,7 @@ items_router = Blueprint("items", __name__)
 @items_router.route("/")
 def hello():
     return "Hello World!"
+    
 
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
@@ -19,6 +20,20 @@ def get_all_items():
     for i in listOfItems:
         output.append(i.toDict())
     return jsonify(output), 200
+
+@items_router.route('/items/search=<query>', methods=['GET'])
+def get_all_items_sorted(query):
+    items = mongo.db.items
+    itemObj = ItemDao(items)
+    listOfItems = itemObj.findByName()
+
+    queriedItem = Item(name=query, desc="")
+    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
+    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+
+    output = [pair[1].toDict() for pair in scoredItems]     
+
+    return jsonify(output)
 
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
