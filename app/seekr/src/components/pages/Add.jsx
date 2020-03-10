@@ -41,7 +41,7 @@ export default class Add extends React.Component {
             <React.Fragment>
                 <h1>Add Item</h1>
                 <AddItem addItem={this.addItem} />  
-                <GoogleMap googleMap={this.googleMap}/>
+                
             </React.Fragment>
         );
     }
