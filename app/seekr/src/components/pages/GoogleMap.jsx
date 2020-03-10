@@ -14,7 +14,7 @@ class MainMap extends Component {
         {
           title: "The marker`s title will appear as a tooltip.",
           name: "SOMA",
-          position: { lat: 37.778519, lng: -122.40564 }
+          position: { lat: 39.3299013, lng: -76.6227064 }
         }
       ]
     };
@@ -50,6 +50,7 @@ class MainMap extends Component {
           className={"map"}
           zoom={14}
           onClick={this.onClick}
+          initialCenter={{ lat: 39.3299013, lng: -76.6227064 }}
         >
           {this.state.markers.map((marker, index) => (
             <Marker
