@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import AddItem from '../item/AddItem';
 
 const mapStyles = {
   width: '75%',
@@ -10,21 +11,18 @@ class MainMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markers: [
-        {
-          title: "The marker`s title will appear as a tooltip.",
-          name: "SOMA",
-          position: { lat: 39.3299013, lng: -76.6227064 }
-        }
-      ]
+      markers: []
     };
     this.onClick = this.onClick.bind(this);
   }
+  
 
   onClick(t, map, coord) {
     const { latLng } = coord;
     const lat = latLng.lat();
     const lng = latLng.lng();
+    this.state.markers.pop();
+    /* AddItem.setTheState('') */
 
     this.setState(previousState => {
       return {
@@ -43,7 +41,7 @@ class MainMap extends Component {
   render() {
     return (
       <div>
-        <h1 className="text-center">My Maps</h1>
+        <h1 className="text-center">Drop a marker on location of lost item.</h1>
         <Map
           google={this.props.google}
           style={{ width: "80%", margin: "auto" }}

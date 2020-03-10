@@ -26,13 +26,15 @@ export default class Add extends React.Component {
         );
       }
     
-      addItem = (name, found, desc) => {
+      addItem = (name, found, desc, location) => {
         axios.post('/items', {
           name: name,
           found: found,
-          desc: desc
+          desc: desc,
+          location: location
         })
       }
+      
 
     render() {
         return (
