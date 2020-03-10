@@ -7,11 +7,12 @@ const mapStyles = {
   height: '75%'
 };
 
-class MainMap extends Component {
+class GoogleMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markers: []
+      markers: [],
+      location: ''
     };
     this.onClick = this.onClick.bind(this);
   }
@@ -22,6 +23,8 @@ class MainMap extends Component {
     const lat = latLng.lat();
     const lng = latLng.lng();
     this.state.markers.pop();
+    this.props.updateParent
+    this.state.location = { lat, lng }
     /* AddItem.setTheState('') */
 
     this.setState(previousState => {
@@ -108,4 +111,4 @@ class MainMap extends Component {
 
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyDlUTl5jQFNPLW_z1wA_C0IXYHfwUvt8V8'
-})(MainMap);
+})(GoogleMap);
