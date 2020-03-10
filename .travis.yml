@@ -19,6 +19,6 @@ matrix:
       node_js:
         - "13"
       install:
-        - npm install --prefix /seekr/
+        - npm install --prefix seekr/
       script:
-        - npm test --prefix /seekr/ a -- --coverage
+        - npm test --prefix seekr/ a -- --coverage
