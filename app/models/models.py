@@ -26,14 +26,14 @@ class ItemDao(DatabaseObject):
 
     def findById(self, id):
         item = self.collection.find_one({"_id" : ObjectId(id)})
-        newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'])
+        newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'], item['location'])
         return newItem
 
     def findByName(self, name=None):
         listOfItems = []
         toSearch = self.collection.find() if name == None else self.collection.find({"name" : name})
         for item in toSearch:
-            newItem = Item(str(item.get('_id')), item.get('name'), item.get('found'), item.get('desc'))
+            newItem = Item(str(item.get('_id')), item.get('name'), item.get('found'), item.get('desc'), item.get('location'))
             listOfItems.append(newItem)
             
         return listOfItems
@@ -42,7 +42,8 @@ class ItemDao(DatabaseObject):
         name = item.getName()
         found = item.getFound()
         desc = item.getDesc()
-        item_id = self.collection.insert({'name' : name, 'found': found, 'desc':desc})
+        location = item.getLocation()
+        item_id = self.collection.insert({'name' : name, 'found': found, 'desc':desc, 'location':location})
         new_item = self.collection.find_one({'_id' : item_id})
         item.setId(str(new_item['_id']))
         return item
@@ -52,7 +53,8 @@ class ItemDao(DatabaseObject):
         name = item.getName()
         found = item.getFound()
         desc = item.getDesc()
-        self.collection.find_one_and_update({'_id':ObjectId(id)}, {"$set": {"name": name, 'found': found, 'desc': desc}}, upsert=False)
+        location = item.getLocation()
+        self.collection.find_one_and_update({'_id':ObjectId(id)}, {"$set": {"name": name, 'found': found, 'desc': desc, 'location':location}}, upsert=False)
         return item
 
     def remove(self, id):
@@ -137,5 +139,5 @@ class Item:
         return 1
     
     def toDict(self):
-        output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
+        output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc, 'location': self.location}
         return output

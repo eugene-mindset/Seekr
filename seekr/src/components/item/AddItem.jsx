@@ -8,7 +8,7 @@ export class AddItem extends Component {
         name: '',
         found: false,
         desc: '',
-        location: ''
+        location: []
         /* markers: [
             {
               title: "The marker`s title will appear as a tooltip.",
@@ -18,6 +18,10 @@ export class AddItem extends Component {
           ] */
     }
 
+    callbackFunction = (childData) => {
+        this.setState({location: childData})
+    }
+
     onClick = (e) => {
         this.setState({found: true});
     }
@@ -25,14 +29,10 @@ export class AddItem extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location);
-        this.setState({ name: '', found: false, desc: '', location: ''});
+        this.setState({ name: '', found: false, desc: ''});
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
-    
-    updateState() {
-        this.setState({ location: '' });
-    }
 
     render() {
         return (
@@ -55,14 +55,14 @@ export class AddItem extends Component {
                         value={this.state.desc}
                         onChange={this.onChange}
                     />
-                    <input 
+                    {/* <input 
                         type="text" 
                         name="location" 
                         style={{ flex: '10', padding: '5px' }}
                         placeholder="Click on map to add location..."
                         value={this.state.location}
                         onChange={this.onChange}
-                    />
+                    /> */}
                     <input 
                         type="submit" 
                         value="List as Missing "
@@ -79,7 +79,7 @@ export class AddItem extends Component {
                         onClick={this.onClick}
                     />
                 </form>
-                <GoogleMap/>
+                <GoogleMap parentCallback = {this.callbackFunction}/>
                 {/* <div>
                     <h1 className="text-center">My Maps</h1>
                     <Map

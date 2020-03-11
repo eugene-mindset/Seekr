@@ -8,7 +8,6 @@ import About from './components/pages/About';
 import axios from 'axios';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
-import GoogleMaps from './components/pages/GoogleMaps'
 import GoogleMap from './components/pages/GoogleMap'
 
 import './App.css';

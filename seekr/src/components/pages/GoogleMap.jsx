@@ -12,20 +12,28 @@ export class GoogleMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markers: [],
-      location: ''
+      markers: [
+        {name: '',
+        position: { lat: 39.3299013, lng: -76.6227064 },
+        title: ''}
+      ],
+      location: [ 39.3299013, -76.6227064 ]
     };
     this.onClick = this.onClick.bind(this);
   }
-  
 
+  sendData = () => {
+    this.props.parentCallback(this.state.location);
+  }
+  
   onClick(t, map, coord) {
     const { latLng } = coord;
     const lat = latLng.lat();
     const lng = latLng.lng();
     this.state.markers.pop();
     this.props.updateParent
-    this.state.location = { lat, lng }
+    this.state.location = [ lat, lng ]
+    this.sendData()
     /* AddItem.setTheState('') */
 
     this.setState(previousState => {
@@ -43,6 +51,7 @@ export class GoogleMap extends Component {
   }
 
   render() {
+    
     return (
       <div>
         <h1 className="text-center">Drop a marker on location of lost item.</h1>

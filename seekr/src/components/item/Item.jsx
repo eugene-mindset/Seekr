@@ -11,11 +11,14 @@ export class Item extends Component {
     }
     
     render() {
-        const { id, name, found, desc } = this.props.item;
+        const { id, name, found, desc, location } = this.props.item;
+        var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
         return (
             <div style={this.getStyle()}>
                 <p>
                     { name.concat(':') } { desc }
+                    <br />
+                    <a href={ url } target="_blank">Location</a>
                     <button onClick={this.props.deleteItem.bind(this, id)} style={btnStyle}>x</button>
                     <br />
                     { found ? "Found item" : "Lost item" }
