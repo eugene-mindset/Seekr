@@ -1,4 +1,3 @@
-<<<<<<< HEAD:app/app/python_tests/flask_api_test.py
 import unittest
 from app import create_app
 from app.mongo_inst import mongo
@@ -44,9 +43,3 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 2)
         self.assertEqual(response_dict[0]['name'], 'pen')
-
-    def test_get_all_item(self):
-        response = self.app.get('/items')
-        response_dict = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response_dict), 2)

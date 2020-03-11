@@ -1,4 +1,3 @@
-<<<<<<< HEAD:app/app/models/models.py
 from app import mongo
 from abc import ABCMeta, abstractmethod
 from bson.objectid import ObjectId
@@ -139,3 +138,4 @@ class Item:
     
     def toDict(self):
         output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
+        return output
