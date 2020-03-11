@@ -1,13 +1,15 @@
 # Seekr: JHU OOSE PROJECT SPRING 2020
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
 
+# Deployed At:
+http://ec2-35-174-174-14.compute-1.amazonaws.com/
+
 # Running the App
 
 ## Notes
 
 - API server served on <http://localhost:5000>
 - React default serves on <http://localhost:3000>
-- MongoDB default on port <27017>
 - Nodejs version 13.9.0
 - Python version 3.7.5
 - Need to have npm, nodejs, python installed.
