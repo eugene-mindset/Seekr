@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 import AddItem from '../item/AddItem';
+import GoogleMap from './GoogleMap';
 
 export default class Add extends React.Component {
       // Toggle state vars
@@ -25,19 +26,22 @@ export default class Add extends React.Component {
         );
       }
     
-      addItem = (name, found, desc) => {
+      addItem = (name, found, desc, location) => {
         axios.post('/items', {
           name: name,
           found: found,
-          desc: desc
+          desc: desc,
+          location: location
         })
       }
+      
 
     render() {
         return (
             <React.Fragment>
                 <h1>Add Item</h1>
                 <AddItem addItem={this.addItem} />  
+                
             </React.Fragment>
         );
     }

@@ -14,7 +14,8 @@ import './App.css';
 
 class App extends Component {
   state = {
-    items: []
+    items: [],
+    googleMaps: []
   }
 
   
@@ -40,6 +41,7 @@ class App extends Component {
               <React.Fragment>
                 <h1>Click on tabs to choose correct path</h1>
                 <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
+                {/* <GoogleMaps googleMaps = {this.state.googleMaps} /> */}
               </React.Fragment>
             )}/>
           </div>
