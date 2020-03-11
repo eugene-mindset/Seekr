@@ -8,13 +8,15 @@ import About from './components/pages/About';
 import axios from 'axios';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
+import GoogleMaps from './components/pages/GoogleMaps'
 import GoogleMap from './components/pages/GoogleMap'
 
 import './App.css';
 
 class App extends Component {
   state = {
-    items: []
+    items: [],
+    googleMaps: []
   }
 
   
@@ -40,6 +42,7 @@ class App extends Component {
               <React.Fragment>
                 <h1>Click on tabs to choose correct path</h1>
                 <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
+                {/* <GoogleMaps googleMaps = {this.state.googleMaps} /> */}
               </React.Fragment>
             )}/>
           </div>

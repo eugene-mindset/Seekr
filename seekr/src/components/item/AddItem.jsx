@@ -79,8 +79,7 @@ export class AddItem extends Component {
                         onClick={this.onClick}
                     />
                 </form>
-                <GoogleMap 
-                />
+                <GoogleMap/>
                 {/* <div>
                     <h1 className="text-center">My Maps</h1>
                     <Map

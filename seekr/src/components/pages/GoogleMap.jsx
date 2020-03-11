@@ -108,10 +108,6 @@ export class GoogleMap extends Component {
   }
 } */
 
-GoogleMap.propTypes = {
-  googleMap: PropTypes.object.isRequired
-}
-
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyDlUTl5jQFNPLW_z1wA_C0IXYHfwUvt8V8'
 })(GoogleMap);
