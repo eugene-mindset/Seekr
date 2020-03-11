@@ -1,4 +1,3 @@
-<<<<<<< HEAD:app/app/python_tests/flask_api_test.py
 import unittest
 from app import create_app
 from app.mongo_inst import mongo

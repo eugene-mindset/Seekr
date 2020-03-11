@@ -1,4 +1,3 @@
-<<<<<<< HEAD:app/app/models/models.py
 from app import mongo
 from abc import ABCMeta, abstractmethod
 from bson.objectid import ObjectId
