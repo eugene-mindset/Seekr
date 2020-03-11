@@ -12,8 +12,6 @@ matrix:
         - coverage run --source=./ run_tests.py
         # just for now
         - coverage report
-      after_success:
-        -codecov
 
     - language: node_js
       node_js:

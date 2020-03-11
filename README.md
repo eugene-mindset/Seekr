@@ -1,6 +1,5 @@
 # Seekr: JHU OOSE PROJECT SPRING 2020
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
-[![Python coverage](https://codecov.io/gh/jhu-oose/2020-spring-group-Seekr/branch/master/graph/badge.svg)](https://codecov.io/gh/jhu-oose/2020-spring-group-Seekr/)
 
 # Running the App
 
@@ -38,3 +37,9 @@
 
 1. Open terminal and head to /app
 2. Enter the command `mongod --dbpath=./data/db/`
+
+## Deployment (AWS)
+1. ssh -i /path/to/your/oose_key.pem ubuntu@ec2-35-174-174-14.compute-1.amazonaws.com
+2. cd (into project folder)
+3. git pull (currently due to hot reloading from being in dev mode)
+4. tmux a (to open up the background terminals running the app, use tmux commands)
