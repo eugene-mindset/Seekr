@@ -111,32 +111,26 @@ class Item:
 
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
-            total = 0
-            unique = 0
+            total = []
+            unique = set()
+
+            if type(self.name) == str and type(self.desc) == str:
+                tokensName = set(self.name.lower().split())
+                tokensDesc = set(self.desc.lower().split())
+
+                total += list(tokensName.union(tokensDesc))
+
+            if type(otherItem.name) == str and type(otherItem.desc) == str:
+                tokensName = set(otherItem.name.lower().split())
+                tokensDesc = set(otherItem.desc.lower().split())
+
+                total += list(tokensName.union(tokensDesc))
             
-            uniqueTokensSelf = set()
-            uniqueTokensOther = set()
-
-            if type(self.name) == str and type(otherItem.name) == str:
-                uniqueTokensSelf = set(self.name.lower().split())
-                uniqueTokensOther = set(otherItem.name.lower().split())
-
-                setTokenName = uniqueTokensSelf.union(uniqueTokensOther)
-                total += len(uniqueTokensSelf) + len(uniqueTokensOther)
-
-            """
-            if type(self.desc) == str and type(otherItem.desc) == str:
-                tokensDesc = self.desc.lower().split() + otherItem.desc.lower().split()
-                setTokenDesc = set(tokensDesc)
-                total += len(tokensDesc)
-            """
-
-            unique = len(uniqueTokensSelf.union(uniqueTokensOther))
-            matches = total - unique
-
+            unique = set(total)
+            matches = len(total) - len(unique)
             result = matches
 
-            print(unique, total, otherItem.name, otherItem.desc, result)
+            # print(otherItem.name + ":", otherItem.desc, result, total, unique)
 
             return result
 

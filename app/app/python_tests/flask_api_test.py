@@ -36,3 +36,10 @@ class ApiTest(unittest.TestCase):
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 2)
+
+    def test_get_all_items_sorted(self):
+        response = self.app.get('/items/search=pen')
+        response_dict = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response_dict), 2)
+        self.assertEqual(response_dict[0]['name'], 'pen')
