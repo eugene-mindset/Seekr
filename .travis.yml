@@ -6,19 +6,17 @@ matrix:
       services:
         - mongodb
       install:
-        - pip install -r app/requirements.txt
+        - pip install -r requirements.txt
         - pip install codecov
       script:
-        - coverage run --source=app/ app/run_tests.py
+        - coverage run --source=./ run_tests.py
         # just for now
         - coverage report
-      after_success:
-        -codecov
 
     - language: node_js
       node_js:
         - "13"
       install:
-        - npm install --prefix app/seekr/
+        - npm install --prefix seekr/
       script:
-        - npm test --prefix app/seekr/ a -- --coverage
+        - npm test --prefix seekr/ a -- --coverage
