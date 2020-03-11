@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import AddItem from '../item/AddItem';
+import PropTypes from 'prop-types';
 
 const mapStyles = {
   width: '75%',
   height: '75%'
 };
 
-class GoogleMap extends Component {
+export class GoogleMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,7 +108,9 @@ class GoogleMap extends Component {
   }
 } */
 
-
+GoogleMap.propTypes = {
+  googleMap: PropTypes.object.isRequired
+}
 
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyDlUTl5jQFNPLW_z1wA_C0IXYHfwUvt8V8'
