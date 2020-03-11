@@ -138,3 +138,4 @@ class Item:
     
     def toDict(self):
         output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc}
+        return output
