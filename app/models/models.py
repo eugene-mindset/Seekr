@@ -24,8 +24,8 @@ class ItemDao(DatabaseObject):
     def __init__(self, collection):
         super().__init__(collection)
 
-    def findById(self, id):
-        item = self.collection.find_one({"_id" : ObjectId(id)})
+    def findById(self, Id):
+        item = self.collection.find_one({"_id" : ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'], item['desc'], item['location'])
         return newItem
 
@@ -49,31 +49,31 @@ class ItemDao(DatabaseObject):
         return item
 
     def update(self, item):
-        id = item.getId()
+        Id = item.getId()
         name = item.getName()
         found = item.getFound()
         desc = item.getDesc()
         location = item.getLocation()
-        self.collection.find_one_and_update({'_id':ObjectId(id)}, {"$set": {"name": name, 'found': found, 'desc': desc, 'location':location}}, upsert=False)
+        self.collection.find_one_and_update({'_id':ObjectId(Id)}, {"$set": {"name": name, 'found': found, 'desc': desc, 'location':location}}, upsert=False)
         return item
 
-    def remove(self, id):
-        returned = self.collection.delete_one({'_id': ObjectId(id)})
+    def remove(self, Id):
+        returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
     
 class Item:
-    def __init__(self, id=None, name=None, found=None, desc=None, location=None):
-        self.id = id
+    def __init__(self, Id=None, name=None, found=None, desc=None, location=None):
+        self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
 
     def getId(self):
-        return self.id
+        return self.Id
 
-    def setId(self, id):
-        self.id = id
+    def setId(self, Id):
+        self.Id = Id
 
     def getName(self):
         return self.name
@@ -100,7 +100,7 @@ class Item:
         self.location = location
 
     def __eq__(self, otherItem):
-        if self.id != otherItem.id:
+        if self.Id != otherItem.Id:
             return False
         if self.name != otherItem.name:
             return False
@@ -136,5 +136,5 @@ class Item:
         return 1
     
     def toDict(self):
-        output = {'id': self.id, 'name' : self.name, 'found': self.found, 'desc': self.desc, 'location': self.location}
+        output = {'id': self.Id, 'name' : self.name, 'found': self.found, 'desc': self.desc, 'location': self.location}
         return output

@@ -7,7 +7,7 @@ export class AddItem extends Component {
         name: '',
         found: false,
         desc: '',
-        location: []
+        location: [ 39.3299, -76.6205 ]
     }
 
     callbackFunction = (childData) => {
