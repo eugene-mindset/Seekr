@@ -6,12 +6,13 @@ from flask_pymongo import MongoClient, PyMongo
 from config import *
 import json
 
+
 class ApiTest(unittest.TestCase):
 
     def setUp(self):
         app = create_app(TestConfig)
         app.testing = True
-        self.app = app.test_client() 
+        self.app = app.test_client()
         items = mongo.db.items
         itemObj = ItemDao(items)
 
@@ -20,13 +21,13 @@ class ApiTest(unittest.TestCase):
         found = False
         desc = "It is a pen"
         location = [39.3299, -76.6205]
-        item = Item(name = name, found = found, desc = desc)
+        item = Item(name=name, found=found, desc=desc)
         itemObj.insert(item)
         name = "card"
         found = True
         desc = "It is a card"
         location = [39.3299, -76.6205]
-        item = Item(name = name, found = found, desc = desc)
+        item = Item(name=name, found=found, desc=desc)
         itemObj.insert(item)
 
     def tearDown(self):
