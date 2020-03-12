@@ -19,11 +19,13 @@ class ApiTest(unittest.TestCase):
         name = "pen"
         found = False
         desc = "It is a pen"
+        location = [39.3299, -76.6205]
         item = Item(name = name, found = found, desc = desc)
         itemObj.insert(item)
         name = "card"
         found = True
         desc = "It is a card"
+        location = [39.3299, -76.6205]
         item = Item(name = name, found = found, desc = desc)
         itemObj.insert(item)
 

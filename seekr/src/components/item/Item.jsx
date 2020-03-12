@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 
+const btnStyle = {
+    background: '#ff0000',
+    color: '#fff',
+    border: 'none',
+    padding: '5px 9px',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    float: 'right'
+}
+
 export class Item extends Component {
     getStyle = () => {
         return{
@@ -28,19 +38,8 @@ export class Item extends Component {
     }
 }
 
-const btnStyle = {
-    background: '#ff0000',
-    color: '#fff',
-    border: 'none',
-    padding: '5px 9px',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    float: 'right'
-}
-
 Item.propTypes = {
     item: PropTypes.object.isRequired,
-    markFound: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired
 }
 

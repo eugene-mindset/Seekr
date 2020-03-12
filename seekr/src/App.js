@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Header from './components/layout/Header';
-import Items from './components/item/Items';
-import AddItem from './components/item/AddItem';
 import About from './components/pages/About';
-import axios from 'axios';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
 import GoogleMap from './components/pages/GoogleMap'
@@ -13,13 +10,6 @@ import GoogleMap from './components/pages/GoogleMap'
 import './App.css';
 
 class App extends Component {
-  state = {
-    items: [],
-    googleMaps: []
-  }
-
-  
-
 
   render() {
     return (
@@ -35,13 +25,11 @@ class App extends Component {
 
             <Route path="/about" component={About} />
 
-            <Route path ="/Map" component={GoogleMap} />
+            {/* <Route path="/Map" component={GoogleMap} /> */}
 
-            <Route exact path="/" render={props => (
+            <Route exact path="/" render={() => (
               <React.Fragment>
                 <h1>Click on tabs to choose correct path</h1>
-                <Items items={this.state.items} markFound={this.markFound} deleteItem={this.deleteItem} />
-                {/* <GoogleMaps googleMaps = {this.state.googleMaps} /> */}
               </React.Fragment>
             )}/>
           </div>

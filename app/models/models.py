@@ -62,7 +62,6 @@ class ItemDao(DatabaseObject):
         return returned.deleted_count
     
 class Item:
-    #TODO remove placeholder when location can be added
     def __init__(self, id=None, name=None, found=None, desc=None, location=None):
         self.id = id
         self.name = name
@@ -131,8 +130,6 @@ class Item:
             unique = set(total)
             matches = len(total) - len(unique)
             result = matches
-
-            # print(otherItem.name + ":", otherItem.desc, result, total, unique)
 
             return result
 

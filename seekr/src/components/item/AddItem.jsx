@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import GoogleMap from '../pages/GoogleMap';
 
 export class AddItem extends Component {
@@ -9,13 +8,6 @@ export class AddItem extends Component {
         found: false,
         desc: '',
         location: []
-        /* markers: [
-            {
-              title: "The marker`s title will appear as a tooltip.",
-              name: "SOMA",
-              position: { lat: 37.778519, lng: -122.40564 }
-            }
-          ] */
     }
 
     callbackFunction = (childData) => {
@@ -55,14 +47,6 @@ export class AddItem extends Component {
                         value={this.state.desc}
                         onChange={this.onChange}
                     />
-                    {/* <input 
-                        type="text" 
-                        name="location" 
-                        style={{ flex: '10', padding: '5px' }}
-                        placeholder="Click on map to add location..."
-                        value={this.state.location}
-                        onChange={this.onChange}
-                    /> */}
                     <input 
                         type="submit" 
                         value="List as Missing "
@@ -79,37 +63,14 @@ export class AddItem extends Component {
                         onClick={this.onClick}
                     />
                 </form>
-                <GoogleMap parentCallback = {this.callbackFunction}/>
-                {/* <div>
-                    <h1 className="text-center">My Maps</h1>
-                    <Map
-                    google={this.props.google}
-                    style={{ width: "80%", margin: "auto" }}
-                    className={"map"}
-                    zoom={14}
-                    onClick={this.onClick}
-                    >
-                    {this.state.markers.map((marker, index) => (
-                        <Marker
-                        key={index}
-                        title={marker.title}
-                        name={marker.name}
-                        position={marker.position}
-                        />
-                    ))}
-                    </Map>
-                </div> */}
+                <GoogleMap parentCallback={this.callbackFunction}/>
             </div>
         )
     }
 }
 
-/* GoogleApiWrapper({
-    apiKey: 'AIzaSyDlUTl5jQFNPLW_z1wA_C0IXYHfwUvt8V8'
-  })(GoogleMap); */
-
 AddItem.propTypes = {
     addItem: PropTypes.func.isRequired
 }
 
-export default AddItem;/* {AddItem, GoogleApiWrapper}; */
+export default AddItem;
