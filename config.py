@@ -5,5 +5,3 @@ class TestConfig(object):
 class ProdConfig(object):
     MONGO_DBNAME = "proddb"
     MONGO_URI = "mongodb://localhost:27017/" + MONGO_DBNAME
-
-

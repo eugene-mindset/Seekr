@@ -9,7 +9,6 @@ items_router = Blueprint("items", __name__)
 @items_router.route("/")
 def hello():
     return "Hello World!"
-    
 
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
