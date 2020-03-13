@@ -19,8 +19,8 @@
 
 ## Tasks
 
-- [ ] Add item matching to search bar
-- [ ] Add test code for search bar
+- [X] Add item matching to search bar
+- [X] Add test code for search bar
 - [X] Add location field for item listings
 - [X] Allow user to supply location information when creating a listing
 - [X] Deploy on AWS
