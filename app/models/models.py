@@ -64,12 +64,12 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        item_id = self.collection.insert({
+        item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
             'location': location
-        })
+        }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
         return item
@@ -153,6 +153,8 @@ class Item:
         if self.found != otherItem.found:
             return False
         if self.desc != otherItem.desc:
+            return False
+        if self.location != otherItem.location:
             return False
         return True
 
