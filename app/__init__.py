@@ -6,6 +6,7 @@ from .mongo_inst import mongo
 
 app = Flask(__name__)
 
+
 #Configure app from object input and enable CORS
 def create_app(config_obj):
     app.config.from_object(config_obj)
@@ -13,6 +14,7 @@ def create_app(config_obj):
     mongo.init_app(app)
     register_blueprints(app)
     return app
+
 
 def register_blueprints(application):
     from app.controllers import items_router

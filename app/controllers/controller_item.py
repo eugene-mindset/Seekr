@@ -6,33 +6,37 @@ from app import mongo
 
 items_router = Blueprint("items", __name__)
 
+
 @items_router.route("/")
 def hello():
     return "Hello World!"
+
 
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
     items = mongo.db.items
     itemObj = ItemDao(items)
-    listOfItems = itemObj.findByName()
+    listOfItems = itemObj.findAll()
     output = []
     for i in listOfItems:
         output.append(i.toDict())
     return jsonify(output), 200
 
+
 @items_router.route('/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
     items = mongo.db.items
     itemObj = ItemDao(items)
-    listOfItems = itemObj.findByName()
+    listOfItems = itemObj.findAll()
 
     queriedItem = Item(name=query, desc="")
     scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 
-    output = [pair[1].toDict() for pair in scoredItems]     
+    output = [pair[1].toDict() for pair in scoredItems]
 
     return jsonify(output)
+
 
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
@@ -43,6 +47,7 @@ def get_item(name):
     for i in listOfItems:
         output.append(i.toDict())
     return jsonify(output), 200
+
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
@@ -59,6 +64,7 @@ def add_item():
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
+
 @items_router.route('/items/<id>', methods=['PUT'])
 def update_item(id):
     items = mongo.db.items
@@ -69,9 +75,10 @@ def update_item(id):
     location = request.get_json()['location']
 
     itemObj = ItemDao(items)
-    item = Item(id=id, name=name, found=found, desc=desc, location=location)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
+
 
 @items_router.route('/items/<id>', methods=['DELETE'])
 def delete_item(id):
@@ -84,4 +91,4 @@ def delete_item(id):
     else:
         output = {'message': 'not deleted'}
 
-    return jsonify({'result' : output}), 200
+    return jsonify({'result': output}), 200
