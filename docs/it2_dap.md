@@ -26,3 +26,4 @@
 - [X] Deploy on AWS
 - [x] Have unit testing
 - [x] Set up continous integration with Travis CI
+- [X] Switch to object-oriented model
