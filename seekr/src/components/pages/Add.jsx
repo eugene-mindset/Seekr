@@ -4,24 +4,21 @@ import AddItem from '../item/AddItem';
 
 export default class Add extends Component {
     
-      addItem = (name, found, desc, location) => {
-        axios.post('/items', {
-          name: name,
-          found: found,
-          desc: desc,
-          location: location
-        })
-      }
-      
+  addItem = (name, found, desc, location) => {
+    axios.post('/items', {
+      name: name,
+      found: found,
+      desc: desc,
+      location: location
+    })
+  }
 
-    render() {
-        return (
-            <React.Fragment>
-                <h1>Add Item</h1>
-                <AddItem addItem={this.addItem} />  
-                
-            </React.Fragment>
-        );
-    }
-
+  render() {
+    return (
+      <React.Fragment>
+        <h1>Add Item</h1>
+        <AddItem addItem={this.addItem} />
+      </React.Fragment>
+    );
+  }
 }

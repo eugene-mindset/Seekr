@@ -48,7 +48,7 @@ export class GoogleMap extends Component {
         <h1 className="text-center">Drop a marker on location of lost item.</h1>
         <Map
           google={this.props.google}
-          style={{ width: "80%", margin: "auto" }}
+          style={{ width: "50%", margin: "auto" }}
           className={"map"}
           zoom={14}
           onClick={this.onClick}

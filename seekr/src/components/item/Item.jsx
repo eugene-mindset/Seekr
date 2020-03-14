@@ -1,46 +1,47 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 
 const btnStyle = {
-    background: '#ff0000',
-    color: '#fff',
-    border: 'none',
-    padding: '5px 9px',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    float: 'right'
+  background: '#ff0000',
+  color: '#fff',
+  border: 'none',
+  padding: '5px 9px',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  float: 'right'
 }
 
 export class Item extends Component {
-    getStyle = () => {
-        return{
-            background: '#f4f4f4',
-            padding: '10px',
-            borderBottom: '1px #ccc dotted',
-        }
+  getStyle = () => {
+    return{
+      background: '#f4f4f4',
+      padding: '10px',
+      borderBottom: '1px #ccc dotted',
     }
-    
-    render() {
-        const { id, name, found, desc, location } = this.props.item;
-        var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
-        return (
-            <div style={this.getStyle()}>
-                <p>
-                    { name.concat(':') } { desc }
-                    <br />
-                    <a href={ url } target="_blank">Location</a>
-                    <button onClick={this.props.deleteItem.bind(this, id)} style={btnStyle}>x</button>
-                    <br />
-                    { found ? "Found item" : "Lost item" }
-                </p>
-            </div>
-        )
-    }
+  }
+  
+  render() {
+    const { id, name, found, desc, location } = this.props.item;
+    var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
+    return (
+      <Card style={{ textAlign: 'left'}}>
+        <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
+        <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
+        <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
+        <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
+        <Card.Footer>
+          <small className="text-muted">{ found ? "Found item" : "Lost item" }</small>
+        </Card.Footer>
+      </Card>
+    )
+  }
 }
 
 Item.propTypes = {
-    item: PropTypes.object.isRequired,
-    deleteItem: PropTypes.func.isRequired
+  item: PropTypes.object.isRequired,
+  deleteItem: PropTypes.func.isRequired
 }
 
 export default Item

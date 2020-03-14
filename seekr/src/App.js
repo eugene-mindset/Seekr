@@ -5,7 +5,6 @@ import Navigation from './components/layout/Navigation';
 import About from './components/pages/About';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
-import GoogleMap from './components/pages/GoogleMap'
 import Home from './components/pages/Home';
 import Image from 'react-bootstrap/Image'
 
@@ -18,17 +17,11 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navigation />
-          {/* Add item */}
-          <Route path="/add" component={Add} />
-
-          {/* Search item */}
-          <Route path="/search" component={Search} />
-
-          <Route path="/about" component={About} />
-
-          {/* <Route path="/Map" component={GoogleMap} /> */}
 
           <Route exact path="/" component={Home}/>
+          <Route path="/add" component={Add} />
+          <Route path="/search" component={Search} />
+          <Route path="/about" component={About} />
         </div>
       </Router>
     );
