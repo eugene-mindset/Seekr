@@ -3,15 +3,6 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
-const btnStyle = {
-  background: '#ff0000',
-  color: '#fff',
-  border: 'none',
-  padding: '5px 9px',
-  borderRadius: '50%',
-  cursor: 'pointer',
-  float: 'right'
-}
 
 export class Item extends Component {
   getStyle = () => {
@@ -26,7 +17,7 @@ export class Item extends Component {
     const { id, name, found, desc, location } = this.props.item;
     var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
     return (
-      <Card style={{ textAlign: 'left'}}>
+      <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}

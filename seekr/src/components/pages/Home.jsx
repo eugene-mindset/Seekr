@@ -1,6 +1,5 @@
-import React from 'react'
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import Navigation from '../layout/Navigation';
+import React from 'react';
+import Jumbotron from 'react-bootstrap/Jumbotron';
 
 import './stylesheets/Home.css';
 

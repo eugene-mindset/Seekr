@@ -6,7 +6,6 @@ import About from './components/pages/About';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
 import Home from './components/pages/Home';
-import Image from 'react-bootstrap/Image'
 
 import './App.css';
 

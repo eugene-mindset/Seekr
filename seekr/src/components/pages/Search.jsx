@@ -6,6 +6,12 @@ import SearchItem from '../item/SearchItem';
 import CardColumns from 'react-bootstrap/CardColumns'
 
 
+const columnStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center'
+}
+
 export default class Search extends Component {
   state = {
     items: []
@@ -22,7 +28,7 @@ export default class Search extends Component {
 
   deleteItem = (id) => {
     // ...spread operator to get list of items make a copy
-    // filter out all tha arent the item to remove the item, this is only front end so non persisting
+    // filter out all that arent the item to remove the item
     axios.delete(`/items/${id}`)
       .then(res => this.setState({
         items: [...this.state.items.filter(item => item.id !== id)]
@@ -36,7 +42,7 @@ export default class Search extends Component {
         <h1>Search</h1>
         <SearchItem searchItem={this.searchItem} />
         <br />
-        <CardColumns>
+        <CardColumns style={columnStyle}>
           <Items items={this.state.items} deleteItem={this.deleteItem} />
         </CardColumns>
       </React.Fragment>
