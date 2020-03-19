@@ -16,11 +16,12 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navigation />
-
           <Route exact path="/" component={Home}/>
-          <Route path="/add" component={Add} />
-          <Route path="/search" component={Search} />
-          <Route path="/about" component={About} />
+          <div className="site-container">
+            <Route path="/add" component={Add} />
+            <Route path="/search" component={Search} />
+            <Route path="/about" component={About} />
+          </div>
         </div>
       </Router>
     );
