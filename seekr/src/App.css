@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.site-container {
+  margin: 2em;
+}
+
 .navbar-brand{
   color:#C4C5C6 !important;
   font-family: "Bubblegum Sans" !important;
