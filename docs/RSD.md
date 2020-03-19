@@ -29,7 +29,6 @@
 * As someone who lost or found something, I want to be able to search for items, so if can see the listings that match my query.
 * As someone who has lost something, I want to be able to search the listings by the location of where the item was found, so I can have an easier time finding my lost item.
 * As someone who has lost something, I want to set a radius on a map of where I think I lost it, so I can be notified if someone finds something in that area.
-* As someone who has found something, I want to set a radius on a map of where I found the item, so people can be notified if their item was found in that area.
 
 ### Nice to have
 
