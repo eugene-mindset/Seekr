@@ -4,11 +4,11 @@
 
 ### UML Diagram
 
-![UML Diagram]())
+![UML Diagram]()
 
 ## Wireframe
 
-![Wireframe]())
+![Wireframe]()
 
 ## Iteration Backlog
 
@@ -20,7 +20,7 @@
 
 ## Tasks
 
-### User Accounts (Shaurya, Andrew, Jacob)
+### User Accounts (Shaurya, Andrew, Jacob) #38
 
 * [ ] Need to be able to register for an account
 * [ ] Need to be able to login and logout
@@ -28,7 +28,7 @@
 * [ ] Supply contact information when registering for account
 * [ ] Display contact information on listings
 
-### Filtering (Andrew, Jason, Eugene)
+### Filtering (Andrew, Jason, Eugene) #39
 
 * [ ] Create descriptive tags for users to apply to item listings
 * [ ] Modify add page to apply descriptive tags when creating listings
@@ -37,12 +37,12 @@
 * [ ] Modify search bar to narrow results to display only items within a radius of a location
 * [ ] Modify search bar to sort results in different orders (most recent, best matches, ...)
 
-### Miscellaneous (Anderson, Shaurya, Jason, Jacob, Eugene)
+### Miscellaneous (@Anderson-A, Shaurya, Jason, Jacob, Eugene)
 
-* [ ] Allow user to supply radius when adding a lost item (Jacob)
-* [ ] Get the timestamp of when a listing is created (Shaurya)
-* [ ] Display the timestamp of listings (Anderson)
-* [ ] Eliminating the homepage (Anderson)
-* [X] Listing the items as cards (Anderson)
-* [ ] Deploy changes to live site (Jason)
-* [ ] Improve search functionality (Eugene)
+* [ ] Allow user to supply radius when adding a lost item (Jacob) #40
+* [ ] Get the timestamp of when a listing is created (Shaurya) #41
+* [ ] Display the timestamp of listings (@Anderson-A) #42
+* [ ] Eliminate the homepage (@Anderson-A) #43
+* [X] List the item as cards (@Anderson-A) #46
+* [ ] Deploy changes to live site (Jason) #45
+* [ ] Improve search functionality (@eugene-mindset) #44
