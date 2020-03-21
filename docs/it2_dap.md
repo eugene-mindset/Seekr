@@ -27,3 +27,8 @@
 - [x] Have unit testing
 - [x] Set up continous integration with Travis CI
 - [X] Switch to object-oriented model
+
+## Retrospective
+This iteration, we focused on adding more features for our items and also made some behind-the-scenes changes. We added the ability to select a location for each Item so in future iterations our filtering when searching can be more sophisticated. Behind-the-scenes, we deployed our app onto AWS to make it accessibile to the public, and so none of our computers needed to always host the backend and server. We were able to set up Travis CI to make sure that our tests were able to automatically run. In addition, we changed the structure of our code to better reflect the object-oriented nature of the course. Overall, this iteration was very successful, and we were all able to contribute a lot to our project.
+
+
