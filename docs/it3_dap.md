@@ -39,7 +39,7 @@
 * [ ] Allow user to apply tags to the search bar in order to narrow down listing (Jason & Anderson)
 * [ ] Allow user to change the order of item listings based on time added, best-matching, etc. (Jason & Anderson)
 * [X] List the item as cards (Anderson)
-* [X] Display the image belonging to item listing
+* [ ] Display the image belonging to item listing (Anderson)
 
 ### Backend
 
