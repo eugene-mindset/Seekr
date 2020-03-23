@@ -4,11 +4,11 @@
 
 ### UML Diagram
 
-![UML Diagram]()
+![UML Diagram](./additional/uml3.png)
 
 ## Wireframe
 
-![Wireframe]()
+![Wireframe](./additional/wireframe3.bmp)
 
 ## Iteration Backlog
 
