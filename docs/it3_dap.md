@@ -18,7 +18,6 @@
 * As someone who lost something, I want to be able to filter items based on designated tags, so I can have an easier time finding an item by its properties or functionality.
 * As a user, I want to search through entries with tags so that it is faster to sort through entries.
 
-
 ## Tasks
 
 ### Frontend
