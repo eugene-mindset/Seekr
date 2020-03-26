@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'])
+                       item['desc'], item['location'], item['tags'])
         return newItem
 
     def findByName(self, name=None):
@@ -43,7 +43,7 @@ class ItemDao(DatabaseObject):
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'))
+                           item.get('location'), item.get('tags'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -54,7 +54,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'))
+                           item.get('location'), item.get('tags'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -64,11 +64,13 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        tags = item.tags
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
-            'location': location
+            'location': location,
+            'tags': tags
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -80,12 +82,14 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        tags = item.tags
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
                 'found': found,
                 'desc': desc,
-                'location': location
+                'location': location,
+                'tags': tags
             }
         }, upsert=False)
         return item
@@ -98,7 +102,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None):
+                 location=None, tags=None):
         self.Id = Id
         self.name = name
         self.found = found
