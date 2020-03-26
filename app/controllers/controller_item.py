@@ -2,10 +2,19 @@ from flask import Blueprint, jsonify, request
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from app.models.models import *
+from app.controllers.tags import *
 from app import mongo
 
 items_router = Blueprint("items", __name__)
 
+# tags:
+#   tech
+#   clothing
+#   jewelry
+#   pet
+#   personal - wallets, keys, id's
+#   apparel - clothing, accessories, purse
+#   other - anything not in the above categories: bikes, coffee mugs, etc
 
 @items_router.route("/")
 def hello():
@@ -57,10 +66,11 @@ def add_item():
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-
+    tags = request.get_json()['tags']
+    
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location)
+    item = Item(name=name, found=found, desc=desc, location=location, tags=tags)
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
@@ -73,9 +83,10 @@ def update_item(id):
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-
+    tags = request.get_json()['tags']
+    
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 

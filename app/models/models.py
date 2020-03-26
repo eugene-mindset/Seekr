@@ -108,6 +108,7 @@ class Item:
         self.found = found
         self.desc = desc
         self.location = location
+        self.tags = tags
 
     @property
     def Id(self):
@@ -148,6 +149,14 @@ class Item:
     @location.setter
     def location(self, location):
         self.__location = location
+        
+    @property
+    def tags(self):
+        return self.__tags
+
+    @tags.setter
+    def tags(self, tags):
+        self.__tags = tags
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -160,8 +169,11 @@ class Item:
             return False
         if self.location != otherItem.location:
             return False
+        if set(self.tags) != set(otherItem.tags): # tags is a list of strings
+            return False
         return True
 
+    # magical formula to determine if a word is similar to another word
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
             total = []
@@ -193,6 +205,7 @@ class Item:
             'name': self.name,
             'found': self.found,
             'desc': self.desc,
-            'location': self.location
+            'location': self.location,
+            'tags' : self.tags
         }
         return output
