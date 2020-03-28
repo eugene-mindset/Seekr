@@ -32,13 +32,17 @@ class ItemSimilarity():
             return self.score <= other.score
 
         def __str__(self):
-            return item.name + ": " + item.desc
+            return item.name.lower() + ": " + item.desc.lower()
 
     def __init__(self, modelName='': str):
         """
             Creates the class.
 
-            modelName:str -> name of the model to download through gensim
+            Parameters
+            ----------
+
+            modelName:str
+                name of the model to download through gensim
         """
 
         # public properties
@@ -62,7 +66,13 @@ class ItemSimilarity():
 
     def addItem(self, item):
         """
-            Add item listing to use for computing its similarity to other items.
+            Add `item` to use for computing its similarity to queried items.
+
+            Parameters
+            ----------
+
+            item: Item
+                item to add to 'self'
         """
 
         # create new ItemScore and dictionary entries from ItemScore
@@ -77,8 +87,14 @@ class ItemSimilarity():
 
     def addItems(self, items):
         """
-            Add many item listings to use for computing its similarity to other
-            items.
+            Add every item in `items` to use for computing its similarity
+            to queried items.
+
+            Parameters
+            ----------
+
+            items: list of Item
+                items to add to 'self'
         """
 
         # create new ItemScores and dictionary entries from ItemScore
@@ -145,13 +161,19 @@ class ItemSimilarity():
 
     def _computeSimilarity(self, sent1, sent2):
         """
-            Compute soft cosine similarity between two sentences.
+            Compute soft cosine similarity between `sent1` and `sent2`.
 
-            sent1 -> query sentence
+            Parameters
+            ----------
+            sent1:
+                query sentence
 
-            sent2 -> compared sentence
+            sent2:
+                compared sentence
 
-            returns -> float from -1 to 1 of how similar the two sentences are,
+            Return
+            ------
+            float from -1 to 1 of how similar the two sentences are,
             the higher the better
         """
 
@@ -160,20 +182,25 @@ class ItemSimilarity():
     def scoreItems(self, itemToCompare, computeSim=False, computeBag=False):
         """
             Score every item listing in self. The score is how similar that item
-            is to itemToCompare.
+            is to `itemToCompare`.
 
-            itemToCompare: Item -> item to see how similar it is to other items
+            Parameters
+            ----------
+            itemToCompare: Item
+                item to see how similar it is to other items
 
-            computeSim=False, bool -> If true, will automatically update
-            simMatrix
+            computeSim=False: bool
+                If true, will automatically update simMatrix
 
-            computeBag=False, bool-> If true, will automatically update every
-            items sentence (bag of words)
+            computeBag=False: bool
+                If true, will automatically update every items sentence
+                (bag of words)
         """
+
 
         # make itemToCompare's bag of words
         sentence = self.dictionary.doc2bow(
-            simple_preprocess(itemToCompare.name + ": " + itemToCompare.desc))
+            simple_preprocess(str(ItemScore(itemToCompare))))
 
         # based on flags and parameters, update information or
         # send errors/warnings
@@ -200,7 +227,9 @@ class ItemSimilarity():
         """
             Get the items in self by how well they scored.
 
-            returns -> list of items sorted by similarity to last compared item
+            Return
+            ------
+            list of items sorted by similarity to last compared item
         """
 
         results = [itemScore for itemScore in self.itemScores]
