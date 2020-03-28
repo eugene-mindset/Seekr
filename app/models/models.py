@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'])
+                        item['desc'], item['location'])
         return newItem
 
     def findByName(self, name=None):
@@ -42,8 +42,8 @@ class ItemDao(DatabaseObject):
         toSearch = self.collection.find({"name": name})
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'))
+                            item.get('found'), item.get('desc'),
+                            item.get('location'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -53,8 +53,8 @@ class ItemDao(DatabaseObject):
         allItems = self.collection.find()
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'))
+                            item.get('found'), item.get('desc'),
+                            item.get('location'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -98,7 +98,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None):
+        location=None):
         self.Id = Id
         self.name = name
         self.found = found
@@ -191,4 +191,5 @@ class Item:
             'desc': self.desc,
             'location': self.location
         }
+
         return output
