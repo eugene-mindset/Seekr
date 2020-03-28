@@ -32,9 +32,9 @@ class ItemSimilarity():
             return self.score <= other.score
 
         def __str__(self):
-            return item.name.lower() + ": " + item.desc.lower()
+            return self.item.name.lower() + ": " + self.item.desc.lower()
 
-    def __init__(self, modelName='': str):
+    def __init__(self, modelName: str=''):
         """
             Creates the class.
 
@@ -76,12 +76,12 @@ class ItemSimilarity():
         """
 
         # create new ItemScore and dictionary entries from ItemScore
-        newEntry = ItemScore(item)
-        newDictEntry = corpora.Dictionary([simple_preprocess(str(newScore))])
+        newEntry = self.ItemScore(item)
+        newDictEntry = corpora.Dictionary([simple_preprocess(str(newEntry))])
 
         # add new entries to items and dictionary, update flags
         self.itemScores.append(newEntry)
-        self.dictionary.merge_with(newDictEntries)
+        self.dictionary.merge_with(newDictEntry)
         self._simOutdated = True
         self._bagOfWordsCalled = False
 
@@ -98,7 +98,7 @@ class ItemSimilarity():
         """
 
         # create new ItemScores and dictionary entries from ItemScore
-        newEntries = [ItemScore(item)) for item in items]
+        newEntries = [self.ItemScore(item) for item in items]
         newDictEntries = corpora.Dictionary(
             [simple_preprocess(str(newScore)) for newScore in newEntries])
 
@@ -200,7 +200,7 @@ class ItemSimilarity():
 
         # make itemToCompare's bag of words
         sentence = self.dictionary.doc2bow(
-            simple_preprocess(str(ItemScore(itemToCompare))))
+            simple_preprocess(str(self.ItemScore(itemToCompare))))
 
         # based on flags and parameters, update information or
         # send errors/warnings
@@ -235,4 +235,4 @@ class ItemSimilarity():
         results = [itemScore for itemScore in self.itemScores]
         results.sort()
 
-        return [itemScore.item for item]
+        return [itemScore.item for item in results]
