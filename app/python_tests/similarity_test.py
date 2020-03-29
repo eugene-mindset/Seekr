@@ -2,9 +2,9 @@ import unittest
 from app.models import Item
 from app.models.similarity import ItemSimilarity
 import gensim.downloader as api
+from gensim.utils import simple_preprocess
 
 class ItemSimTest(unittest.TestCase):
-
 
     @classmethod
     def setUpClass(cls):
@@ -34,6 +34,10 @@ class ItemSimTest(unittest.TestCase):
         self.itemSim.addItem(self.item1_1)
         self.assertIs(self.itemSim.itemScores[0].item, self.item1_1)
 
+        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
+        prep = list(set(prep))
+        self.assertEqual(len(self.itemSim.dictionary), len(prep))
+
         self.itemSim.clearItems()
         self.assertEqual(len(self.itemSim.itemScores), 0)
 
@@ -44,3 +48,30 @@ class ItemSimTest(unittest.TestCase):
 
         self.itemSim.clearItems()
         self.assertEqual(len(self.itemSim.itemScores), 0)
+
+    def test_clear_dict(self):
+        self.itemSim.addItem(self.item1_1)
+        self.itemSim.clearDictionary()
+        self.assertEqual(len(self.itemSim.dictionary), 0)
+
+    def test_compute_dict(self):
+        self.itemSim.addItem(self.item1_1)
+        self.itemSim.clearDictionary()
+
+        self.itemSim.computeDictionary()
+        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
+        prep = list(set(prep))
+        self.assertEqual(len(self.itemSim.dictionary), len(prep))
+
+    def test_exception_compute_sim(self):
+        with self.assertRaises(Exception) as err:
+            self.model = None
+            self.itemSim.computeSimilarityMatrix()
+
+    def test_compute_sim_matrx(self):
+        self.itemSim.addItem(self.item1_1)
+        self.itemSim.computeSimilarityMatrix()
+
+        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
+        prep = list(set(prep))
+        self.assertEqual(self.itemSim.simMatrix.shape, (len(prep), len(prep)))

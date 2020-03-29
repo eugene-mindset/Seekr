@@ -143,7 +143,7 @@ class ItemSimilarity():
                 "similarity matrix with NoneType")
 
         # create similarity matrix, update flags
-        self.simMatrix = self.model.similarity_matrix(dictionary, tfidf=None,
+        self.simMatrix = self.model.similarity_matrix(self.dictionary, tfidf=None,
             threshold=0.0, exponent=2.0, nonzero_limit=100)
         self._simOutdated = False
 
