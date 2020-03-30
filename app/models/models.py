@@ -158,6 +158,12 @@ class Item:
             return False
         return True
 
+    def __str__(self):
+        return self.name + ': ' + self.desc
+
+    def __repr__(self):
+        return str(self)
+
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
             total = []

@@ -137,11 +137,6 @@ class ItemSimilarity():
             Compute the similarity matrix of the model
         """
 
-        # raise exception if model is not defined
-        if self.model is None:
-            raise TypeError("self.model is NoneType, cannot make "
-                "similarity matrix with NoneType")
-
         # create similarity matrix, update flags
         self.simMatrix = self.model.similarity_matrix(self.dictionary, tfidf=None,
             threshold=0.0, exponent=2.0, nonzero_limit=100)
@@ -233,6 +228,6 @@ class ItemSimilarity():
         """
 
         results = [itemScore for itemScore in self.itemScores]
-        results.sort()
+        results.sort(reverse=True)
 
-        return [itemScore.item for item in results]
+        return [itemScore.item for itemScore in results]
