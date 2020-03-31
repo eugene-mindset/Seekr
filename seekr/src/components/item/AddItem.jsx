@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
+import Checkboxes from "./Checkboxes";
 
 export class AddItem extends Component {
   state = {
@@ -65,6 +66,7 @@ export class AddItem extends Component {
             onClick={this.onClick}
           />
         </form>
+        <Checkboxes />
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )
