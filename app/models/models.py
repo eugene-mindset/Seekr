@@ -45,6 +45,8 @@ class ItemDao(DatabaseObject):
                            item.get('found'), item.get('desc'),
                            item.get('location'), item.get('imageName'))
             listOfItems.append(newItem)
+            #Get timestamp of object created  
+            print(item.get('_id').generation_time)
 
         return listOfItems
 
