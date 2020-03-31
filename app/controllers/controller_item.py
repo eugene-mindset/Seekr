@@ -66,7 +66,7 @@ def add_item():
     items = mongo.db.items
 
     name = request.form['name']
-    found = request.form['found']
+    found = eval(request.form['found'].capitalize())
     desc = request.form['desc']
     location = request.form['location']
     imageName = request.files['image'].filename
