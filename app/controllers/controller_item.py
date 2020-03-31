@@ -1,17 +1,22 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from app.models.models import *
 from app import mongo
+import os
 
 items_router = Blueprint("items", __name__)
 
+IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 
 @items_router.route("/")
 def hello():
-    return "Hello World!"
+    return "Hello World"
 
+@items_router.route("/fetch_image/<filename>")
+def fetch_resource(filename):
+    return send_from_directory('../'+IMAGE_FOLDER, filename)
 
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
@@ -47,26 +52,28 @@ def get_item(name):
     listOfItems = itemObj.findByName(name)
     for i in listOfItems:
         output.append(i.toDict())
+
     return jsonify(output), 200
 
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
 
+    # save image to local folder
     f = request.files['image']
-    f.save(secure_filename('test'))
+    f.save(os.path.join(IMAGE_FOLDER, secure_filename(f.filename)))
 
     items = mongo.db.items
 
     name = request.form['name']
-    print(name)
     found = request.form['found']
     desc = request.form['desc']
     location = request.form['location']
+    imageFile = request.files['image']
 
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location)
+    item = Item(name=name, found=found, desc=desc, location=location, imageFile=imageFile)
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 

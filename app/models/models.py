@@ -43,7 +43,7 @@ class ItemDao(DatabaseObject):
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'))
+                           item.get('location'), item.get('image'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -64,11 +64,13 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        image = item.imageFile.filename
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
-            'location': location
+            'location': location,
+            'image': image
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -98,12 +100,13 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None):
+                 location=None, imageFile=None):
         self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
+        self.imageFile = imageFile
 
     @property
     def Id(self):
