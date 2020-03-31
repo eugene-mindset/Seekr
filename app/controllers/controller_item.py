@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_pymongo import PyMongo
+from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from app.models.models import *
 from app import mongo
@@ -51,12 +52,17 @@ def get_item(name):
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
+
+    f = request.files['image']
+    f.save(secure_filename('test'))
+
     items = mongo.db.items
 
-    name = request.get_json()['name']
-    found = request.get_json()['found']
-    desc = request.get_json()['desc']
-    location = request.get_json()['location']
+    name = request.form['name']
+    print(name)
+    found = request.form['found']
+    desc = request.form['desc']
+    location = request.form['location']
 
     items = mongo.db.items
     itemObj = ItemDao(items)
