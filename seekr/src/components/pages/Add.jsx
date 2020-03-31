@@ -4,12 +4,13 @@ import AddItem from '../item/AddItem';
 
 export default class Add extends Component {
     
-  addItem = (name, found, desc, location) => {
+  addItem = (name, found, desc, location, tags) => {
     axios.post('/items', {
       name: name,
       found: found,
       desc: desc,
-      location: location
+      location: location,
+      tags: tags
     })
   }
 
