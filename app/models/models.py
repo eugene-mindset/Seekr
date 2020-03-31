@@ -37,14 +37,22 @@ class ItemDao(DatabaseObject):
                        item['desc'], item['location'], item['tags'])
         return newItem
 
-    def findByName(self, name=None):
-        listOfItems = []
+    def findByName(self, name=None, tags=None):
+        listOfItems = []        
+        
         toSearch = self.collection.find({"name": name})
         for item in toSearch:
-            newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('tags'))
-            listOfItems.append(newItem)
+            
+            # if this item has a tag
+            for i in range(len(tags)):
+                if tags[i] in item.get('tags'):
+                    newItem = Item(str(item.get('_id')), item.get('name'),
+                                item.get('found'), item.get('desc'),
+                                item.get('location'), item.get('tags'))
+                    listOfItems.append(newItem)
+                    continue
+                
+            
 
         return listOfItems
 
