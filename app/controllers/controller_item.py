@@ -46,13 +46,24 @@ def get_all_items_sorted(query):
 
     return jsonify(output)
 
-
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
     items = mongo.db.items
     itemObj = ItemDao(items)
     output = []
-    listOfItems = itemObj.findByName(name)
+    
+    # Get any arguments in the query
+    args = request.args
+    
+    
+    # Get the tags if exists
+    tags = []
+    if (args.get('tags') != None):
+        tags = args.get('tags').split(',')
+    
+    listOfItems = itemObj.findByName(name, tags)
+    
+    
     for i in listOfItems:
         output.append(i.toDict())
     return jsonify(output), 200
