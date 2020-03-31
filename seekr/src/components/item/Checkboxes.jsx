@@ -12,25 +12,11 @@ const tags = [
   "other"
 ];
 
-// TODO: figure out how to use props to pass selectedCheckboxes up to SearchItem
 export class Checkboxes extends Component {
-  componentDidMount = () => {
-    // create a set of checked boxes when component is created
-    this.selectedCheckboxes = new Set();
-  };
-
-  toggleCheckbox = label => {
-    if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label);
-    } else {
-      this.selectedCheckboxes.add(label);
-    }
-  };
-
   createCheckbox = label => (
     <Checkbox
-      label={"  " + label + "  "}
-      handleCheckboxChange={this.toggleCheckbox}
+      label={label}
+      handleCheckboxChange={this.props.toggleCheckbox}
       key={label}
     />
   );

@@ -5,8 +5,21 @@ import Checkboxes from "./Checkboxes";
 
 
 export class SearchItem extends Component {
+  componentDidMount = () => {
+    // create a set of checked boxes when component is created
+    this.selectedCheckboxes = new Set();
+  };
+
   state = {
     name: ""
+  };
+
+  toggleCheckbox = label => {
+    if (this.selectedCheckboxes.has(label)) {
+      this.selectedCheckboxes.delete(label);
+    } else {
+      this.selectedCheckboxes.add(label);
+    }
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -15,6 +28,8 @@ export class SearchItem extends Component {
     e.preventDefault();
     // searchItem has a searchItem property which is a function in the parent component
     this.props.searchItem(this.state.name); // also send the checkboxes
+    
+    
     for (const checkbox of this.selectedCheckboxes) {
       console.log(checkbox, " is selected.");
     }
@@ -44,7 +59,7 @@ export class SearchItem extends Component {
             </form>            
           </div>
         </div>
-        <Checkboxes />
+        <Checkboxes toggleCheckbox={this.toggleCheckbox}/>
       </div>
 
     );

@@ -4,12 +4,25 @@ import GoogleMap from '../pages/GoogleMap';
 import Checkboxes from "./Checkboxes";
 
 export class AddItem extends Component {
+  componentDidMount = () => {
+    // create a set of checked boxes when component is created
+    this.selectedCheckboxes = new Set();
+  };
+  
   state = {
     name: '',
     found: false,
     desc: '',
     location: [39.3299, -76.6205]
   }
+
+  toggleCheckbox = label => {
+    if (this.selectedCheckboxes.has(label)) {
+      this.selectedCheckboxes.delete(label);
+    } else {
+      this.selectedCheckboxes.add(label);
+    }
+  };
 
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
@@ -27,6 +40,11 @@ export class AddItem extends Component {
     }
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location);
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205]});
+    
+    
+    for (const checkbox of this.selectedCheckboxes) {
+      console.log(checkbox, " is selected.");
+    }
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -66,7 +84,7 @@ export class AddItem extends Component {
             onClick={this.onClick}
           />
         </form>
-        <Checkboxes />
+        <Checkboxes toggleCheckbox={this.toggleCheckbox}/>
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )
