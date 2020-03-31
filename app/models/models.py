@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'])
+                       item['desc'], item['location'], item['imageName'])
         return newItem
 
     def findByName(self, name=None):
@@ -43,7 +43,7 @@ class ItemDao(DatabaseObject):
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('image'))
+                           item.get('location'), item.get('imageName'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -54,7 +54,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'))
+                           item.get('location'), item.get('imageName'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -64,13 +64,13 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        image = item.imageFile.filename
+        imageName = item.imageName
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
             'location': location,
-            'image': image
+            'imageName': imageName
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -100,13 +100,13 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None, imageFile=None):
+                 location=None, imageName=None):
         self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
-        self.imageFile = imageFile
+        self.imageName = imageName
 
     @property
     def Id(self):
@@ -192,6 +192,7 @@ class Item:
             'name': self.name,
             'found': self.found,
             'desc': self.desc,
-            'location': self.location
+            'location': self.location,
+            'imageName': self.imageName
         }
         return output

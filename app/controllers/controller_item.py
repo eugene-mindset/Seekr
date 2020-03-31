@@ -69,11 +69,11 @@ def add_item():
     found = request.form['found']
     desc = request.form['desc']
     location = request.form['location']
-    imageFile = request.files['image']
+    imageName = request.files['image'].filename
 
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageFile=imageFile)
+    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName)
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
