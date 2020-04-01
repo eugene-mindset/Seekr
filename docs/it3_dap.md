@@ -30,7 +30,7 @@
 
 * [ ] Allow user to add tags to their listing when they are being created (Jacob)
 * [ ] Allow user to supply radius when adding a lost item (Jacob)
-* [ ] Allow user to supply images with their listing (Anderson)
+* [X] Allow user to supply images with their listing (Anderson)
 
 #### Search Page
 
@@ -38,14 +38,14 @@
 * [ ] Allow user to apply tags to the search bar in order to narrow down listing (Jason & Anderson)
 * [ ] Allow user to change the order of item listings based on time added, best-matching, etc. (Jason & Anderson)
 * [X] List the item as cards (Anderson)
-* [ ] Display the image belonging to item listing (Anderson)
+* [X] Display the image belonging to item listing (Anderson)
 
 ### Backend
 
 #### Adding Items
 
 * [ ] Update backend to get timestamp of when an item was created (Shaurya & Andrew)
-* [ ] Update backend to get images when a user listing is added (Anderson)
+* [X] Update backend to get images when a user listing is added (Anderson)
 * [ ] Update backend to get radius when a user listing is added (Shaurya & Andrew)
 * [ ] Update backend to get tags when a user listing is added (Shaurya & Andrew)
 

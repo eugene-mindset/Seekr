@@ -23,7 +23,8 @@ export class AddItem extends Component {
     name: '',
     found: false,
     desc: '',
-    location: [39.3299, -76.6205]
+    location: [39.3299, -76.6205],
+    img: ''
   }
 
   // idea: make checkboxes as a state that keeps track of checked or not
@@ -65,12 +66,18 @@ export class AddItem extends Component {
       return false;
     }
 
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes));
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205]});
-
+    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes), this.state.img);
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: ''});
+    document.getElementById("imageUpload").value = "";
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  fileSelectedHandler = (e) => {
+    this.setState({
+      img: e.target.files[0]
+    })
+  }
 
   render() {
     return (
@@ -92,6 +99,11 @@ export class AddItem extends Component {
             placeholder="Add Item Description..."
             value={this.state.desc}
             onChange={this.onChange}
+          />
+          <input
+            type="file"
+            id="imageUpload"
+            onChange={this.fileSelectedHandler}
           />
           <input
             type="submit"
