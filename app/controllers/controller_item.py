@@ -47,7 +47,7 @@ def get_all_items_sorted(query):
 
     
     scoredItems = [(item.timestamp, item) for item in listOfItems]
-    scoredItems.sort(key=lambda tup: tup[0], reverse=False)
+    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 
     output = [pair[1].toDict() for pair in scoredItems]
 
