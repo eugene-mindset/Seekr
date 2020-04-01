@@ -1,15 +1,28 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
+import Checkboxes from "./Checkboxes";
 
 export class AddItem extends Component {
+  componentDidMount = () => {
+    // create a set of checked boxes when component is created
+    this.selectedCheckboxes = new Set();
+  };
+
   state = {
     name: '',
     found: false,
     desc: '',
     location: [39.3299, -76.6205],
-    img: ''
   }
+
+  toggleCheckbox = label => {
+    if (this.selectedCheckboxes.has(label)) {
+      this.selectedCheckboxes.delete(label);
+    } else {
+      this.selectedCheckboxes.add(label);
+    }
+  };
 
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
@@ -25,9 +38,12 @@ export class AddItem extends Component {
       alert("Item must have a name!");
       return false;
     }
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.img);
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: ''});
-    document.getElementById("imageUpload").value = "";
+
+    
+
+    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes));
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205]});
+        
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -78,6 +94,7 @@ export class AddItem extends Component {
             onClick={this.onClick}
           />
         </form>
+        <Checkboxes toggleCheckbox={this.toggleCheckbox}/>
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )

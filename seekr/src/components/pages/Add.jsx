@@ -4,19 +4,14 @@ import AddItem from '../item/AddItem';
 
 export default class Add extends Component {
     
-  addItem = (name, found, desc, location, img) => {
-    var data = new FormData();
-    data.append('name', name);
-    data.append('found', found);
-    data.append('desc', desc);
-    data.append('location', location);
-    data.append('image', img);
-    axios({
-      method: 'post',
-      url: '/items',
-      data: data,
-      headers: {'Content-Type': 'multipart/form-data' }
-      });
+  addItem = (name, found, desc, location, tags) => {
+    axios.post('/items', {
+      name: name,
+      found: found,
+      desc: desc,
+      location: location,
+      tags: tags
+    })
   }
 
   render() {

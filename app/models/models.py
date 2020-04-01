@@ -34,19 +34,25 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'], item['imageName'])
+                       item['desc'], item['location'], item['tags'])
         return newItem
 
-    def findByName(self, name=None):
-        listOfItems = []
+    def findByName(self, name=None, tags=None):
+        listOfItems = []        
+        
         toSearch = self.collection.find({"name": name})
         for item in toSearch:
-            newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('imageName'))
-            listOfItems.append(newItem)
-            #Get timestamp of object created  
-            print(item.get('_id').generation_time)
+            
+            # if this item has a tag
+            for i in range(len(tags)):
+                if tags[i] in item.get('tags'):
+                    newItem = Item(str(item.get('_id')), item.get('name'),
+                                item.get('found'), item.get('desc'),
+                                item.get('location'), item.get('tags'))
+                    listOfItems.append(newItem)
+                    continue
+                
+            
 
         return listOfItems
 
@@ -56,7 +62,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('imageName'))
+                           item.get('location'), item.get('tags'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -66,13 +72,13 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        imageName = item.imageName
+        tags = item.tags
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
             'location': location,
-            'imageName': imageName
+            'tags': tags
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -84,12 +90,14 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        tags = item.tags
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
                 'found': found,
                 'desc': desc,
-                'location': location
+                'location': location,
+                'tags': tags
             }
         }, upsert=False)
         return item
@@ -102,13 +110,13 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None, imageName=None):
+                 location=None, tags=None):
         self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
-        self.imageName = imageName
+        self.tags = tags
 
     @property
     def Id(self):
@@ -149,6 +157,14 @@ class Item:
     @location.setter
     def location(self, location):
         self.__location = location
+        
+    @property
+    def tags(self):
+        return self.__tags
+
+    @tags.setter
+    def tags(self, tags):
+        self.__tags = tags
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -161,8 +177,11 @@ class Item:
             return False
         if self.location != otherItem.location:
             return False
+        if set(self.tags) != set(otherItem.tags): # tags is a list of strings
+            return False
         return True
 
+    # magical formula to determine if a word is similar to another word
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
             total = []
@@ -195,6 +214,6 @@ class Item:
             'found': self.found,
             'desc': self.desc,
             'location': self.location,
-            'imageName': self.imageName
+            'tags' : self.tags
         }
         return output

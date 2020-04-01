@@ -3,12 +3,20 @@ from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from app.models.models import *
+from app.controllers.tags import *
 from app import mongo
 import os
 
 items_router = Blueprint("items", __name__)
 
-IMAGE_FOLDER = os.path.dirname('uploadedImages/')
+# tags:
+#   tech
+#   clothing
+#   jewelry
+#   pet
+#   personal - wallets, keys, id's
+#   apparel - clothing, accessories, purse
+#   other - anything not in the above categories: bikes, coffee mugs, etc
 
 @items_router.route("/")
 def hello():
@@ -43,13 +51,24 @@ def get_all_items_sorted(query):
 
     return jsonify(output)
 
-
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
     items = mongo.db.items
     itemObj = ItemDao(items)
     output = []
-    listOfItems = itemObj.findByName(name)
+    
+    # Get any arguments in the query
+    args = request.args
+    
+    
+    # Get the tags if exists
+    tags = []
+    if (args.get('tags') != None):
+        tags = args.get('tags').split(',')
+    
+    listOfItems = itemObj.findByName(name, tags)
+    
+    
     for i in listOfItems:
         output.append(i.toDict())
 
@@ -65,15 +84,15 @@ def add_item():
 
     items = mongo.db.items
 
-    name = request.form['name']
-    found = eval(request.form['found'].capitalize())
-    desc = request.form['desc']
-    location = request.form['location']
-    imageName = request.files['image'].filename
-
+    name = request.get_json()['name']
+    found = request.get_json()['found']
+    desc = request.get_json()['desc']
+    location = request.get_json()['location']
+    tags = request.get_json()['tags']
+    
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName)
+    item = Item(name=name, found=found, desc=desc, location=location, tags=tags)
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
@@ -86,9 +105,10 @@ def update_item(id):
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-
+    tags = request.get_json()['tags']
+    
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 
