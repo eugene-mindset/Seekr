@@ -102,7 +102,7 @@ dist
 .dynamodb/
 
 # Database stuff for Mac
-data/
+/data/
 
 # TernJS port file
 .tern-port
