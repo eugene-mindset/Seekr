@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class Checkbox extends Component {
   state = {
@@ -7,14 +7,15 @@ class Checkbox extends Component {
   };
 
   toggleCheckboxChange = () => {
-    const { handleCheckboxChange, label } = this.props;
+    const { toggleCheckbox, label } = this.props;
 
     this.setState(({ isChecked }) => ({
       isChecked: !isChecked
     }));
 
-    handleCheckboxChange(label);
+    toggleCheckbox(label);
   };
+
 
   render() {
     const { label } = this.props;
@@ -39,7 +40,7 @@ class Checkbox extends Component {
 
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
-  handleCheckboxChange: PropTypes.func.isRequired
+  toggleCheckbox: PropTypes.func.isRequired
 };
 
 export default Checkbox;

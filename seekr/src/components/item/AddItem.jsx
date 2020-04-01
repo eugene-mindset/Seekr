@@ -1,7 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
-import Checkboxes from "./Checkboxes";
+import Checkbox from "./Checkbox";
+
+const tags = [
+  "tech",
+  "clothing",
+  "jewelry",
+  "pet",
+  "personal",
+  "apparel",
+  "other"
+];
 
 export class AddItem extends Component {
   componentDidMount = () => {
@@ -16,6 +26,8 @@ export class AddItem extends Component {
     location: [39.3299, -76.6205],
   }
 
+  // idea: selectedCheckboxes will be tags, when toggling checkbox, search thru selectedCheckboxes and add or remove
+  
   toggleCheckbox = label => {
     if (this.selectedCheckboxes.has(label)) {
       this.selectedCheckboxes.delete(label);
@@ -23,6 +35,19 @@ export class AddItem extends Component {
       this.selectedCheckboxes.add(label);
     }
   };
+
+  createCheckbox = label => (
+    <Checkbox
+      label={label}
+      toggleCheckbox={this.toggleCheckbox}
+      key={label}
+    />
+  );
+
+
+  createCheckboxes = () => tags.map(this.createCheckbox);
+  
+  uncheckCheckboxes = () => tags.map(this.createCheckbox);
 
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
@@ -39,11 +64,11 @@ export class AddItem extends Component {
       return false;
     }
 
-    
-
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes));
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205]});
-        
+    //TODO: clear checkboxes 
+    // map thru all of the boxes, mark each unchecked
+    // this.uncheckCheckboxes();
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -83,7 +108,7 @@ export class AddItem extends Component {
             onClick={this.onClick}
           />
         </form>
-        <Checkboxes toggleCheckbox={this.toggleCheckbox}/>
+        <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )

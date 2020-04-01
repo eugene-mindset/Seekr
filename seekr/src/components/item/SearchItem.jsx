@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Checkboxes from "./Checkboxes";
+import Checkbox from "./Checkbox";
+
+const tags = [
+  "tech",
+  "clothing",
+  "jewelry",
+  "pet",
+  "personal",
+  "apparel",
+  "other"
+];
 
 export class SearchItem extends Component {
   componentDidMount = () => {
@@ -20,6 +30,16 @@ export class SearchItem extends Component {
     }
   };
 
+  createCheckbox = label => (
+    <Checkbox
+      label={label}
+      toggleCheckbox={this.toggleCheckbox}
+      key={label}
+    />
+  );
+
+  createCheckboxes = () => tags.map(this.createCheckbox);
+
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = e => {
@@ -28,7 +48,8 @@ export class SearchItem extends Component {
       alert("Item must have a name!");
       return false;
     }
-    this.props.searchItem(this.state.name, Array.from(this.selectedCheckboxes));
+    this.props.searchItem(this.state.name, Array.from(this.selectedCheckboxes)); // call API
+
   };
 
   render() {
@@ -55,7 +76,7 @@ export class SearchItem extends Component {
             </form>
           </div>
         </div>
-        <Checkboxes toggleCheckbox={this.toggleCheckbox} />
+        <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
       </div>
     );
   }

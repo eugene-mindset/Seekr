@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Checkbox from "./Checkbox";
 
+// DEPRECATED
 const tags = [
   "tech",
   "clothing",
@@ -15,7 +16,8 @@ export class Checkboxes extends Component {
   createCheckbox = label => (
     <Checkbox
       label={label}
-      handleCheckboxChange={this.props.toggleCheckbox}
+      toggleCheckbox={this.props.toggleCheckbox}
+      checkedState={this.props.selectedCheckboxes.includes(label) ? true : false}
       key={label}
     />
   );
