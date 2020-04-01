@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'], item['tags'])
+                       item['desc'], item['location'], item['tags'], item['radius'])
         return newItem
 
     def findByName(self, name=None, tags=None):
@@ -48,7 +48,7 @@ class ItemDao(DatabaseObject):
                 if tags[i] in item.get('tags'):
                     newItem = Item(str(item.get('_id')), item.get('name'),
                                 item.get('found'), item.get('desc'),
-                                item.get('location'), item.get('tags'))
+                                item.get('location'), item.get('tags'), item.get('radius'))
                     listOfItems.append(newItem)
                     continue
                 
@@ -62,7 +62,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('tags'))
+                           item.get('location'), item.get('tags'), item.get('radius'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -73,12 +73,14 @@ class ItemDao(DatabaseObject):
         desc = item.desc
         location = item.location
         tags = item.tags
+        radius = item.radius
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
             'location': location,
             'tags': tags
+            'radius' : radius
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -91,6 +93,7 @@ class ItemDao(DatabaseObject):
         desc = item.desc
         location = item.location
         tags = item.tags
+        radius = item.radius
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
@@ -98,6 +101,7 @@ class ItemDao(DatabaseObject):
                 'desc': desc,
                 'location': location,
                 'tags': tags
+                'radius' : radius
             }
         }, upsert=False)
         return item
