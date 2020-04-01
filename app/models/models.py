@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'], item['tags'], item['radius'])
+                       item['desc'], item['location'], item['tags'], item['radius'], item['timestamp'])
         return newItem
 
     def findByName(self, name=None, tags=None):
@@ -48,7 +48,7 @@ class ItemDao(DatabaseObject):
                 if tags[i] in item.get('tags'):
                     newItem = Item(str(item.get('_id')), item.get('name'),
                                 item.get('found'), item.get('desc'),
-                                item.get('location'), item.get('tags'), item.get('radius'))
+                                item.get('location'), item.get('tags'), item.get('radius'), item.get('timestamp'))
                     listOfItems.append(newItem)
                     continue
                 
@@ -62,7 +62,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('tags'), item.get('radius'))
+                           item.get('location'), item.get('tags'), item.get('radius'), item.get('timestamp'))
             listOfItems.append(newItem)
 
         return listOfItems
@@ -74,6 +74,7 @@ class ItemDao(DatabaseObject):
         location = item.location
         tags = item.tags
         radius = item.radius
+        timestamp = item.timestamp
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
@@ -81,6 +82,7 @@ class ItemDao(DatabaseObject):
             'location': location,
             'tags': tags,
             'radius': radius
+            'timestamp' : timestamp
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -94,6 +96,7 @@ class ItemDao(DatabaseObject):
         location = item.location
         tags = item.tags
         radius = item.radius
+        timestamp = item.timestamp
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
@@ -102,6 +105,7 @@ class ItemDao(DatabaseObject):
                 'location': location,
                 'tags': tags,
                 'radius': radius
+                'timestamp': timestamp
             }
         }, upsert=False)
         return item
@@ -114,7 +118,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None, tags=None, radius=None):
+                 location=None, tags=None, radius=None, timestamp=None):
         self.Id = Id
         self.name = name
         self.found = found
@@ -122,6 +126,7 @@ class Item:
         self.location = location
         self.tags = tags
         self.radius = radius
+        self.timestamp = timestamp
 
     @property
     def Id(self):
@@ -178,6 +183,14 @@ class Item:
     @radius.setter
     def radius(self, radius):
         self.__radius = radius
+    
+    @property
+    def timestamp(self):
+        return self.__timestamp
+
+    @timestamp.setter
+    def timestamp(self, timestamp):
+        self.__timestamp = timestamp
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -193,6 +206,8 @@ class Item:
         if set(self.tags) != set(otherItem.tags): # tags is a list of strings
             return False
         if self.radius != otherIterm.radius:
+            return False
+        if self.timestamp != otherItem.timestamp:
             return False
         return True
 
@@ -230,6 +245,7 @@ class Item:
             'desc': self.desc,
             'location': self.location,
             'tags' : self.tags,
-            'radius' : self.radius
+            'radius' : self.radius,
+            'timestamp' : self.timestamp
         }
         return output
