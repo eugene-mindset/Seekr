@@ -39,7 +39,7 @@ def get_all_items():
 
 
 @items_router.route('/items/timesearch=<query>', methods=['GET'])
-def get_all_items_sorted(query):
+def get_all_items_timesorted(query):
 
     items = mongo.db.items
     itemObj = ItemDao(items)
