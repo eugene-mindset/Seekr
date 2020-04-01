@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Checkbox from "./Checkbox";
 import Checkboxes from "./Checkboxes";
-
 
 export class SearchItem extends Component {
   componentDidMount = () => {
@@ -29,7 +27,7 @@ export class SearchItem extends Component {
     // searchItem has a searchItem property which is a function in the parent component
     this.props.searchItem(this.state.name); // also send the checkboxes
     
-    
+    // TODO: send the selectedCheckboxes to the API
     for (const checkbox of this.selectedCheckboxes) {
       console.log(checkbox, " is selected.");
     }
