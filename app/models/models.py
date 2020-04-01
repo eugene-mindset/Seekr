@@ -81,8 +81,8 @@ class ItemDao(DatabaseObject):
             'desc': desc,
             'location': location,
             'tags': tags,
-            'radius': radius
-            'timestamp' : timestamp
+            'radius': radius,
+            'timestamp': timestamp
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -104,7 +104,7 @@ class ItemDao(DatabaseObject):
                 'desc': desc,
                 'location': location,
                 'tags': tags,
-                'radius': radius
+                'radius': radius,
                 'timestamp': timestamp
             }
         }, upsert=False)
