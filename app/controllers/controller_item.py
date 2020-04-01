@@ -38,7 +38,7 @@ def get_all_items():
     return jsonify(output), 200
 
 
-@items_router.route('/items/search=<query>', methods=['GET'])
+@items_router.route('/items/timesearch=<query>', methods=['GET'])
 def get_all_items_sorted(query):
 
     items = mongo.db.items
@@ -53,19 +53,19 @@ def get_all_items_sorted(query):
 
     return jsonify(output)
 
-# @items_router.route('/items/search=<query>', methods=['GET'])
-# def get_all_items_sorted(query):
-#     items = mongo.db.items
-#     itemObj = ItemDao(items)
-#     listOfItems = itemObj.findAll()
+@items_router.route('/items/search=<query>', methods=['GET'])
+def get_all_items_sorted(query):
+    items = mongo.db.items
+    itemObj = ItemDao(items)
+    listOfItems = itemObj.findAll()
 
-#     queriedItem = Item(name=query, desc="")
-#     scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
-#     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+    queriedItem = Item(name=query, desc="")
+    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
+    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 
-#     output = [pair[1].toDict() for pair in scoredItems]
+    output = [pair[1].toDict() for pair in scoredItems]
 
-#     return jsonify(output)
+    return jsonify(output)
 
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
