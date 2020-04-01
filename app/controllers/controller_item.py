@@ -44,13 +44,26 @@ def get_all_items_sorted(query):
     itemObj = ItemDao(items)
     listOfItems = itemObj.findAll()
 
-    queriedItem = Item(name=query, desc="")
-    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
+    scoredItems = [(item.timestamp(), item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 
     output = [pair[1].toDict() for pair in scoredItems]
 
     return jsonify(output)
+
+# @items_router.route('/items/search=<query>', methods=['GET'])
+# def get_all_items_sorted(query):
+#     items = mongo.db.items
+#     itemObj = ItemDao(items)
+#     listOfItems = itemObj.findAll()
+
+#     queriedItem = Item(name=query, desc="")
+#     scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
+#     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+
+#     output = [pair[1].toDict() for pair in scoredItems]
+
+#     return jsonify(output)
 
 @items_router.route('/items/<name>', methods=['GET'])
 def get_item(name):
