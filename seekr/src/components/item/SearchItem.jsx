@@ -24,13 +24,11 @@ export class SearchItem extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    // searchItem has a searchItem property which is a function in the parent component
-    this.props.searchItem(this.state.name); // also send the checkboxes
-    
-    // TODO: send the selectedCheckboxes to the API
-    for (const checkbox of this.selectedCheckboxes) {
-      console.log(checkbox, " is selected.");
+    if (this.state.name === "") {
+      alert("Item must have a name!");
+      return false;
     }
+    this.props.searchItem(this.state.name, Array.from(this.selectedCheckboxes));
   };
 
   render() {
@@ -54,12 +52,11 @@ export class SearchItem extends Component {
                 className="btn"
                 style={{ flex: "1" }}
               />
-            </form>            
+            </form>
           </div>
         </div>
-        <Checkboxes toggleCheckbox={this.toggleCheckbox}/>
+        <Checkboxes toggleCheckbox={this.toggleCheckbox} />
       </div>
-
     );
   }
 }
