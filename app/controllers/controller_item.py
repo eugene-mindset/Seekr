@@ -79,8 +79,8 @@ def get_item(name):
 def add_item():
 
     # save image to local folder
-    f = request.files['image']
-    f.save(os.path.join(IMAGE_FOLDER, secure_filename(f.filename)))
+    # f = request.files['image']
+    # f.save(os.path.join(IMAGE_FOLDER, secure_filename(f.filename)))
 
     items = mongo.db.items
 
