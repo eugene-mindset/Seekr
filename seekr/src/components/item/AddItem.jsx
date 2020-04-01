@@ -23,10 +23,11 @@ export class AddItem extends Component {
     name: '',
     found: false,
     desc: '',
-    location: [39.3299, -76.6205],
+    location: [39.3299, -76.6205]
   }
 
-  // idea: selectedCheckboxes will be tags, when toggling checkbox, search thru selectedCheckboxes and add or remove
+  // idea: make checkboxes as a state that keeps track of checked or not
+  // would need to modify for SearchItem as well
   
   toggleCheckbox = label => {
     if (this.selectedCheckboxes.has(label)) {
@@ -66,9 +67,7 @@ export class AddItem extends Component {
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes));
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205]});
-    //TODO: clear checkboxes 
-    // map thru all of the boxes, mark each unchecked
-    // this.uncheckCheckboxes();
+
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
