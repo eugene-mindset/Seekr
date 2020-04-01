@@ -107,7 +107,7 @@ def add_item():
     desc = request.form['desc']
     location = request.form['location']
     imageName = request.files['image'].filename
-    tags = request.form()['tags']
+    tags = request.form['tags']
     
     items = mongo.db.items
     itemObj = ItemDao(items)
