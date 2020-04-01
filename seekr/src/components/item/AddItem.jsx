@@ -1,8 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
+import Checkbox from "./Checkbox";
+
+const tags = [
+  "tech",
+  "clothing",
+  "jewelry",
+  "pet",
+  "personal",
+  "apparel",
+  "other"
+];
 
 export class AddItem extends Component {
+  componentDidMount = () => {
+    // create a set of checked boxes when component is created
+    this.selectedCheckboxes = new Set();
+  };
+
   state = {
     name: '',
     found: false,
@@ -10,6 +26,30 @@ export class AddItem extends Component {
     location: [39.3299, -76.6205],
     img: ''
   }
+
+  // idea: make checkboxes as a state that keeps track of checked or not
+  // would need to modify for SearchItem as well
+  
+  toggleCheckbox = label => {
+    if (this.selectedCheckboxes.has(label)) {
+      this.selectedCheckboxes.delete(label);
+    } else {
+      this.selectedCheckboxes.add(label);
+    }
+  };
+
+  createCheckbox = label => (
+    <Checkbox
+      label={label}
+      toggleCheckbox={this.toggleCheckbox}
+      key={label}
+    />
+  );
+
+
+  createCheckboxes = () => tags.map(this.createCheckbox);
+  
+  uncheckCheckboxes = () => tags.map(this.createCheckbox);
 
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
@@ -25,7 +65,8 @@ export class AddItem extends Component {
       alert("Item must have a name!");
       return false;
     }
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.img);
+
+    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes), this.state.img);
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: ''});
     document.getElementById("imageUpload").value = "";
   }
@@ -78,6 +119,7 @@ export class AddItem extends Component {
             onClick={this.onClick}
           />
         </form>
+        <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )
