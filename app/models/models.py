@@ -37,34 +37,39 @@ class ItemDao(DatabaseObject):
                        item['desc'], item['location'], item['tags'])
         return newItem
 
-    def findByName(self, name=None, tags=None):
-        listOfItems = []        
+    # DEPRECATED
+    # def findByName(self, name=None, tags=None):
+    #     listOfItems = []        
         
-        toSearch = self.collection.find({"name": name})
-        for item in toSearch:
+    #     toSearch = self.collection.find({"name": name})
+    #     for item in toSearch:
             
-            # if this item has a tag
-            for i in range(len(tags)):
-                if tags[i] in item.get('tags'):
-                    newItem = Item(str(item.get('_id')), item.get('name'),
-                                item.get('found'), item.get('desc'),
-                                item.get('location'), item.get('tags'))
-                    listOfItems.append(newItem)
-                    continue
-                
-            
+    #         # if this item has a tag
+    #         for i in range(len(tags)):
+    #             if tags[i] in item.get('tags'):
+    #                 newItem = Item(str(item.get('_id')), item.get('name'),
+    #                             item.get('found'), item.get('desc'),
+    #                             item.get('location'), item.get('tags'))
+    #                 listOfItems.append(newItem)
+    #                 continue
+    #     return listOfItems
 
-        return listOfItems
-
-    def findAll(self, name=None):
+    def findAll(self, tags=None):
         listOfItems = []
         allItems = self.collection.find()
+        
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                            item.get('found'), item.get('desc'),
                            item.get('location'), item.get('tags'))
-            listOfItems.append(newItem)
-
+            if (len(tags) == 0): # no tags, add all
+                listOfItems.append(newItem)
+            else: # yes tags, filter
+                containsAllTags = True
+                for tag in tags:
+                    if tag not in item.get('tags'):
+                        containsAllTags = False
+                if (containsAllTags): listOfItems.append(newItem)
         return listOfItems
 
     def insert(self, item):

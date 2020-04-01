@@ -25,48 +25,59 @@ def hello():
 def get_all_items():
     items = mongo.db.items
     itemObj = ItemDao(items)
-    listOfItems = itemObj.findAll()
-    output = []
-    for i in listOfItems:
-        output.append(i.toDict())
-    return jsonify(output), 200
-
-
-@items_router.route('/items/search=<query>', methods=['GET'])
-def get_all_items_sorted(query):
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    listOfItems = itemObj.findAll()
-
-    queriedItem = Item(name=query, desc="")
-    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]
-    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
-
-    output = [pair[1].toDict() for pair in scoredItems]
-
-    return jsonify(output)
-
-@items_router.route('/items/<name>', methods=['GET'])
-def get_item(name):
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    output = []
     
     # Get any arguments in the query
     args = request.args
-    
     
     # Get the tags if exists
     tags = []
     if (args.get('tags') != None):
         tags = args.get('tags').split(',')
-    
-    listOfItems = itemObj.findByName(name, tags)
-    
-    
+        
+    listOfItems = itemObj.findAll(tags)
+    output = []
     for i in listOfItems:
         output.append(i.toDict())
     return jsonify(output), 200
+
+
+@items_router.route('/items/<query>', methods=['GET'])
+def get_all_items_sorted(query):
+    items = mongo.db.items
+    itemObj = ItemDao(items)
+    
+    # Get any arguments in the query
+    args = request.args
+    
+    # Get the tags if exists
+    tags = []
+    if (args.get('tags') != None):
+        tags = args.get('tags').split(',')
+        
+    listOfItems = itemObj.findAll(tags)
+    queriedItem = Item(name=query, desc="")
+    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]    
+    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+    output = [pair[1].toDict() for pair in scoredItems]
+
+    return jsonify(output)
+
+# DEPRECATED
+# @items_router.route('/items/<name>', methods=['GET'])
+# def get_item(name):
+#     items = mongo.db.items
+#     itemObj = ItemDao(items)
+#     output = []
+#     # Get any arguments in the query
+#     args = request.args
+#     # Get the tags if exists
+#     tags = []
+#     if (args.get('tags') != None):
+#         tags = args.get('tags').split(',')
+#     listOfItems = itemObj.findByName(name, tags)
+#     for i in listOfItems:
+#         output.append(i.toDict())
+#     return jsonify(output), 200
 
 
 @items_router.route('/items', methods=['POST'])
