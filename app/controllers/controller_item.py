@@ -89,10 +89,11 @@ def add_item():
     desc = request.get_json()['desc']
     location = request.get_json()['location']
     tags = request.get_json()['tags']
+    radius = request.get_json()['radius']
     
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, tags=tags)
+    item = Item(name=name, found=found, desc=desc, location=location, tags=tags, radius=radius)
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
@@ -106,9 +107,10 @@ def update_item(id):
     desc = request.get_json()['desc']
     location = request.get_json()['location']
     tags = request.get_json()['tags']
+    radius = request.get_json()['radius']
     
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 

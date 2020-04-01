@@ -110,13 +110,14 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None, tags=None):
+                 location=None, tags=None, radius=None):
         self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
         self.tags = tags
+        self.radius = radius
 
     @property
     def Id(self):
@@ -166,6 +167,14 @@ class Item:
     def tags(self, tags):
         self.__tags = tags
 
+    @property
+    def radius(self):
+        return self.__radius
+    
+    @radius.setter
+    def radius(self, radius):
+        self.__radius = radius
+
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
@@ -178,6 +187,8 @@ class Item:
         if self.location != otherItem.location:
             return False
         if set(self.tags) != set(otherItem.tags): # tags is a list of strings
+            return False
+        if self.radius != otherIterm.radius:
             return False
         return True
 
@@ -214,6 +225,7 @@ class Item:
             'found': self.found,
             'desc': self.desc,
             'location': self.location,
-            'tags' : self.tags
+            'tags' : self.tags,
+            'radius' : self.radius
         }
         return output
