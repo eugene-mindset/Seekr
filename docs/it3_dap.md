@@ -30,7 +30,7 @@
 
 * [ ] Allow user to add tags to their listing when they are being created (Jacob)
 * [ ] Allow user to supply radius when adding a lost item (Jacob)
-* [ ] Allow user to supply images with their listing (Anderson)
+* [X] Allow user to supply images with their listing (Anderson)
 
 #### Search Page
 
