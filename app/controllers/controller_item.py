@@ -59,8 +59,16 @@ def get_all_items_timesorted(query):
 
     items = mongo.db.items
     itemObj = ItemDao(items)
-    listOfItems = itemObj.findAll()
 
+    # Get any arguments in the query
+    args = request.args
+    
+    # Get the tags if exists
+    tags = []
+    if (args.get('tags') != None):
+        tags = args.get('tags').split(',')
+        
+    listOfItems = itemObj.findAll(tags)
     
     scoredItems = [(item.timestamp, item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)

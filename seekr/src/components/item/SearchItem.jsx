@@ -19,8 +19,11 @@ export class SearchItem extends Component {
   };
 
   state = {
-    name: ""
+    name: "",
+    filter: "Best"
   };
+
+  changeFilter = () => this.setState({filter: document.getElementById("filters").value})
 
   toggleCheckbox = label => {
     if (this.selectedCheckboxes.has(label)) {
@@ -48,7 +51,7 @@ export class SearchItem extends Component {
       alert("Item must have a name!");
       return false;
     }
-    this.props.searchItem(this.state.name, Array.from(this.selectedCheckboxes)); // call API
+    this.props.searchItem(this.state.name, Array.from(this.selectedCheckboxes), this.state.filter); // call API
 
   };
 
@@ -66,7 +69,6 @@ export class SearchItem extends Component {
                 value={this.state.name}
                 onChange={this.onChange}
               />
-
               <input
                 type="submit"
                 value="Submit"
@@ -77,6 +79,13 @@ export class SearchItem extends Component {
           </div>
         </div>
         <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
+        <div style={{ display: "flex" }}>
+          <label for="filters">Sort by:  </label>
+          <select id="filters" onChange={this.changeFilter}>
+            <option value="Best">Best match</option>
+            <option value="Recent">Most Recent</option>
+          </select>
+        </div>
       </div>
     );
   }
