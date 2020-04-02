@@ -14,9 +14,14 @@ export class Item extends Component {
   }
 
   getImage = imageName => <Card.Img variant="bottom" src={`/fetch_image/${ imageName }`} />;
+
+  getTime = timestamp => {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+  }
   
   render() {
-    const { id, name, found, desc, location, imageName } = this.props.item;
+    const { id, name, found, desc, location, imageName, timestamp } = this.props.item;
     var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
@@ -26,7 +31,8 @@ export class Item extends Component {
         <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
         { imageName ? this.getImage(imageName) : <span></span>}
         <Card.Footer>
-          <small className="text-muted">{ found ? "Found item" : "Lost item" }</small>
+          <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
+          <small className="text-muted">{ this.getTime(timestamp) }</small>
         </Card.Footer>
       </Card>
     )
