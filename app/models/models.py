@@ -34,28 +34,39 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                        item['desc'], item['location'])
+                    item['desc'], item['location'], item['tags'], item['imageName'])
         return newItem
 
+    # DEPRECATED
     def findByName(self, name=None):
         listOfItems = []
         toSearch = self.collection.find({"name": name})
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                             item.get('found'), item.get('desc'),
-                            item.get('location'))
+                            item.get('location'), item.get('imageName'))
             listOfItems.append(newItem)
+            #Get timestamp of object created
+            print(item.get('_id').generation_time)
 
         return listOfItems
 
-    def findAll(self, name=None):
+    def findAll(self, tags=None):
         listOfItems = []
         allItems = self.collection.find()
+        
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
-                            item.get('found'), item.get('desc'),
-                            item.get('location'))
-            listOfItems.append(newItem)
+                        item.get('found'), item.get('desc'),
+                        item.get('location'), item.get('tags'), item.get('imageName'))
+            if (len(tags) == 0): # no tags, add all
+                listOfItems.append(newItem)
+            else: # yes tags, filter
+                containsAllTags = True
+                for tag in tags:
+                    if tag not in item.get('tags'):
+                        containsAllTags = False
+                if (containsAllTags): listOfItems.append(newItem)
 
         return listOfItems
 
@@ -64,11 +75,16 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        tags = item.tags
+        imageName = item.imageName
+        
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
-            'location': location
+            'location': location,
+            'tags': tags,
+            'imageName': imageName
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -80,12 +96,14 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
+        tags = item.tags
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
                 'found': found,
                 'desc': desc,
-                'location': location
+                'location': location,
+                'tags': tags
             }
         }, upsert=False)
         return item
@@ -98,12 +116,15 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-        location=None):
+                location=None, tags=None, imageName=None):
         self.Id = Id
         self.name = name
         self.found = found
         self.desc = desc
         self.location = location
+        self.tags = tags
+        self.imageName = imageName
+
 
     @property
     def Id(self):
@@ -144,6 +165,14 @@ class Item:
     @location.setter
     def location(self, location):
         self.__location = location
+        
+    @property
+    def tags(self):
+        return self.__tags
+
+    @tags.setter
+    def tags(self, tags):
+        self.__tags = tags
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -156,6 +185,8 @@ class Item:
             return False
         if self.location != otherItem.location:
             return False
+        if set(self.tags) != set(otherItem.tags): # tags is a list of strings
+            return False
         return True
 
     def __str__(self):
@@ -164,6 +195,7 @@ class Item:
     def __repr__(self):
         return str(self)
 
+    # magical formula to determine if a word is similar to another word
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
             total = []
@@ -195,7 +227,9 @@ class Item:
             'name': self.name,
             'found': self.found,
             'desc': self.desc,
-            'location': self.location
+            'location': self.location,
+            'tags' : self.tags,
+            'imageName': self.imageName
         }
 
         return output

@@ -12,14 +12,28 @@ const columnStyle = {
   justifyContent: 'center'
 }
 
+// az - terrible solution but works for now
+function setTags(tags) {
+  let tagString = 'tags=' + tags[0];
+  for (let i = 1; i < tags.length; i++) {
+    tagString = tagString + ',' + tags[i];
+  }
+  return tagString;
+}
+
 export default class Search extends Component {
   state = {
     items: []
   }
 
-  searchItem = (name) => {
+  searchItem = (name, tags) => {
     this.setState({items:[]})
-    axios.get('/items/search=' + name).then(res =>
+
+    let tagList = "";
+    if (tags.length>0){
+      tagList = setTags(tags);
+    }
+    axios.get('/items/' + name + '?' + tagList).then(res =>
       res.data.map((item) => {
         this.setState({ items: [...this.state.items, item] })
       })
@@ -27,8 +41,6 @@ export default class Search extends Component {
   }
 
   deleteItem = (id) => {
-    // ...spread operator to get list of items make a copy
-    // filter out all that arent the item to remove the item
     axios.delete(`/items/${id}`)
       .then(res => this.setState({
         items: [...this.state.items.filter(item => item.id !== id)]
