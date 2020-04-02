@@ -120,7 +120,7 @@ def add_item():
     location = request.form['location']
     imageName = f.filename if f != None else ''
     tags = request.form['tags']
-    radius = request.get_json()['radius']
+    radius = request.form['radius']
     timestamp = time.time() # request.get_json()['timestamp']
     
     items = mongo.db.items

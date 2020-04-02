@@ -24,7 +24,8 @@ export class AddItem extends Component {
     found: false,
     desc: '',
     location: [39.3299, -76.6205],
-    img: ''
+    img: '',
+    radius: ''
   }
 
   // idea: make checkboxes as a state that keeps track of checked or not
@@ -66,8 +67,8 @@ export class AddItem extends Component {
       return false;
     }
 
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes), this.state.img);
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: ''});
+    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes), this.state.img, this.state.radius);
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: '', radius: ''});
     document.getElementById("imageUpload").value = "";
   }
 
@@ -98,6 +99,14 @@ export class AddItem extends Component {
             style={{ flex: '10', padding: '5px' }}
             placeholder="Add Item Description..."
             value={this.state.desc}
+            onChange={this.onChange}
+          />
+          <input
+            type="text"
+            name="radius"
+            style={{ flex: '10', padding: '5px' }}
+            placeholder="Add Item Radius..."
+            value={this.state.radius}
             onChange={this.onChange}
           />
           <input
