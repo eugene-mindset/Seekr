@@ -33,7 +33,7 @@ export default class Search extends Component {
     if (tags.length>0){
       tagList = setTags(tags);
     }
-    axios.get('/items/' + name + '?' + tagList).then(res =>
+    axios.get('/items/search=' + name + '?' + tagList).then(res =>
       res.data.map((item) => {
         this.setState({ items: [...this.state.items, item] })
       })

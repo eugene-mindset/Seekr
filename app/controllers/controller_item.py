@@ -76,13 +76,15 @@ def get_all_items_sorted(query):
     
     # Get any arguments in the query
     args = request.args
-    
     # Get the tags if exists
     tags = []
     if (args.get('tags') != None):
         tags = args.get('tags').split(',')
         
     listOfItems = itemObj.findAll(tags)
+    if not listOfItems:
+        # if nothing in db, don't do any similarity comparisons
+        return jsonify([])
     queriedItem = Item(name=query, desc="")
 
     simMatch = ItemSimilarity(modelName=None)

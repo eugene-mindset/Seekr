@@ -13,6 +13,7 @@ export default class Add extends Component {
     data.append('location', location);
     data.append('image', img);
     data.append('tags', tags);
+    data.append('radius', 2.0);
       
     axios({
       method: 'post',
