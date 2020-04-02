@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                       item['desc'], item['location'], item['tags'], item['imageName'])
+                    item['desc'], item['location'], item['tags'], item['imageName'])
         return newItem
 
     # DEPRECATED
@@ -43,10 +43,10 @@ class ItemDao(DatabaseObject):
         toSearch = self.collection.find({"name": name})
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('imageName'))
+                            item.get('found'), item.get('desc'),
+                            item.get('location'), item.get('imageName'))
             listOfItems.append(newItem)
-            #Get timestamp of object created  
+            #Get timestamp of object created
             print(item.get('_id').generation_time)
 
         return listOfItems
@@ -57,8 +57,8 @@ class ItemDao(DatabaseObject):
         
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
-                           item.get('found'), item.get('desc'),
-                           item.get('location'), item.get('tags'), item.get('imageName'))
+                        item.get('found'), item.get('desc'),
+                        item.get('location'), item.get('tags'), item.get('imageName'))
             if (len(tags) == 0): # no tags, add all
                 listOfItems.append(newItem)
             else: # yes tags, filter
@@ -116,7 +116,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                 location=None, tags=None, imageName=None):
+                location=None, tags=None, imageName=None):
         self.Id = Id
         self.name = name
         self.found = found
@@ -189,6 +189,12 @@ class Item:
             return False
         return True
 
+    def __str__(self):
+        return self.name + ': ' + self.desc
+
+    def __repr__(self):
+        return str(self)
+
     # magical formula to determine if a word is similar to another word
     def compareItem(self, otherItem: 'Item', comparator=None):
         if comparator is None:
@@ -225,4 +231,5 @@ class Item:
             'tags' : self.tags,
             'imageName': self.imageName
         }
+
         return output

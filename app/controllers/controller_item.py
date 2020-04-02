@@ -5,7 +5,9 @@ from bson.objectid import ObjectId
 from app.models.models import *
 from app.controllers.tags import *
 from app import mongo
+from app.models.similarity import ItemSimilarity
 import os
+import gensim.downloader as gens_api
 
 items_router = Blueprint("items", __name__)
 
@@ -20,6 +22,7 @@ items_router = Blueprint("items", __name__)
 #   other - anything not in the above categories: bikes, coffee mugs, etc
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
+embedding = gens_api.load('glove-wiki-gigaword-50')
 
 
 @items_router.route("/")
@@ -65,10 +68,16 @@ def get_all_items_sorted(query):
         
     listOfItems = itemObj.findAll(tags)
     queriedItem = Item(name=query, desc="")
-    scoredItems = [(queriedItem.compareItem(item), item) for item in listOfItems]    
-    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
-    output = [pair[1].toDict() for pair in scoredItems]
 
+    simMatch = ItemSimilarity(modelName=None)
+    simMatch.model = embedding
+
+    simMatch.addItems(listOfItems)
+    simMatch.computeBagOfWordsForItems()
+    simMatch.computeSimilarityMatrix()
+    simMatch.scoreItems(queriedItem, True, True)
+
+    output = [item.toDict() for item in simMatch.getSortedItems()]
     return jsonify(output)
 
 
