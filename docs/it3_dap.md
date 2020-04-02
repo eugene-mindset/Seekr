@@ -43,9 +43,9 @@ As someone who has lost something, I want to be able to search the listings by t
 
 #### Adding Items
 
-* [ ] Update backend to get timestamp of when an item was created (Shaurya & Andrew)
+* [X] Update backend to get timestamp of when an item was created (Shaurya & Andrew)
 * [X] Update backend to get images when a user listing is added (Anderson)
-* [ ] Update backend to get radius when a user listing is added (Shaurya & Andrew)
+* [X] Update backend to get radius when a user listing is added (Shaurya & Andrew)
 * [X] Update backend to get tags when a user listing is added (Shaurya & Andrew)
 
 #### Returning Item Listings
