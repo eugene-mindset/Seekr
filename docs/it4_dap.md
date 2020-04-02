@@ -18,4 +18,4 @@ As a developer, I want to have fun while making the application!
 
 ## Tasks
 
-* [] Have lots of fun!
+* [ ] Have lots of fun!
