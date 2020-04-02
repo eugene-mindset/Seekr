@@ -35,7 +35,7 @@
 #### Search Page
 
 * [ ] Display the timestamp of listings (Anderson)
-* [ ] Allow user to apply tags to the search bar in order to narrow down listing (Jason & Anderson)
+* [X] Allow user to apply tags to the search bar in order to narrow down listing (Jason & Anderson)
 * [ ] Allow user to change the order of item listings based on time added, best-matching, etc. (Jason & Anderson)
 * [X] List the item as cards (Anderson)
 * [X] Display the image belonging to item listing (Anderson)
@@ -47,7 +47,7 @@
 * [ ] Update backend to get timestamp of when an item was created (Shaurya & Andrew)
 * [X] Update backend to get images when a user listing is added (Anderson)
 * [ ] Update backend to get radius when a user listing is added (Shaurya & Andrew)
-* [ ] Update backend to get tags when a user listing is added (Shaurya & Andrew)
+* [X] Update backend to get tags when a user listing is added (Shaurya & Andrew)
 
 #### Returning Item Listings
 
