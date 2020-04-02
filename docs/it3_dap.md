@@ -28,7 +28,7 @@
 
 #### Add Page
 
-* [ ] Allow user to add tags to their listing when they are being created (Jacob)
+* [X] Allow user to add tags to their listing when they are being created (Andrew)
 * [ ] Allow user to supply radius when adding a lost item (Jacob)
 * [X] Allow user to supply images with their listing (Anderson)
 
@@ -51,6 +51,6 @@
 
 #### Returning Item Listings
 
-* [ ] Allow sorting based on time or best match (Eugene)
-* [ ] Improve item listing matching algorithm to match on similar words, not exact (Eugene, Jason and Andrew)
-* [ ] Add filtering functionality to narrow results down to only those with the desired tags or qualifications (Shaurya & Eugene)
+* [X] Allow sorting based on time or best match (Shaurya)
+* [X] Improve item listing matching algorithm to match on similar words, not exact (Eugene, Jason and Andrew)
+* [X] Add filtering functionality to narrow results down to only those with the desired tags or qualifications (Andrew)
