@@ -86,7 +86,7 @@ class ItemDao(DatabaseObject):
             'desc': desc,
             'location': location,
             'tags': tags,
-            'imageName': imageName
+            'imageName': imageName,
             'radius': radius,
             'timestamp': timestamp
         }).inserted_id
@@ -212,7 +212,7 @@ class Item:
             return False
         if set(self.tags) != set(otherItem.tags): # tags is a list of strings
             return False
-        if self.radius != otherIterm.radius:
+        if self.radius != otherItem.radius:
             return False
         if self.timestamp != otherItem.timestamp:
             return False
@@ -258,7 +258,7 @@ class Item:
             'desc': self.desc,
             'location': self.location,
             'tags' : self.tags,
-            'imageName': self.imageName
+            'imageName': self.imageName,
             'radius' : self.radius,
             'timestamp' : self.timestamp
         }
