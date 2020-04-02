@@ -8,9 +8,9 @@ from app import mongo
 from app.models.similarity import ItemSimilarity
 import os
 import gensim.downloader as gens_api
+import time
 
 items_router = Blueprint("items", __name__)
-
 
 # tags:
 #   tech
@@ -54,11 +54,12 @@ def get_all_items():
     return jsonify(output), 200
 
 
-@items_router.route('/items/<query>', methods=['GET'])
-def get_all_items_sorted(query):
+@items_router.route('/items/timesearch=<query>', methods=['GET'])
+def get_all_items_timesorted(query):
+
     items = mongo.db.items
     itemObj = ItemDao(items)
-    
+
     # Get any arguments in the query
     args = request.args
     
@@ -68,6 +69,30 @@ def get_all_items_sorted(query):
         tags = args.get('tags').split(',')
         
     listOfItems = itemObj.findAll(tags)
+    
+    scoredItems = [(item.timestamp, item) for item in listOfItems]
+    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+
+    output = [pair[1].toDict() for pair in scoredItems]
+
+    return jsonify(output)
+
+@items_router.route('/items/search=<query>', methods=['GET'])
+def get_all_items_sorted(query):
+    items = mongo.db.items
+    itemObj = ItemDao(items)
+    
+    # Get any arguments in the query
+    args = request.args
+    # Get the tags if exists
+    tags = []
+    if (args.get('tags') != None):
+        tags = args.get('tags').split(',')
+        
+    listOfItems = itemObj.findAll(tags)
+    if not listOfItems:
+        # if nothing in db, don't do any similarity comparisons
+        return jsonify([])
     queriedItem = Item(name=query, desc="")
 
     simMatch = ItemSimilarity(modelName=None)
@@ -119,10 +144,12 @@ def add_item():
     location = request.form['location']
     imageName = f.filename if f != None else ''
     tags = request.form['tags']
+    radius = request.form['radius']
+    timestamp = time.time() # request.get_json()['timestamp']
     
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags)
+    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags, radius=radius, timestamp=timestamp)
 
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
@@ -137,9 +164,13 @@ def update_item(id):
     desc = request.get_json()['desc']
     location = request.get_json()['location']
     tags = request.get_json()['tags']
+    radius = request.get_json()['radius']
+    timestamp = time.time()
+    # I don't think we should update the time at all? 
+    # It's time added, not time last modified
     
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 

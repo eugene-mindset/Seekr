@@ -5,7 +5,7 @@ import AddItem from '../item/AddItem';
 export default class Add extends Component {
     
 
-  addItem = (name, found, desc, location, tags, img) => {
+  addItem = (name, found, desc, location, tags, img, radius) => {
     var data = new FormData();
     data.append('name', name);
     data.append('found', found);
@@ -13,6 +13,7 @@ export default class Add extends Component {
     data.append('location', location);
     data.append('image', img);
     data.append('tags', tags);
+    data.append('radius', radius)
       
     axios({
       method: 'post',
