@@ -31,6 +31,7 @@ def hello():
 
 @items_router.route("/fetch_image/<filename>")
 def fetch_resource(filename):
+    print("THIS IS THE FILENAME"+ filename)
     return send_from_directory('../'+IMAGE_FOLDER, filename)
 
 @items_router.route('/items', methods=['GET'])
@@ -103,19 +104,20 @@ def get_all_items_sorted(query):
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
-
+    
+    f = None
     # save image to local folder
-    f = request.files['image']
-    f.save(os.path.join(IMAGE_FOLDER, secure_filename(f.filename)))
+    if 'image' in request.files:
+        f = request.files['image']
+        # Use secure_filename secure_filename(f.filename)
+        f.save(os.path.join(IMAGE_FOLDER, f.filename))
 
     items = mongo.db.items
-
-
     name = request.form['name']
     found = eval(request.form['found'].capitalize())
     desc = request.form['desc']
     location = request.form['location']
-    imageName = request.files['image'].filename
+    imageName = f.filename if f != None else ''
     tags = request.form['tags']
     
     items = mongo.db.items
