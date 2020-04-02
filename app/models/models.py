@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                    item['desc'], item['location'], item['tags'], item['imageName'])
+                    item['desc'], item['location'], item['tags'], item['imageName'], item['radius'], item['timestamp'])
         return newItem
 
     # DEPRECATED
@@ -44,7 +44,7 @@ class ItemDao(DatabaseObject):
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                             item.get('found'), item.get('desc'),
-                            item.get('location'), item.get('imageName'))
+                            item.get('location'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
             listOfItems.append(newItem)
             #Get timestamp of object created
             print(item.get('_id').generation_time)
@@ -58,7 +58,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                         item.get('found'), item.get('desc'),
-                        item.get('location'), item.get('tags'), item.get('imageName'))
+                        item.get('location'), item.get('tags'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
             if (len(tags) == 0): # no tags, add all
                 listOfItems.append(newItem)
             else: # yes tags, filter
@@ -77,14 +77,17 @@ class ItemDao(DatabaseObject):
         location = item.location
         tags = item.tags
         imageName = item.imageName
-        
+        radius = item.radius
+        timestamp = item.timestamp
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
             'desc': desc,
             'location': location,
             'tags': tags,
-            'imageName': imageName
+            'imageName': imageName,
+            'radius': radius,
+            'timestamp': timestamp
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -97,13 +100,17 @@ class ItemDao(DatabaseObject):
         desc = item.desc
         location = item.location
         tags = item.tags
+        radius = item.radius
+        timestamp = item.timestamp
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
                 'found': found,
                 'desc': desc,
                 'location': location,
-                'tags': tags
+                'tags': tags,
+                'radius': radius,
+                'timestamp': timestamp
             }
         }, upsert=False)
         return item
@@ -116,7 +123,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                location=None, tags=None, imageName=None):
+                location=None, tags=None, imageName=None, radius=None, timestamp=None):
         self.Id = Id
         self.name = name
         self.found = found
@@ -124,7 +131,8 @@ class Item:
         self.location = location
         self.tags = tags
         self.imageName = imageName
-
+        self.radius = radius
+        self.timestamp = timestamp
 
     @property
     def Id(self):
@@ -174,6 +182,22 @@ class Item:
     def tags(self, tags):
         self.__tags = tags
 
+    @property
+    def radius(self):
+        return self.__radius
+    
+    @radius.setter
+    def radius(self, radius):
+        self.__radius = radius
+    
+    @property
+    def timestamp(self):
+        return self.__timestamp
+
+    @timestamp.setter
+    def timestamp(self, timestamp):
+        self.__timestamp = timestamp
+
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
@@ -186,6 +210,10 @@ class Item:
         if self.location != otherItem.location:
             return False
         if set(self.tags) != set(otherItem.tags): # tags is a list of strings
+            return False
+        if self.radius != otherIterm.radius:
+            return False
+        if self.timestamp != otherItem.timestamp:
             return False
         return True
 
@@ -229,7 +257,9 @@ class Item:
             'desc': self.desc,
             'location': self.location,
             'tags' : self.tags,
-            'imageName': self.imageName
+            'imageName': self.imageName,
+            'radius' : self.radius,
+            'timestamp' : self.timestamp
         }
 
         return output

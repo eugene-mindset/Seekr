@@ -8,6 +8,7 @@ from app import mongo
 from app.models.similarity import ItemSimilarity
 import os
 import gensim.downloader as gens_api
+import time
 
 items_router = Blueprint("items", __name__)
 
@@ -119,10 +120,12 @@ def add_item():
     location = request.form['location']
     imageName = f.filename if f != None else ''
     tags = request.form['tags']
+    radius = request.get_json()['radius']
+    timestamp = time.time() # request.get_json()['timestamp']
     
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags)
+    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags, radius=radius, timestamp=timestamp)
 
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
@@ -137,9 +140,11 @@ def update_item(id):
     desc = request.get_json()['desc']
     location = request.get_json()['location']
     tags = request.get_json()['tags']
+    radius = request.get_json()['radius']
+    timestamp = time.time() # request.get_json()['timestamp']
     
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 
