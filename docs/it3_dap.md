@@ -23,19 +23,19 @@ As someone who has lost something, I want to be able to search the listings by t
 
 #### Home Page
 
-* [ ] Eliminate the homepage (Anderson)
+* [X] Eliminate the homepage (Anderson)
 
 #### Add Page
 
 * [X] Allow user to add tags to their listing when they are being created (Andrew)
-* [ ] Allow user to supply radius when adding a lost item (Jacob)
+* [X] Allow user to supply radius when adding a lost item (Jacob)
 * [X] Allow user to supply images with their listing (Anderson)
 
 #### Search Page
 
-* [ ] Display the timestamp of listings (Anderson)
+* [X] Display the timestamp of listings (Anderson)
 * [X] Allow user to apply tags to the search bar in order to narrow down listing (Jason & Anderson)
-* [ ] Allow user to change the order of item listings based on time added, best-matching, etc. (Jason & Anderson)
+* [X] Allow user to change the order of item listings based on time added, best-matching, etc. (Jason & Anderson)
 * [X] List the item as cards (Anderson)
 * [X] Display the image belonging to item listing (Anderson)
 
