@@ -60,10 +60,10 @@ class ItemSimilarity():
         # if the name is NoneType, load no model, else load the specified model
         if filepath is not '':
             self.model = Word2VecKeyedVectors.load(filepath)
-        elif modelName is not '':
-            self.model = api.load(modelName)
         elif modelName is None:
             pass
+        elif modelName is not '':
+            self.model = api.load(modelName)
         else:
             self.model = api.load('fasttext-wiki-news-subwords-300')
 
