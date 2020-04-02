@@ -211,7 +211,7 @@ class Item:
             return False
         if set(self.tags) != set(otherItem.tags): # tags is a list of strings
             return False
-        if self.radius != otherIterm.radius:
+        if self.radius != otherItem.radius:
             return False
         if self.timestamp != otherItem.timestamp:
             return False

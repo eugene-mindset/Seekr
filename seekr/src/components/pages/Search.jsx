@@ -26,18 +26,26 @@ export default class Search extends Component {
     items: []
   }
 
-  searchItem = (name, tags) => {
+  searchItem = (name, tags, filter) => {
     this.setState({items:[]})
 
     let tagList = "";
     if (tags.length>0){
       tagList = setTags(tags);
     }
-    axios.get('/items/' + name + '?' + tagList).then(res =>
-      res.data.map((item) => {
-        this.setState({ items: [...this.state.items, item] })
-      })
-    );
+    if (filter === 'Best') {
+      axios.get('/items/search=' + name + '?' + tagList).then(res =>
+        res.data.map((item) => {
+          this.setState({ items: [...this.state.items, item] })
+        })
+      );
+    } else {
+      axios.get('/items/timesearch=' + name + '?' + tagList).then(res =>
+        res.data.map((item) => {
+          this.setState({ items: [...this.state.items, item] })
+        })
+      );
+    }
   }
 
   deleteItem = (id) => {

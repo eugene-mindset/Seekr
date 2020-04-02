@@ -13,11 +13,6 @@ export default class Navigation extends React.Component {
             <Nav className="ml-auto">
               <Nav.Item>
                 <Nav.Link>
-                  <Link to="/">Home</Link>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link>
                   <Link to="/add">Add</Link>
                 </Nav.Link>
               </Nav.Item>
