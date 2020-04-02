@@ -14,9 +14,8 @@
 
 ### User Stories to implement
 
-* As someone who has lost something, I want to set a radius on a map of where I think I lost it, so I can be notified if someone finds something in that area.
+As someone who has lost something, I want to be able to search the listings by the location of where the item was found, so I can have an easier time finding my lost item.
 * As someone who lost something, I want to be able to filter items based on designated tags, so I can have an easier time finding an item by its properties or functionality.
-* As a user, I want to search through entries with tags so that it is faster to sort through entries.
 
 ## Tasks
 
