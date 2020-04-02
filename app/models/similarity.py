@@ -4,6 +4,7 @@ from gensim.matutils import softcossim
 from gensim import corpora
 import gensim.downloader as api
 from gensim.utils import simple_preprocess
+from gensim.models.keyedvectors import Word2VecKeyedVectors
 
 import sys
 
@@ -34,7 +35,7 @@ class ItemSimilarity():
         def __str__(self):
             return self.item.name.lower() + ": " + self.item.desc.lower()
 
-    def __init__(self, modelName: str=''):
+    def __init__(self, modelName: str='', filepath: str=''):
         """
             Creates the class.
 
@@ -57,12 +58,14 @@ class ItemSimilarity():
 
         # load the default (fasttext-wiki) model if no modelName is passed,
         # if the name is NoneType, load no model, else load the specified model
-        if modelName is '':
-            self.model = api.load('fasttext-wiki-news-subwords-300')
+        if filepath is not '':
+            self.model = Word2VecKeyedVectors.load(filepath)
+        elif modelName is not '':
+            self.model = api.load(modelName)
         elif modelName is None:
             pass
         else:
-            self.model = api.load(modelName)
+            self.model = api.load('fasttext-wiki-news-subwords-300')
 
     def addItem(self, item):
         """
