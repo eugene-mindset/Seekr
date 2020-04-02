@@ -12,6 +12,8 @@ export class Item extends Component {
       borderBottom: '1px #ccc dotted',
     }
   }
+
+  getImage = imageName => <Card.Img variant="bottom" src={`/fetch_image/${ imageName }`} />;
   
   render() {
     const { id, name, found, desc, location, imageName } = this.props.item;
@@ -22,7 +24,7 @@ export class Item extends Component {
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
         <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
-        <Card.Img variant="bottom" src={`/fetch_image/${ imageName }`} />
+        { imageName ? this.getImage(imageName) : <span></span>}
         <Card.Footer>
           <small className="text-muted">{ found ? "Found item" : "Lost item" }</small>
         </Card.Footer>
