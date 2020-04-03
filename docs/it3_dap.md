@@ -53,3 +53,8 @@ As someone who has lost something, I want to be able to search the listings by t
 * [X] Allow sorting based on time or best match (Shaurya)
 * [X] Improve item listing matching algorithm to match on similar words, not exact (Eugene, Jason and Andrew)
 * [X] Add filtering functionality to narrow results down to only those with the desired tags or qualifications (Andrew)
+
+
+## Retrospective
+This iteration was the first iteration where all of us met online due to the coronavirus. At first, it was a little difficult to work in pairs on tasks that were given to multiple people. However, by using an integration branch, we were able to resolve merge conflicts that occured. We were able to refine our NLP search algorithm, although we think we will continue to make it better throughout the remaining iterations. We also refined our actual item object to be more robust. There is now the feature to add tags and to filter by tags in our search feature. We also added the ability to attach an image. As we add more robustness to the item class, we are thinking about abstracting some of our properties into different classes, such as the map that is included in the item.
+
