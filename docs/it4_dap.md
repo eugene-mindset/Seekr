@@ -20,13 +20,31 @@
 
 ## Tasks
 
-* [ ] Implement algorithm to match similar item images
+#### Search
+
 * [ ] Allow searching based on proximity to a specified location
+* [ ] Improve search algorithm word matching
+
+#### Adding
+
+* [ ] Allow user to input their contact information when adding an item
+* [ ] Make adding an image optional instead of required
+
+#### Notifications
+
 * [ ] Notify a user by sending them and email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location
-* [ ] Display the tags an item has on its listing
-* [ ] Improve search algorithm
-* [ ] Display contact information of a user on the item listing that they posted
+
+#### Database
+
 * [ ] Create a User class and Location class in the backend
 * [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database
-* [ ] Allow user to input their contact information when adding an item
 * [ ] Handle adding the new parameters for an item into the database
+
+#### Image Recognition
+
+* [ ] Implement algorithm to match similar item images
+
+#### Frontend
+
+* [ ] Display the tags an item has on its listing
+* [ ] Display contact information of a user on the item listing that they posted
