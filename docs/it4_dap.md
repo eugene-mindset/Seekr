@@ -23,12 +23,12 @@
 #### Search
 
 * [ ] Allow searching based on proximity to a specified location
-* [ ] Improve search algorithm word matching
+* [ ] Improve search algorithm word matching (Eugene)
 
 #### Adding
 
 * [ ] Allow user to input their contact information when adding an item
-* [ ] Make adding an image optional instead of required
+* [ ] Make adding an image optional instead of required (Jason)
 
 #### Notifications
 
@@ -36,13 +36,14 @@
 
 #### Database
 
-* [ ] Create a User class and Location class in the backend
-* [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database
+* [ ] Create a User class and Location class in the backend (Anderson)
+* [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
 * [ ] Handle adding the new parameters for an item into the database
+* [ ] Make database store tags as enums (Andrew)
 
 #### Image Recognition
 
-* [ ] Implement algorithm to match similar item images, give a matching score
+* [ ] Implement algorithm to match similar item images, give a matching score (Anderson)
 
 #### Frontend
 
