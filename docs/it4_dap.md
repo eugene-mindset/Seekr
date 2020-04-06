@@ -26,3 +26,7 @@
 * [ ] Display the tags an item has on its listing
 * [ ] Improve search algorithm
 * [ ] Display contact information of a user on the item listing that they posted
+* [ ] Create a User class and Location class in the backend
+* [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database
+* [ ] Allow user to input their contact information when adding an item
+* [ ] Handle adding the new parameters for an item into the database
