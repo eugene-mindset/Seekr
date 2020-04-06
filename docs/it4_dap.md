@@ -8,7 +8,7 @@
 
 ## Wireframe
 
-![Wireframe](./additional/wireframe4.bmp)
+![Wireframe](./additional/wireframe3.bmp)
 
 ## Iteration Backlog
 
