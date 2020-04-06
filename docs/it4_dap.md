@@ -42,7 +42,7 @@
 
 #### Image Recognition
 
-* [ ] Implement algorithm to match similar item images
+* [ ] Implement algorithm to match similar item images, give a matching score
 
 #### Frontend
 
