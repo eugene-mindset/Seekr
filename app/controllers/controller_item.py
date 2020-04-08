@@ -22,7 +22,6 @@ items_router = Blueprint("items", __name__)
 #   other - anything not in the above categories: bikes, coffee mugs, etc
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
-embedding = gens_api.load('glove-wiki-gigaword-50')
 
 
 @items_router.route("/")
@@ -95,15 +94,7 @@ def get_all_items_sorted(query):
         return jsonify([])
     queriedItem = Item(name=query, desc="")
 
-    simMatch = ItemSimilarity(modelName=None)
-    simMatch.model = embedding
-
-    simMatch.addItems(listOfItems)
-    simMatch.computeBagOfWordsForItems()
-    simMatch.computeSimilarityMatrix()
-    simMatch.scoreItems(queriedItem, True, True)
-
-    output = [item.toDict() for item in simMatch.getSortedItems()]
+    output = [item.toDict() for item in listOfItems]
     return jsonify(output)
 
 
