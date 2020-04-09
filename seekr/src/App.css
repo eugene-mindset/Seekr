@@ -33,11 +33,11 @@ a, .navbar-nav, .nav-link {
 
 .tags {
   background-color: darkblue;
-  margin-right: 7px;
-  margin-bottom: 7px;
+  margin-right: 5px;
+  margin-bottom: 6px;
   border-radius: 5px;
-  padding: 5px;
-  font-size: small;
+  padding: 2px 5px 2px 5px;
+  font-size: smaller;
   color: white;
 }
 
