@@ -22,30 +22,35 @@
 
 #### Search
 
-* [ ] Allow searching based on proximity to a specified location
-* [ ] Improve search algorithm word matching (Eugene)
+* [ ] Allow searching based on proximity to a specified location frontend and backend (Jacob)
+* [ ] Improve search algorithm word matching (Eugene and Jason)
 
 #### Adding
 
-* [ ] Allow user to input their contact information when adding an item
-* [ ] Make adding an image optional instead of required (Jason)
+* [ ] Allow user to input their contact information when adding an item frontend and backend (Jacob)
+* [X] Make adding an image optional instead of required (Jason)
 
 #### Notifications
 
-* [ ] Notify a user by sending them and email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location
+* [ ] Notify a user by sending them an email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location (Shaurya and Andrew)
 
 #### Database
 
 * [ ] Create a User class and Location class in the backend (Anderson)
 * [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
-* [ ] Handle adding the new parameters for an item into the database
-* [ ] Make database store tags as enums (Andrew)
+* [ ] Make database store tags as enums (Eugene)
 
 #### Image Recognition
 
 * [ ] Implement algorithm to match similar item images, give a matching score (Anderson)
 
-#### Frontend
+#### Frontend Misc
 
-* [ ] Display the tags an item has on its listing
-* [ ] Display contact information of a user on the item listing that they posted
+* [ ] Make frontend store tags as enums (Eugene)
+* [ ] Display the tags an item has on its listing (Andrew)
+* [ ] Display contact information of a user on the item listing that they posted (Jacob)
+* [ ] Clear the search when not searching (Andrew)
+
+#### Deploy
+
+* [ ] Figure out how to deploy better (Jason)
