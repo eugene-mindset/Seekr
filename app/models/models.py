@@ -2,7 +2,7 @@ from app import mongo
 from abc import ABCMeta, abstractmethod
 from bson.objectid import ObjectId
 from flask import jsonify
-
+from enum import IntFlag
 
 class DatabaseObject:
 
@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                    item['desc'], item['location'], item['tags'], item['imageName'], item['radius'], item['timestamp'])
+                    item['desc'], item['location'], ItemTags(item['tags']), item['imageName'], item['radius'], item['timestamp'])
         return newItem
 
     # DEPRECATED
@@ -51,22 +51,18 @@ class ItemDao(DatabaseObject):
 
         return listOfItems
 
-    def findAll(self, tags=None):
+    def findAll(self, tags):
         listOfItems = []
         allItems = self.collection.find()
-        
+
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                         item.get('found'), item.get('desc'),
-                        item.get('location'), item.get('tags'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
-            if (len(tags) == 0): # no tags, add all
+                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+
+            if (tags == ItemTags.NONE) or (tags == newItem.tags): # no tags, add all
                 listOfItems.append(newItem)
-            else: # yes tags, filter
-                containsAllTags = True
-                for tag in tags:
-                    if tag not in item.get('tags'):
-                        containsAllTags = False
-                if (containsAllTags): listOfItems.append(newItem)
+
 
         return listOfItems
 
@@ -84,7 +80,7 @@ class ItemDao(DatabaseObject):
             'found': found,
             'desc': desc,
             'location': location,
-            'tags': tags,
+            'tags': int(tags),
             'imageName': imageName,
             'radius': radius,
             'timestamp': timestamp
@@ -108,7 +104,7 @@ class ItemDao(DatabaseObject):
                 'found': found,
                 'desc': desc,
                 'location': location,
-                'tags': tags,
+                'tags': int(tags),
                 'radius': radius,
                 'timestamp': timestamp
             }
@@ -256,14 +252,13 @@ class Item:
             'found': self.found,
             'desc': self.desc,
             'location': self.location,
-            'tags' : self.tags,
+            'tags' : ItemTags.toInt(self.tags),
             'imageName': self.imageName,
             'radius' : self.radius,
             'timestamp' : self.timestamp
         }
 
         return output
-
 
 class User:
 
@@ -320,7 +315,6 @@ class User:
 
         return output
 
-
 class Location:
 
     def __init__(self, coordinates=None):
@@ -352,3 +346,26 @@ class Location:
         }
 
         return output
+
+class ItemTags(IntFlag):
+    NONE        = 0b0000_0000
+    TECH        = 0b0000_0001
+    CLOTHING    = 0b0000_0010
+    JEWELRY     = 0b0000_0100
+    PET         = 0b0000_1000
+    PERSONAL    = 0b0001_0000
+    APPAREL     = 0b0010_0000
+    OTHER       = 0b0100_0000
+
+    @staticmethod
+    def get(x):
+        if x == None or type(x) != int:
+            return None
+        else:
+            return ItemTags(x)
+
+    def toInt(x):
+        if x == None or type(x) != int:
+            return None
+        else:
+            return int(ItemTags(x))
