@@ -263,3 +263,92 @@ class Item:
         }
 
         return output
+
+
+class User:
+
+    def __init__(self, name=None, email=None, phone=None):
+        self.name = name
+        self.email = email
+        self.phone = phone
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+    @property
+    def email(self):
+        return self.__email
+
+    @email.setter
+    def email(self, email):
+        self.__email = email
+
+    @property
+    def phone(self):
+        return self.__phone
+
+    @phone.setter
+    def phone(self, phone):
+        self.__phone = phone
+
+    def __eq__(self, otherUser):
+        if self.name != otherUser.name:
+            return False
+        if self.email != otherUser.email:
+            return False
+        if self.phone != otherUser.phone:
+            return False
+        return True
+
+    def __str__(self):
+        return self.name + ': ' + self.email + ', ' + self.phone
+
+    def __repr__(self):
+        return str(self)
+
+    def toDict(self):
+        output = {
+            'name': self.name,
+            'email': self.email,
+            'phone': self.phone
+        }
+
+        return output
+
+
+class Location:
+
+    def __init__(self, coordinates=None):
+        self.coordinate = coordinates
+
+    @property
+    def coordinates(self):
+        return self.__coordinates
+
+    @coordinates.setter
+    def coordinates(self, coordinates):
+        self.__coordinates = coordinates
+
+    def __eq__(self, otherLoc):
+        if self.coordinates != otherLoc.coordinates:
+            return False
+        return True
+
+    def __str__(self):
+        return 'Point at: ' + self.coordinates
+
+    def __repr__(self):
+        return str(self)
+
+    def toDict(self):
+        output = {
+            'type': 'Point',
+            'coordinates': self.coordinates
+        }
+
+        return output
