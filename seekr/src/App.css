@@ -30,3 +30,20 @@ a, .navbar-nav, .nav-link {
   -o-background-size: cover;
   background-size: cover;
 }
+
+.tags {
+  background-color: darkblue;
+  margin-right: 5px;
+  margin-bottom: 6px;
+  border-radius: 5px;
+  padding: 2px 5px 2px 5px;
+  font-size: smaller;
+  color: white;
+}
+
+.tags-container {
+  display: flex; 
+  margin-left: 1em;
+  flex-wrap: wrap;
+
+}
