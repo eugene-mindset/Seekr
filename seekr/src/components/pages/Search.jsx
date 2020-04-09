@@ -12,35 +12,22 @@ const columnStyle = {
   justifyContent: 'center'
 }
 
-// az - terrible solution but works for now
-function setTags(tags) {
-  let tagString = 'tags=' + tags[0];
-  for (let i = 1; i < tags.length; i++) {
-    tagString = tagString + ',' + tags[i];
-  }
-  return tagString;
-}
-
 export default class Search extends Component {
   state = {
     items: []
   }
 
   searchItem = (name, tags, filter) => {
+    console.log(tags)
     this.setState({items:[]})
-
-    let tagList = "";
-    if (tags.length>0){
-      tagList = setTags(tags);
-    }
     if (filter === 'Best') {
-      axios.get('/items/search=' + name + '?' + tagList).then(res =>
+      axios.get('/items/search=' + name + '?tags=' + tags).then(res =>
         res.data.map((item) => {
           this.setState({ items: [...this.state.items, item] })
         })
       );
     } else {
-      axios.get('/items/timesearch=' + name + '?' + tagList).then(res =>
+      axios.get('/items/timesearch=' + name + '?tags=' + tags).then(res =>
         res.data.map((item) => {
           this.setState({ items: [...this.state.items, item] })
         })
