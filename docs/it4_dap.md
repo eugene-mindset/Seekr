@@ -36,7 +36,7 @@
 
 #### Database
 
-* [ ] Create a User class and Location class in the backend (Anderson)
+* [X] Create a User class and Location class in the backend (Anderson)
 * [ ] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
 * [ ] Make database store tags as enums (Eugene)
 
