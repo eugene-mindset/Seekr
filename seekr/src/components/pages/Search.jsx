@@ -18,7 +18,6 @@ export default class Search extends Component {
   }
 
   searchItem = (name, tags, filter) => {
-    console.log(tags)
     this.setState({items:[]})
     if (filter === 'Best') {
       axios.get('/items/search=' + name + '?tags=' + tags).then(res =>

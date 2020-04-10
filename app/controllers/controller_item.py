@@ -78,7 +78,6 @@ def get_all_items_sorted(query):
     
     # Get any arguments in the query
     args = request.args
-    print(request.args.get('tags'))
 
     # Get the tags if exists
     tags = ItemTags.get(int(request.args.get('tags')))

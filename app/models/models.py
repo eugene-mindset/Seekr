@@ -47,7 +47,6 @@ class ItemDao(DatabaseObject):
                             item.get('location'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
             listOfItems.append(newItem)
             #Get timestamp of object created
-            print(item.get('_id').generation_time)
 
         return listOfItems
 
@@ -58,7 +57,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                         item.get('found'), item.get('desc'),
-                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+                        item.get('location'), ItemTags.get(int(item.get('tags'))), item.get('imageName'), item.get('radius'), item.get('timestamp'))
 
             if (tags == ItemTags.NONE) or (tags == newItem.tags): # no tags, add all
                 listOfItems.append(newItem)
@@ -365,7 +364,7 @@ class ItemTags(IntFlag):
             return ItemTags(x)
 
     def toInt(x):
-        if x == None or type(x) != int:
+        if x == None or not (type(x) == int or isinstance(x, IntFlag)):
             return None
         else:
             return int(ItemTags(x))
