@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Tags from './Tags'
+import ItemTags from '../helper/ItemTags'
 
 export class Item extends Component {
   getStyle = () => {
@@ -28,7 +29,7 @@ export class Item extends Component {
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
-        <Tags tags={tags.split(',')} ></Tags> 
+        <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
         <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
