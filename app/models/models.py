@@ -57,7 +57,7 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                         item.get('found'), item.get('desc'),
-                        item.get('location'), ItemTags.get(int(item.get('tags'))), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
 
             if (tags == ItemTags.NONE) or (tags == newItem.tags): # no tags, add all
                 listOfItems.append(newItem)
@@ -79,7 +79,7 @@ class ItemDao(DatabaseObject):
             'found': found,
             'desc': desc,
             'location': location,
-            'tags': int(tags),
+            'tags': ItemTags.get(tags),
             'imageName': imageName,
             'radius': radius,
             'timestamp': timestamp
@@ -103,7 +103,7 @@ class ItemDao(DatabaseObject):
                 'found': found,
                 'desc': desc,
                 'location': location,
-                'tags': int(tags),
+                'tags': ItemTags.get(tags),
                 'radius': radius,
                 'timestamp': timestamp
             }
