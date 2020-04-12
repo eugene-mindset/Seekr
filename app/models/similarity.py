@@ -8,6 +8,8 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors
 from gensim.models import WordEmbeddingSimilarityIndex
 from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
 
+import string
+import numpy as np
 import sys
 
 class ItemSimilarity():
@@ -55,27 +57,27 @@ class ItemSimilarity():
         self.itemScores = []
         self.dictionary = corpora.Dictionary()
         self.model = None
-        self.simMatrix = None
-        self.docsimIndex = None
-
-        # private properties (do not touch, these are important flags)
-        self._simOutdated = True
-        self._bagOfWordsCalled = False
-        self._wordEmbedding = None
+        self.wordEmbedding = None
 
         # load the default (fasttext-wiki) model if no modelName is passed,
         # if the name is NoneType, load no model, else load the specified model
         if filepath is not '':
             self.model = Word2VecKeyedVectors.load(filepath)
-            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
         elif modelName is None:
             pass
         elif modelName is not '':
             self.model = api.load(modelName)
-            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
         else:
             self.model = api.load('fasttext-wiki-news-subwords-300')
-            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+
+    def preprocess(self, preStr):
+        processed = "".join(l if l not in string.punctuation else " " for l in preStr)
+        tokenized = processed.split()
+
+        return tokenized
 
 
     def addItem(self, item):
@@ -91,13 +93,11 @@ class ItemSimilarity():
 
         # create new ItemScore and dictionary entries from ItemScore
         newEntry = self.ItemScore(item)
-        newDictEntry = corpora.Dictionary([simple_preprocess(str(newEntry))])
+        newDictEntry = corpora.Dictionary([self.preprocess(str(newEntry))])
 
         # add new entries to items and dictionary, update flags
         self.itemScores.append(newEntry)
         self.dictionary.merge_with(newDictEntry)
-        self._simOutdated = True
-        self._bagOfWordsCalled = False
 
 
     def addItems(self, items):
@@ -115,13 +115,11 @@ class ItemSimilarity():
         # create new ItemScores and dictionary entries from ItemScore
         newEntries = [self.ItemScore(item) for item in items]
         newDictEntries = corpora.Dictionary(
-            [simple_preprocess(str(newScore)) for newScore in newEntries])
+            [self.preprocess(str(newScore)) for newScore in newEntries])
 
         # add new entries to items and dictionary, update flags
         self.itemScores = self.itemScores + newEntries
         self.dictionary.merge_with(newDictEntries)
-        self._simOutdated = True
-        self._bagOfWordsCalled = False
 
 
     def clearItems(self):
@@ -147,39 +145,48 @@ class ItemSimilarity():
         """
 
         self.dictionary = corpora.Dictionary(
-            [simple_preprocess(str(item)) for item in self.itemScores])
-        self._bagOfWordsCalled = False
+            [self.preprocess(str(item)) for item in self.itemScores])
 
 
-    def computeBagOfWordsForItems(self):
+    def computeBagOfWordsForItems(self, corpus):
         """
             Compute the sentences (or the bag of words) for every item listing
             in self.
+
+            Parameters
+            ----------
+            corpus: corpora.Dictionary
+                dictionary to use to create bag of words for each item
         """
 
         for itemScore in self.itemScores:
-            itemScore.sentence = self.dictionary.doc2bow(
-                simple_preprocess(str(itemScore)))
-
-        self._bagOfWordsCalled = True
-        self._simOutdated = True
+            itemScore.sentence = corpus.doc2bow(
+                self.preprocess(str(itemScore)))
 
 
-    def computeSimilarityMatrix(self):
+    def computeDocumentSimilarityIndex(self, corpus):
         """
             Compute the similarity matrix of the model
+
+            Parameters
+            ----------
+            corpus: corpora.Dictionary
+                dictionary to use to create index
+
+            Return
+            ------
+            SoftCosineSimilarity instance
         """
 
-        if self._wordEmbedding is None:
-            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+        if self.wordEmbedding is None:
+            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
 
         # create similarity matrix, update flags
-        self.simMatrix = SparseTermSimilarityMatrix(self._wordEmbedding, self.dictionary)
-        self.docsimIndex = SoftCosineSimilarity([x.sentence for x in self.itemScores], self.simMatrix)
-        self._simOutdated = False
+        simMatrix = SparseTermSimilarityMatrix(self.wordEmbedding, corpus)
+        return SoftCosineSimilarity([x.sentence for x in self.itemScores], simMatrix)
 
 
-    def scoreItems(self, itemToCompare, computeSim=False, computeBag=False):
+    def scoreItems(self, itemToCompare):
         """
             Score every item listing in self. The score is how similar that item
             is to `itemToCompare`.
@@ -188,42 +195,27 @@ class ItemSimilarity():
             ----------
             itemToCompare: Item
                 item to see how similar it is to other items
-
-            computeSim=False: bool
-                If true, will automatically update simMatrix
-
-            computeBag=False: bool
-                If true, will automatically update every items sentence
-                (bag of words)
         """
 
         # make itemToCompare's bag of words
-        sentence = self.dictionary.doc2bow(
-            simple_preprocess(str(self.ItemScore(itemToCompare))))
 
-        # based on flags and parameters, update information or
-        # send errors/warnings
-        if not self._bagOfWordsCalled:
-            if computeBag:
-                self.computeBagOfWordsForItems()
-            else:
-                raise TypeError("One ItemScore isntance contains has no "
-                                "sentence (bag of words) computed for it yet "
-                                "(self.sentence is NoneType)")
+        sentence = self.preprocess(str(self.ItemScore(itemToCompare)))
 
-        if self._simOutdated:
-            if computeSim:
-                self.computeSimilarityMatrix()
-            else:
-                raise TypeError("Similarity matrix for "
-                    + repr(self) + " is not up to date with its dictionary, thus"
-                    + " cannot the corresponding docsim may not exist.")
+        newDict = corpora.Dictionary([sentence])
+        newDict.merge_with(self.dictionary)
+
+        sentence = newDict.doc2bow(sentence)
+
+        self.computeBagOfWordsForItems(newDict)
+        docsimIndex = self.computeDocumentSimilarityIndex(newDict)
 
         # score every item
-        scores = self.docsimIndex[sentence]
-        print(scores)
-        print(type(scores.tolist()))
-        for score, itemScore in zip(self.docsimIndex[sentence].tolist(), self.itemScores):
+        scores = docsimIndex[sentence].tolist()
+
+        if scores == 0:
+            return
+
+        for score, itemScore in zip(scores, self.itemScores):
             itemScore.score = score
 
 

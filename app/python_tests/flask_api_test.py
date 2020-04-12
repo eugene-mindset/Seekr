@@ -42,7 +42,7 @@ class ApiTest(unittest.TestCase):
         client.drop_database(TestConfig.MONGO_DBNAME)
 
     def test_get_all_item(self):
-        response = self.app.get('/items')
+        response = self.app.get('/items?tags=0')
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 3)
@@ -58,7 +58,7 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(item['location'], [1, 2])
 
     def test_get_all_items_sorted(self):
-        response = self.app.get('/items/search=pen')
+        response = self.app.get('/items/search=pen?tags=0')
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 3)
