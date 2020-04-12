@@ -2,21 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
 import Checkbox from "./Checkbox";
-
-const tags = [
-  "tech",
-  "clothing",
-  "jewelry",
-  "pet",
-  "personal",
-  "apparel",
-  "other"
-];
+import ItemTags from "../helper/ItemTags";
 
 export class AddItem extends Component {
   componentDidMount = () => {
     // create a set of checked boxes when component is created
-    this.selectedCheckboxes = new Set();
+    this.selectedCheckboxes = 0;
   };
 
   state = {
@@ -31,27 +22,26 @@ export class AddItem extends Component {
   // idea: make checkboxes as a state that keeps track of checked or not
   // would need to modify for SearchItem as well
   
-  toggleCheckbox = label => {
-    if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label);
+  toggleCheckbox = val => {
+    if ((this.selectedCheckboxes & val) === val) {
+      this.selectedCheckboxes = this.selectedCheckboxes & ~(val);
     } else {
-      this.selectedCheckboxes.add(label);
+      this.selectedCheckboxes = this.selectedCheckboxes | val;
     }
   };
 
-  createCheckbox = label => (
+  createCheckbox = tag => (
     <Checkbox
-      label={label}
+      label={tag.label}
+      flagValue={tag.value}
       toggleCheckbox={this.toggleCheckbox}
-      key={label}
+      key={tag.label}
     />
   );
 
 
-  createCheckboxes = () => tags.map(this.createCheckbox);
+  createCheckboxes = () => ItemTags.getMapping().map(this.createCheckbox);
   
-  uncheckCheckboxes = () => tags.map(this.createCheckbox);
-
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
   }
@@ -61,15 +51,24 @@ export class AddItem extends Component {
   }
 
   onSubmit = (e) => {
+    
     e.preventDefault();
     if (this.state.name === '') {
       alert("Item must have a name!");
       return false;
     }
 
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, Array.from(this.selectedCheckboxes), this.state.img, this.state.radius);
+    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes, this.state.img, this.state.radius);
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: '', radius: ''});
     document.getElementById("imageUpload").value = "";
+    
+    var boxes = document.getElementsByClassName('box');
+    console.log(boxes);
+    for (let box of boxes) {
+        if (box.checked) {
+            box.click();
+        }
+    }
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });

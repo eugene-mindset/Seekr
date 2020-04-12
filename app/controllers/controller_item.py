@@ -3,7 +3,6 @@ from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from app.models.models import *
-from app.controllers.tags import *
 from app import mongo
 from app.models.similarity import ItemSimilarity
 import os
@@ -38,13 +37,11 @@ def get_all_items():
     items = mongo.db.items
     itemObj = ItemDao(items)
     
-    # Get any arguments in the query
+   # Get any arguments in the query
     args = request.args
     
     # Get the tags if exists
-    tags = []
-    if (args.get('tags') != None):
-        tags = args.get('tags').split(',')
+    tags = ItemTags.get(request.args.get('tags'))
         
     listOfItems = itemObj.findAll(tags)
     output = []
@@ -63,9 +60,7 @@ def get_all_items_timesorted(query):
     args = request.args
     
     # Get the tags if exists
-    tags = []
-    if (args.get('tags') != None):
-        tags = args.get('tags').split(',')
+    tags = ItemTags.get(request.args.get('tags'))
         
     listOfItems = itemObj.findAll(tags)
     
@@ -74,7 +69,7 @@ def get_all_items_timesorted(query):
 
     output = [pair[1].toDict() for pair in scoredItems]
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 @items_router.route('/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
@@ -83,11 +78,10 @@ def get_all_items_sorted(query):
     
     # Get any arguments in the query
     args = request.args
+
     # Get the tags if exists
-    tags = []
-    if (args.get('tags') != None):
-        tags = args.get('tags').split(',')
-    
+    tags = ItemTags.get(request.args.get('tags'))
+        
     listOfItems = itemObj.findAll(tags)
     if not listOfItems:
         # if nothing in db, don't do any similarity comparisons
@@ -107,7 +101,7 @@ def get_all_items_sorted(query):
 
     output = [item.toDict() for item in simMatch.getSortedItems()]
 
-    return jsonify(output)
+    return jsonify(output), 200
 
 
 # DEPRECATED
@@ -127,9 +121,6 @@ def get_all_items_sorted(query):
 #         output.append(i.toDict())
 #     return jsonify(output), 200
 
-
-
-
 @items_router.route('/items', methods=['POST'])
 def add_item():
     
@@ -146,7 +137,7 @@ def add_item():
     desc = request.form['desc']
     location = request.form['location']
     imageName = f.filename if f != None else ''
-    tags = request.form['tags']
+    tags = ItemTags.get(int(request.form['tags']))
     radius = request.form['radius']
     timestamp = time.time() # request.get_json()['timestamp']
     
@@ -166,12 +157,13 @@ def update_item(id):
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-    tags = request.get_json()['tags']
+    tags = ItemTags.get(request.get_json()['tags'])
     radius = request.get_json()['radius']
     timestamp = time.time()
-    # I don't think we should update the time at all? 
+
+    # I don't think we should update the time at all?
     # It's time added, not time last modified
-    
+
     itemObj = ItemDao(items)
     item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp)
     itemObj.update(item)
