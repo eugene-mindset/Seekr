@@ -69,7 +69,7 @@ class ItemSimTest(unittest.TestCase):
 
         prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
         prep = list(set(prep))
-        self.assertEqual(self.itemSim.simMatrix.shape, (len(prep), len(prep)))
+        self.assertEqual(self.itemSim.simMatrix.matrix.shape, (len(prep), len(prep)))
 
     def test_compute_bag_of_words(self):
         self.itemSim.addItem(self.item1_1)

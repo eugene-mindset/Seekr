@@ -5,6 +5,8 @@ from gensim import corpora
 import gensim.downloader as api
 from gensim.utils import simple_preprocess
 from gensim.models.keyedvectors import Word2VecKeyedVectors
+from gensim.models import WordEmbeddingSimilarityIndex
+from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
 
 import sys
 
@@ -26,11 +28,14 @@ class ItemSimilarity():
             self.sentence = None
             self.score = 0
 
+
         def __lt__(self, other):
             return self.score < other.score
 
+
         def __le__(self, other):
             return self.score <= other.score
+
 
         def __str__(self):
             return self.item.name.lower() + ": " + self.item.desc.lower()
@@ -51,21 +56,27 @@ class ItemSimilarity():
         self.dictionary = corpora.Dictionary()
         self.model = None
         self.simMatrix = None
+        self.docsimIndex = None
 
         # private properties (do not touch, these are important flags)
         self._simOutdated = True
         self._bagOfWordsCalled = False
+        self._wordEmbedding = None
 
         # load the default (fasttext-wiki) model if no modelName is passed,
         # if the name is NoneType, load no model, else load the specified model
         if filepath is not '':
             self.model = Word2VecKeyedVectors.load(filepath)
+            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
         elif modelName is None:
             pass
         elif modelName is not '':
             self.model = api.load(modelName)
+            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
         else:
             self.model = api.load('fasttext-wiki-news-subwords-300')
+            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+
 
     def addItem(self, item):
         """
@@ -87,6 +98,7 @@ class ItemSimilarity():
         self.dictionary.merge_with(newDictEntry)
         self._simOutdated = True
         self._bagOfWordsCalled = False
+
 
     def addItems(self, items):
         """
@@ -111,12 +123,14 @@ class ItemSimilarity():
         self._simOutdated = True
         self._bagOfWordsCalled = False
 
+
     def clearItems(self):
         """
             Get rid of item scores in the class
         """
 
         self.itemScores = []
+
 
     def clearDictionary(self):
         """
@@ -125,6 +139,7 @@ class ItemSimilarity():
 
         self.dictionary = corpora.Dictionary()
         self._bagOfWordsCalled = False
+
 
     def computeDictionary(self):
         """
@@ -135,15 +150,6 @@ class ItemSimilarity():
             [simple_preprocess(str(item)) for item in self.itemScores])
         self._bagOfWordsCalled = False
 
-    def computeSimilarityMatrix(self):
-        """
-            Compute the similarity matrix of the model
-        """
-
-        # create similarity matrix, update flags
-        self.simMatrix = self.model.similarity_matrix(self.dictionary, tfidf=None,
-            threshold=0.0, exponent=2.0, nonzero_limit=100)
-        self._simOutdated = False
 
     def computeBagOfWordsForItems(self):
         """
@@ -156,26 +162,22 @@ class ItemSimilarity():
                 simple_preprocess(str(itemScore)))
 
         self._bagOfWordsCalled = True
+        self._simOutdated = True
 
-    def _computeSimilarity(self, sent1, sent2):
+
+    def computeSimilarityMatrix(self):
         """
-            Compute soft cosine similarity between `sent1` and `sent2`.
-
-            Parameters
-            ----------
-            sent1:
-                query sentence
-
-            sent2:
-                compared sentence
-
-            Return
-            ------
-            float from -1 to 1 of how similar the two sentences are,
-            the higher the better
+            Compute the similarity matrix of the model
         """
 
-        return softcossim(sent1, sent2, self.simMatrix)
+        if self._wordEmbedding is None:
+            self._wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+
+        # create similarity matrix, update flags
+        self.simMatrix = SparseTermSimilarityMatrix(self._wordEmbedding, self.dictionary)
+        self.docsimIndex = SoftCosineSimilarity([x.sentence for x in self.itemScores], self.simMatrix)
+        self._simOutdated = False
+
 
     def scoreItems(self, itemToCompare, computeSim=False, computeBag=False):
         """
@@ -195,20 +197,12 @@ class ItemSimilarity():
                 (bag of words)
         """
 
-
         # make itemToCompare's bag of words
         sentence = self.dictionary.doc2bow(
             simple_preprocess(str(self.ItemScore(itemToCompare))))
 
         # based on flags and parameters, update information or
         # send errors/warnings
-        if self._simOutdated:
-            if computeSim:
-                self.computeSimilarityMatrix()
-            else:
-                sys.stderr.write("Warning: similarity matrix for "
-                    + repr(self) + " is not up to date with its dictionary.\n")
-
         if not self._bagOfWordsCalled:
             if computeBag:
                 self.computeBagOfWordsForItems()
@@ -217,9 +211,21 @@ class ItemSimilarity():
                                 "sentence (bag of words) computed for it yet "
                                 "(self.sentence is NoneType)")
 
+        if self._simOutdated:
+            if computeSim:
+                self.computeSimilarityMatrix()
+            else:
+                raise TypeError("Similarity matrix for "
+                    + repr(self) + " is not up to date with its dictionary, thus"
+                    + " cannot the corresponding docsim may not exist.")
+
         # score every item
-        for item in self.itemScores:
-            item.score = self._computeSimilarity(sentence, item.sentence)
+        scores = self.docsimIndex[sentence]
+        print(scores)
+        print(type(scores.tolist()))
+        for score, itemScore in zip(self.docsimIndex[sentence].tolist(), self.itemScores):
+            itemScore.score = score
+
 
     def getSortedItems(self):
         """
