@@ -70,7 +70,7 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        tags = item.tags
+        tags = int(item.tags)
         imageName = item.imageName
         radius = item.radius
         timestamp = item.timestamp
