@@ -35,7 +35,15 @@ export class SearchItem extends Component {
 
   createCheckboxes = () => ItemTags.getMapping().map(this.createCheckbox);
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  onChange = e => {
+    if (this.state.name === "") {
+      // console.log("empty");
+      this.props.clearSearch();
+    }
+    this.setState({ [e.target.name]: e.target.value })
+    // if the name is empty, clear the search contents
+    
+  };
 
   onSubmit = e => {
     e.preventDefault();
@@ -44,7 +52,14 @@ export class SearchItem extends Component {
       return false;
     }
     this.props.searchItem(this.state.name, this.selectedCheckboxes, this.state.filter); // call API
-
+    this.setState({ name: "" });
+    var boxes = document.getElementsByClassName('box');
+    console.log(boxes);
+    for (let box of boxes) {
+        if (box.checked) {
+            box.click();
+        }
+    }
   };
 
   render() {
