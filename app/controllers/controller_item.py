@@ -84,7 +84,7 @@ def get_all_items_sorted(query):
     args = request.args
 
     # Get the tags if exists
-    tags = ItemTags.get(int(request.args.get('tags')))
+    tags = ItemTags.get(request.args.get('tags'))
 
     listOfItems = itemObj.findAll(tags)
 
