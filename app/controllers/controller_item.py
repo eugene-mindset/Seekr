@@ -22,14 +22,17 @@ items_router = Blueprint("items", __name__)
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 embedding = gens_api.load('glove-wiki-gigaword-50')
 
+
 @items_router.route("/")
 def hello():
     return "Hello World"
+
 
 @items_router.route("/fetch_image/<filename>")
 def fetch_resource(filename):
     print("THIS IS THE FILENAME"+ filename)
     return send_from_directory('../'+IMAGE_FOLDER, filename)
+
 
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
@@ -72,6 +75,7 @@ def get_all_items_timesorted(query):
     output = [pair[1].toDict() for pair in scoredItems]
 
     return jsonify(output), 200
+
 
 @items_router.route('/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
