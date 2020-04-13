@@ -363,6 +363,7 @@ class ItemTags(IntFlag):
         else:
             return ItemTags(x)
 
+    @staticmethod
     def toInt(x):
         if x == None or not (type(x) == int or isinstance(x, IntFlag)):
             return None
