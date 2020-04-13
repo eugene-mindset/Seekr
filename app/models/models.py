@@ -358,14 +358,18 @@ class ItemTags(IntFlag):
 
     @staticmethod
     def get(x):
-        if x == None or type(x) != int:
-            return None
-        else:
+        if type(x) == int:
             return ItemTags(x)
+        elif type(x) == str:
+            return ItemTags(int(x))
+        else:
+            return None
 
     @staticmethod
     def toInt(x):
-        if x == None or not (type(x) == int or isinstance(x, IntFlag)):
-            return None
-        else:
+        if type(x) == int or isinstance(x, IntFlag):
             return int(ItemTags(x))
+        elif type(x) == str:
+            return int(ItemTags(int(x)))
+        else:
+            return None

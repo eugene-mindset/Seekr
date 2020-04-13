@@ -41,7 +41,7 @@ def get_all_items():
     args = request.args
     
     # Get the tags if exists
-    tags = ItemTags.get(int(request.args.get('tags')))
+    tags = ItemTags.get(request.args.get('tags'))
         
     listOfItems = itemObj.findAll(tags)
 
@@ -62,7 +62,7 @@ def get_all_items_timesorted(query):
     args = request.args
     
     # Get the tags if exists
-    tags = ItemTags.get(int(request.args.get('tags')))
+    tags = ItemTags.get(request.args.get('tags'))
 
         
     listOfItems = itemObj.findAll(tags)
@@ -137,7 +137,7 @@ def add_item():
     desc = request.form['desc']
     location = request.form['location']
     imageName = f.filename if f != None else ''
-    tags = ItemTags.get(int(request.form['tags']))
+    tags = ItemTags.get(request.form['tags'])
     radius = request.form['radius']
     timestamp = time.time() # request.get_json()['timestamp']
     
@@ -157,7 +157,7 @@ def update_item(id):
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-    tags = ItemTags.get(int(request.get_json()['tags']))
+    tags = ItemTags.get(request.get_json()['tags'])
     radius = request.get_json()['radius']
     timestamp = time.time()
 
