@@ -70,7 +70,7 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        tags = int(item.tags)
+        tags = ItemTags.toInt(item.tags)
         imageName = item.imageName
         radius = item.radius
         timestamp = item.timestamp
@@ -79,7 +79,7 @@ class ItemDao(DatabaseObject):
             'found': found,
             'desc': desc,
             'location': location,
-            'tags': ItemTags.get(tags),
+            'tags': tags,
             'imageName': imageName,
             'radius': radius,
             'timestamp': timestamp
@@ -94,7 +94,7 @@ class ItemDao(DatabaseObject):
         found = item.found
         desc = item.desc
         location = item.location
-        tags = item.tags
+        tags = ItemTags.toInt(item.tags)
         radius = item.radius
         timestamp = item.timestamp
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
@@ -103,7 +103,7 @@ class ItemDao(DatabaseObject):
                 'found': found,
                 'desc': desc,
                 'location': location,
-                'tags': ItemTags.get(tags),
+                'tags': tags,
                 'radius': radius,
                 'timestamp': timestamp
             }
