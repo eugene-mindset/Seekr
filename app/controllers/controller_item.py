@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
-from bson.objectid import ObjectId
 from app.models.models import *
 from app import mongo
 from app.models.similarity import ItemSimilarity
