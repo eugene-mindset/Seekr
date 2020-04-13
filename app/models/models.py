@@ -363,7 +363,7 @@ class ItemTags(IntFlag):
         elif type(x) == str:
             return ItemTags(int(x))
         else:
-            return None
+            return ItemTags.NONE
 
     @staticmethod
     def toInt(x):
@@ -372,4 +372,4 @@ class ItemTags(IntFlag):
         elif type(x) == str:
             return int(ItemTags(int(x)))
         else:
-            return None
+            return 0
