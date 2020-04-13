@@ -2,7 +2,6 @@ import unittest
 from app.models import Item
 from app.models.similarity import ItemSimilarity
 import gensim.downloader as api
-from gensim.utils import simple_preprocess
 
 class ItemSimTest(unittest.TestCase):
 
@@ -34,7 +33,7 @@ class ItemSimTest(unittest.TestCase):
         self.itemSim.addItem(self.item1_1)
         self.assertIs(self.itemSim.itemScores[0].item, self.item1_1)
 
-        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
+        prep = self.itemSim.preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
         prep = list(set(prep))
         self.assertEqual(len(self.itemSim.dictionary), len(prep))
 
@@ -59,48 +58,14 @@ class ItemSimTest(unittest.TestCase):
         self.itemSim.clearDictionary()
 
         self.itemSim.computeDictionary()
-        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
+        prep = self.itemSim.preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
         prep = list(set(prep))
         self.assertEqual(len(self.itemSim.dictionary), len(prep))
-
-    def test_compute_sim_matrx(self):
-        self.itemSim.addItem(self.item1_1)
-        self.itemSim.computeSimilarityMatrix()
-
-        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
-        prep = list(set(prep))
-        self.assertEqual(self.itemSim.simMatrix.shape, (len(prep), len(prep)))
-
-    def test_compute_bag_of_words(self):
-        self.itemSim.addItem(self.item1_1)
-        self.itemSim.computeBagOfWordsForItems()
-
-        prep = simple_preprocess(self.item1_1.name + ': ' + self.item1_1.desc)
-        prep = list(set(prep))
-        self.assertEqual(len(self.itemSim.itemScores[0].sentence), len(prep))
 
     def test_score_items(self):
         self.itemSim.addItem(self.item1_1)
         self.itemSim.addItem(self.item2_1)
-        self.itemSim.computeBagOfWordsForItems()
-        self.itemSim.computeSimilarityMatrix()
 
         self.itemSim.scoreItems(self.item1_1)
         results = self.itemSim.getSortedItems()
         self.assertEqual(results, [self.item1_1, self.item2_1])
-
-    def test_exception_flags(self):
-        with self.assertRaises(Exception) as err:
-            self.itemSim.addItem(self.item1_1)
-            self.itemSim.scoreItems(self.item1_1)
-
-        with self.assertRaises(Exception) as err:
-            self.itemSim.addItem(self.item1_1)
-            self.itemSim.computeSimilarityMatrix()
-            self.itemSim.scoreItems(self.item1_1)
-
-        with self.assertRaises(Exception) as err:
-            self.itemSim.addItem(self.item1_1)
-            self.itemSim.simMatrix = None
-            self.itemSim.computeBagOfWordsForItems()
-            self.itemSim.scoreItems(self.item1_1)

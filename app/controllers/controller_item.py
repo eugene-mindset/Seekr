@@ -21,7 +21,7 @@ items_router = Blueprint("items", __name__)
 #   other - anything not in the above categories: bikes, coffee mugs, etc
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
-
+embedding = gens_api.load('glove-wiki-gigaword-50')
 
 @items_router.route("/")
 def hello():
@@ -41,9 +41,11 @@ def get_all_items():
     args = request.args
     
     # Get the tags if exists
-    tags = ItemTags.get(request.args.get('tags'))
+    tags = ItemTags.get(int(request.args.get('tags')))
         
     listOfItems = itemObj.findAll(tags)
+
+    
     output = []
     for i in listOfItems:
         output.append(i.toDict())
@@ -60,10 +62,12 @@ def get_all_items_timesorted(query):
     args = request.args
     
     # Get the tags if exists
-    tags = ItemTags.get(request.args.get('tags'))
+    tags = ItemTags.get(int(request.args.get('tags')))
+
         
     listOfItems = itemObj.findAll(tags)
-    
+    print(listOfItems)
+
     scoredItems = [(item.timestamp, item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
 
@@ -80,15 +84,23 @@ def get_all_items_sorted(query):
     args = request.args
 
     # Get the tags if exists
-    tags = ItemTags.get(request.args.get('tags'))
-        
+    tags = ItemTags.get(int(request.args.get('tags')))
+
     listOfItems = itemObj.findAll(tags)
+
     if not listOfItems:
         # if nothing in db, don't do any similarity comparisons
         return jsonify([])
+
     queriedItem = Item(name=query, desc="")
 
-    output = [item.toDict() for item in listOfItems]
+    simMatch = ItemSimilarity(modelName=None)
+    simMatch.model = embedding
+    simMatch.addItems(listOfItems)
+    simMatch.scoreItems(queriedItem)
+
+    output = [item.toDict() for item in simMatch.getSortedItems()]
+
     return jsonify(output), 200
 
 
@@ -145,7 +157,7 @@ def update_item(id):
     found = request.get_json()['found']
     desc = request.get_json()['desc']
     location = request.get_json()['location']
-    tags = ItemTags.get(request.get_json()['tags'])
+    tags = ItemTags.get(int(request.get_json()['tags']))
     radius = request.get_json()['radius']
     timestamp = time.time()
 
