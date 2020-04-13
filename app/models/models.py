@@ -59,7 +59,7 @@ class ItemDao(DatabaseObject):
                         item.get('found'), item.get('desc'),
                         item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
 
-            if (tags == ItemTags.NONE) or (tags == newItem.tags): # no tags, add all
+            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags): # no tags, add all
                 listOfItems.append(newItem)
 
 
@@ -358,18 +358,22 @@ class ItemTags(IntFlag):
 
     @staticmethod
     def get(x):
-        if type(x) == int:
-            return ItemTags(x)
-        elif type(x) == str:
-            return ItemTags(int(x))
-        else:
+        val = ItemTags.NONE
+        try:
+            val = ItemTags(int(x))
+            return val
+        except ValueError:
+            return ItemTags.NONE
+        except TypeError:
             return ItemTags.NONE
 
     @staticmethod
     def toInt(x):
-        if type(x) == int or isinstance(x, IntFlag):
-            return int(ItemTags(x))
-        elif type(x) == str:
-            return int(ItemTags(int(x)))
-        else:
+        val = ItemTags.NONE
+        try:
+            val = ItemTags(int(x))
+            return int(val)
+        except ValueError:
             return 0
+        except TypeError:
+            return ItemTags.NONE

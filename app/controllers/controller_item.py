@@ -66,7 +66,6 @@ def get_all_items_timesorted(query):
 
         
     listOfItems = itemObj.findAll(tags)
-    print(listOfItems)
 
     scoredItems = [(item.timestamp, item) for item in listOfItems]
     scoredItems.sort(key=lambda tup: tup[0], reverse=True)
