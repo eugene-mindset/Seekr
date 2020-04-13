@@ -34,6 +34,11 @@ export default class Search extends Component {
     }
   }
 
+  // call this function if the search bar is empty
+  clearSearch = () => {
+    this.setState({items:[]})
+  }
+
   deleteItem = (id) => {
     axios.delete(`/items/${id}`)
       .then(res => this.setState({
@@ -46,7 +51,7 @@ export default class Search extends Component {
     return (
       <React.Fragment>
         <h1>Search</h1>
-        <SearchItem searchItem={this.searchItem} />
+        <SearchItem searchItem={this.searchItem} clearSearch={this.clearSearch} />
         <br />
         <CardColumns style={columnStyle}>
           <Items items={this.state.items} deleteItem={this.deleteItem} />
