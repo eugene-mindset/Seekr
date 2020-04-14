@@ -12,25 +12,19 @@ export default class Navigation extends React.Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <Nav.Item>
-                <Nav.Link>
-                  <Link to="/add">Add</Link>
-                </Nav.Link>
+                <Nav.Link href="/add">Add</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link>
-                  <Link to="/search">Search</Link>
-                </Nav.Link>
+                <Nav.Link href="/search">Search</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link>
-                  <Link to="/about">About</Link>
-                </Nav.Link>
+                <Nav.Link href="/about">About</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
       </div>
-    )
+    );
   }
 }
 

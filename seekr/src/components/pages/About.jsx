@@ -13,5 +13,5 @@ export default function About() {
         Andrew Zhang, and Jason Zhang.
       </p>
     </React.Fragment>
-  )
+  );
 }
