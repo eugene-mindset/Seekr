@@ -15,7 +15,7 @@ class ApiTest(unittest.TestCase):
         app.testing = True
         self.app = app.test_client()
         items = mongo.db.items
-        itemObj = ItemDao(items)
+        mongo_item_dao = ItemDao(items)
 
         #Insert items into database
         name = "Pen"
@@ -23,19 +23,19 @@ class ApiTest(unittest.TestCase):
         desc = "It is a pen"
         location = [0, 0]
         item = Item(name=name, found=found, desc=desc, location=location)
-        itemObj.insert(item)
+        mongo_item_dao.insert(item)
         name = "Card"
         found = True
         desc = "It is a card"
         location = [1, 2]
         item = Item(name=name, found=found, desc=desc, location=location)
-        itemObj.insert(item)
+        mongo_item_dao.insert(item)
         name = "Phone"
         found = True
         desc = "It is a phone"
         location = [39.3299, -76.6205]
         item = Item(name=name, found=found, desc=desc, location=location)
-        itemObj.insert(item)
+        mongo_item_dao.insert(item)
 
     def tearDown(self):
         client = MongoClient('localhost', 27017)
