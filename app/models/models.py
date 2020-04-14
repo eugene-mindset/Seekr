@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 from flask import jsonify
 from enum import IntFlag
 
+
 class DatabaseObject:
 
     def __init__(self, collection):
@@ -32,102 +33,107 @@ class ItemDao(DatabaseObject):
         super().__init__(collection)
 
     def findById(self, Id):
+        # Get the item from our mongodb collection
         item = self.collection.find_one({"_id": ObjectId(Id)})
-        newItem = Item(str(item['_id']), item['name'], item['found'],
-                    item['desc'], item['location'], ItemTags(item['tags']), item['imageName'], item['radius'], item['timestamp'])
+
+        # Serialize it into an Item object
+        newLocation = Location(item['location']['coordinates'])
+        newUser = User(name=item['user']['name'], email=item['user']['email'],
+                       phone=item['user']['phone'])
+        newItem = Item(str(item['_id']), item['name'], item['desc'],
+                       item['found'], newLocation, item['radius'],
+                       ItemTags(item['tags']), item['imageName'],
+                       item['timestamp'], newUser)
+
         return newItem
 
-    # DEPRECATED
-    def findByName(self, name=None):
-        listOfItems = []
-        toSearch = self.collection.find({"name": name})
-        for item in toSearch:
-            newItem = Item(str(item.get('_id')), item.get('name'),
-                            item.get('found'), item.get('desc'),
-                            item.get('location'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
-            listOfItems.append(newItem)
-            #Get timestamp of object created
-
-        return listOfItems
-
     def findAll(self, tags):
+        # Get all the items from our mongodb collection
         listOfItems = []
         allItems = self.collection.find()
 
         for item in allItems:
-            newItem = Item(str(item.get('_id')), item.get('name'),
-                        item.get('found'), item.get('desc'),
-                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+            # Serialize it into an Item object
+            newLocation = Location(item['location']['coordinates'])
+            newUser = User(name=item['user']['name'], email=item['user']['email'],
+                           phone=item['user']['phone'])
+            newItem = Item(str(item['_id']), item['name'], item['desc'],
+                           item['found'], newLocation, item['radius'],
+                           ItemTags(item['tags']), item['imageName'],
+                           item['timestamp'], newUser)
 
-            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags): # no tags, add all
+            # check if we're not searching with tags
+            # or if item has all the tags being searched for
+            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags):
                 listOfItems.append(newItem)
-
 
         return listOfItems
 
     def insert(self, item):
-        name = item.name
-        found = item.found
+        """ name = item.name
         desc = item.desc
+        found = item.found
         location = item.location
+        radius = item.radius
         tags = ItemTags.toInt(item.tags)
         imageName = item.imageName
-        radius = item.radius
         timestamp = item.timestamp
-        item_id = self.collection.insert_one({
-            'name': name,
-            'found': found,
-            'desc': desc,
-            'location': location,
-            'tags': tags,
-            'imageName': imageName,
-            'radius': radius,
-            'timestamp': timestamp
-        }).inserted_id
+        user = item.user """
+        data = item.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # Remove the id
+
+        # Insert the item into our mongodb collection,
+        # get the ID it was assigned, give the item that id
+        item_id = self.collection.insert_one(data).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
-        return item
+
+        return item # TODO: The returned item is never used, remove this line at some point
 
     def update(self, item):
         Id = item.Id
-        name = item.name
-        found = item.found
+        """ name = item.name
         desc = item.desc
+        found = item.found
         location = item.location
-        tags = ItemTags.toInt(item.tags)
         radius = item.radius
-        timestamp = item.timestamp
+        tags = ItemTags.toInt(item.tags)
+        imageName = item.imageName
+        user = item.user """
+        data = item.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # remove the id, shouldn't be updating it
+        data.pop('timestamp') # remove the timestamp, shouldn't be updating it
+        data.pop('imageName') # remove imageName, don't know how we would handle an update to an image???
+
+        # find the item in our mongodb collection by its id,
+        # update it with the new data
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
-            "$set": {
-                "name": name,
-                'found': found,
-                'desc': desc,
-                'location': location,
-                'tags': tags,
-                'radius': radius,
-                'timestamp': timestamp
-            }
+            "$set": data
         }, upsert=False)
-        return item
+
+        return item # TODO: The returned item is never used, remove this line at some point
 
     def remove(self, Id):
+        # Delete the item frmo our mongodb collection by its id
         returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
 
 
 class Item:
 
-    def __init__(self, Id=None, name=None, found=None, desc=None,
-                location=None, tags=None, imageName=None, radius=None, timestamp=None):
-        self.Id = Id
-        self.name = name
-        self.found = found
-        self.desc = desc
-        self.location = location
-        self.tags = tags
-        self.imageName = imageName
-        self.radius = radius
-        self.timestamp = timestamp
+    def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
+                 radius=None, tags=None, imageName=None, timestamp=None,
+                 user=None):
+        self.Id = Id                # Should be a string
+        self.name = name            # Should be a string
+        self.desc = desc            # Should be a string
+        self.found = found          # Should be a bool
+        self.location = location    # Should be a Location object
+        self.radius = radius        # Should be a float or int
+        self.tags = tags            # Should be an ItemTags enum
+        self.imageName = imageName  # Should be a string
+        self.timestamp = timestamp  # Should be a float
+        self.user = user            # Should be a User object
 
     @property
     def Id(self):
@@ -146,14 +152,6 @@ class Item:
         self.__name = name
 
     @property
-    def found(self):
-        return self.__found
-
-    @found.setter
-    def found(self, found):
-        self.__found = found
-
-    @property
     def desc(self):
         return self.__desc
 
@@ -162,12 +160,28 @@ class Item:
         self.__desc = desc
 
     @property
+    def found(self):
+        return self.__found
+
+    @found.setter
+    def found(self, found):
+        self.__found = found
+
+    @property
     def location(self):
         return self.__location
 
     @location.setter
     def location(self, location):
         self.__location = location
+
+    @property
+    def radius(self):
+        return self.__radius
+    
+    @radius.setter
+    def radius(self, radius):
+        self.__radius = radius
         
     @property
     def tags(self):
@@ -178,12 +192,12 @@ class Item:
         self.__tags = tags
 
     @property
-    def radius(self):
-        return self.__radius
-    
-    @radius.setter
-    def radius(self, radius):
-        self.__radius = radius
+    def imageName(self):
+        return self.__imageName
+
+    @imageName.setter
+    def imageName(self, imageName):
+        self.__imageName = imageName
     
     @property
     def timestamp(self):
@@ -193,22 +207,34 @@ class Item:
     def timestamp(self, timestamp):
         self.__timestamp = timestamp
 
+    @property
+    def user(self):
+        return self.__user
+
+    @user.setter
+    def user(self, user):
+        self.__user = user
+
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
         if self.name != otherItem.name:
             return False
-        if self.found != otherItem.found:
-            return False
         if self.desc != otherItem.desc:
+            return False
+        if self.found != otherItem.found:
             return False
         if self.location != otherItem.location:
             return False
-        if set(self.tags) != set(otherItem.tags): # tags is a list of strings
-            return False
         if self.radius != otherItem.radius:
             return False
+        if self.tags != otherItem.tags:
+            return False
+        if self.imageName != otherItem.imageName:
+            return False
         if self.timestamp != otherItem.timestamp:
+            return False
+        if self.user != otherItem.user:
             return False
         return True
 
@@ -218,53 +244,56 @@ class Item:
     def __repr__(self):
         return str(self)
 
+    # TODO: delete this, no longer used because we have a better search algo now
     # magical formula to determine if a word is similar to another word
-    def compareItem(self, otherItem: 'Item', comparator=None):
-        if comparator is None:
-            total = []
-            unique = set()
+    # def compareItem(self, otherItem: 'Item', comparator=None):
+    #     if comparator is None:
+    #         total = []
+    #         unique = set()
 
-            if type(self.name) == str and type(self.desc) == str:
-                tokensName = set(self.name.lower().split())
-                tokensDesc = set(self.desc.lower().split())
+    #         if type(self.name) == str and type(self.desc) == str:
+    #             tokensName = set(self.name.lower().split())
+    #             tokensDesc = set(self.desc.lower().split())
 
-                total += list(tokensName.union(tokensDesc))
+    #             total += list(tokensName.union(tokensDesc))
 
-            if type(otherItem.name) == str and type(otherItem.desc) == str:
-                tokensName = set(otherItem.name.lower().split())
-                tokensDesc = set(otherItem.desc.lower().split())
+    #         if type(otherItem.name) == str and type(otherItem.desc) == str:
+    #             tokensName = set(otherItem.name.lower().split())
+    #             tokensDesc = set(otherItem.desc.lower().split())
 
-                total += list(tokensName.union(tokensDesc))
+    #             total += list(tokensName.union(tokensDesc))
 
-            unique = set(total)
-            matches = len(total) - len(unique)
-            result = matches
+    #         unique = set(total)
+    #         matches = len(total) - len(unique)
+    #         result = matches
 
-            return result
+    #         return result
 
-        return 1
+    #     return 1
 
     def toDict(self):
         output = {
-            'id': self.Id,
-            'name': self.name,
-            'found': self.found,
-            'desc': self.desc,
-            'location': self.location,
-            'tags' : ItemTags.toInt(self.tags),
-            'imageName': self.imageName,
-            'radius' : self.radius,
-            'timestamp' : self.timestamp
+            'id'        : self.Id,
+            'name'      : self.name,
+            'desc'      : self.desc,
+            'found'     : self.found,
+            'location'  : self.location.toDict(),
+            'radius'    : self.radius,
+            'tags'      : ItemTags.toInt(self.tags),
+            'imageName' : self.imageName,
+            'timestamp' : self.timestamp,
+            'user'      : self.user.toDict()
         }
 
         return output
 
+
 class User:
 
     def __init__(self, name=None, email=None, phone=None):
-        self.name = name
-        self.email = email
-        self.phone = phone
+        self.name = name    # Should be a string
+        self.email = email  # Should be a string
+        self.phone = phone  # Should be a string
 
     @property
     def name(self):
@@ -307,17 +336,18 @@ class User:
 
     def toDict(self):
         output = {
-            'name': self.name,
-            'email': self.email,
-            'phone': self.phone
+            'name'  : self.name,
+            'email' : self.email,
+            'phone' : self.phone
         }
 
         return output
 
+
 class Location:
 
     def __init__(self, coordinates=None):
-        self.coordinate = coordinates
+        self.coordinates = coordinates # Should be a list or tuple with two elements, both floats
 
     @property
     def coordinates(self):
@@ -340,11 +370,12 @@ class Location:
 
     def toDict(self):
         output = {
-            'type': 'Point',
-            'coordinates': self.coordinates
+            'type'        : 'Point',
+            'coordinates' : self.coordinates
         }
 
         return output
+
 
 class ItemTags(IntFlag):
     NONE        = 0b0000_0000
