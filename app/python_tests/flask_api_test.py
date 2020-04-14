@@ -21,17 +21,20 @@ class ApiTest(unittest.TestCase):
         name = "Pen"
         found = False
         desc = "It is a pen"
-        item = Item(name=name, found=found, desc=desc)
+        location = Location([0, 0])
+        item = Item(name=name, found=found, desc=desc, location=location)
         mongo_item_dao.insert(item)
         name = "Card"
         found = True
         desc = "It is a card"
-        item = Item(name=name, found=found, desc=desc)
+        location = Location([1, 2])
+        item = Item(name=name, found=found, desc=desc, location=location)
         mongo_item_dao.insert(item)
         name = "Phone"
         found = True
         desc = "It is a phone"
-        item = Item(name=name, found=found, desc=desc)
+        location = Location([39.3299, -76.6205])
+        item = Item(name=name, found=found, desc=desc, location=location)
         mongo_item_dao.insert(item)
 
     def tearDown(self):
