@@ -134,7 +134,7 @@ def add_item():
     name = request.form['name']
     found = eval(request.form['found'].capitalize())
     desc = request.form['desc']
-    location = request.form['location']
+    location = Location(request.get_json()['location'])
     imageName = f.filename if f != None else ''
     tags = ItemTags.get(request.form['tags'])
     radius = request.form['radius']
@@ -155,7 +155,7 @@ def update_item(id):
     name = request.get_json()['name']
     found = request.get_json()['found']
     desc = request.get_json()['desc']
-    location = request.get_json()['location']
+    location = Location(request.get_json()['location'])
     tags = ItemTags.get(request.get_json()['tags'])
     radius = request.get_json()['radius']
     timestamp = time.time()
