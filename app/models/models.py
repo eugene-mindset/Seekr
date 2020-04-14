@@ -34,7 +34,7 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         item = self.collection.find_one({"_id": ObjectId(Id)})
         newItem = Item(str(item['_id']), item['name'], item['found'],
-                    item['desc'], item['location'], ItemTags(item['tags']), item['imageName'], item['radius'], item['timestamp'])
+                    item['desc'], item['location'], ItemTags(item['tags']), item['imageName'], item['radius'], item['timestamp'], item['user'])
         return newItem
 
     # DEPRECATED
@@ -44,7 +44,7 @@ class ItemDao(DatabaseObject):
         for item in toSearch:
             newItem = Item(str(item.get('_id')), item.get('name'),
                             item.get('found'), item.get('desc'),
-                            item.get('location'), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+                            item.get('location'), item.get('imageName'), item.get('radius'), item.get('timestamp'), item.get('user'))
             listOfItems.append(newItem)
             #Get timestamp of object created
 
@@ -57,7 +57,8 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             newItem = Item(str(item.get('_id')), item.get('name'),
                         item.get('found'), item.get('desc'),
-                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'))
+                        item.get('location'), ItemTags.get(item.get('tags')), item.get('imageName'), item.get('radius'), item.get('timestamp'),
+                        item.get('user'))
 
             if (tags == ItemTags.NONE) or (tags & newItem.tags == tags): # no tags, add all
                 listOfItems.append(newItem)
@@ -74,6 +75,7 @@ class ItemDao(DatabaseObject):
         imageName = item.imageName
         radius = item.radius
         timestamp = item.timestamp
+        user = item.user
         item_id = self.collection.insert_one({
             'name': name,
             'found': found,
@@ -82,7 +84,8 @@ class ItemDao(DatabaseObject):
             'tags': tags,
             'imageName': imageName,
             'radius': radius,
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'user': user
         }).inserted_id
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
@@ -97,6 +100,7 @@ class ItemDao(DatabaseObject):
         tags = ItemTags.toInt(item.tags)
         radius = item.radius
         timestamp = item.timestamp
+        user = item.user
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
             "$set": {
                 "name": name,
@@ -105,7 +109,8 @@ class ItemDao(DatabaseObject):
                 'location': location,
                 'tags': tags,
                 'radius': radius,
-                'timestamp': timestamp
+                'timestamp': timestamp,
+                'user': user
             }
         }, upsert=False)
         return item

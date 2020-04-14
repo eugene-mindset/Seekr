@@ -159,7 +159,7 @@ def update_item(id):
     tags = ItemTags.get(request.get_json()['tags'])
     radius = request.get_json()['radius']
     timestamp = time.time()
-    user = User(request.form['username'], request.form['email'], request.form['phone'])
+    user = User(request.form['username'], request.form['email'], request.form['phone']).toDict()
 
     # I don't think we should update the time at all?
     # It's time added, not time last modified
