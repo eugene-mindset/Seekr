@@ -34,4 +34,4 @@
 * [X] Display the tags an item has on its listing (Andrew)
 * [ ] Display contact information of a user on the item listing that they posted (Jacob)
 * [ ] Clear the search when not searching (Andrew)
-* [ ] Figure out how to deploy better (Jason)
+* [X] Figure out how to deploy better (Jason)
