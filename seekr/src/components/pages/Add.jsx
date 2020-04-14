@@ -9,7 +9,8 @@ export default class Add extends Component {
     data.append('name', name);
     data.append('desc', desc);
     data.append('found', found);
-    data.append('location', location);
+    data.append('latitude', location[0]);
+    data.append('longitude', location[1]);
     data.append('radius', radius);
     data.append('tags', tags);
     data.append('image', img);
