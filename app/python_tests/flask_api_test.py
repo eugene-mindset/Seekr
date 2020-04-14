@@ -21,20 +21,17 @@ class ApiTest(unittest.TestCase):
         name = "Pen"
         found = False
         desc = "It is a pen"
-        location = [0, 0]
-        item = Item(name=name, found=found, desc=desc, location=location)
+        item = Item(name=name, found=found, desc=desc)
         mongo_item_dao.insert(item)
         name = "Card"
         found = True
         desc = "It is a card"
-        location = [1, 2]
-        item = Item(name=name, found=found, desc=desc, location=location)
+        item = Item(name=name, found=found, desc=desc)
         mongo_item_dao.insert(item)
         name = "Phone"
         found = True
         desc = "It is a phone"
-        location = [39.3299, -76.6205]
-        item = Item(name=name, found=found, desc=desc, location=location)
+        item = Item(name=name, found=found, desc=desc)
         mongo_item_dao.insert(item)
 
     def tearDown(self):
@@ -50,12 +47,10 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(item['name'], 'Pen')
         self.assertEqual(item['found'], False)
         self.assertEqual(item['desc'], 'It is a pen')
-        self.assertEqual(item['location'], [0, 0])
         item = response_dict[1]
         self.assertEqual(item['name'], 'Card')
         self.assertEqual(item['found'], True)
         self.assertEqual(item['desc'], 'It is a card')
-        self.assertEqual(item['location'], [1, 2])
 
     def test_get_all_items_sorted(self):
         response = self.app.get('/items/search=pen?tags=0')
