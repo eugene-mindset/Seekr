@@ -118,7 +118,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, found=None, desc=None,
-                location=None, tags=None, imageName=None, radius=None, timestamp=None):
+                location=None, tags=None, imageName=None, radius=None, timestamp=None, user=None):
         self.Id = Id
         self.name = name
         self.found = found
@@ -128,6 +128,7 @@ class Item:
         self.imageName = imageName
         self.radius = radius
         self.timestamp = timestamp
+        self.user = user
 
     @property
     def Id(self):
@@ -193,6 +194,14 @@ class Item:
     def timestamp(self, timestamp):
         self.__timestamp = timestamp
 
+    @property
+    def user(self):
+        return self.__user
+    
+    @user.setter
+    def user(self, user):
+        self.__user = user
+
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
@@ -209,6 +218,8 @@ class Item:
         if self.radius != otherItem.radius:
             return False
         if self.timestamp != otherItem.timestamp:
+            return False
+        if self.user != otherItem.user:
             return False
         return True
 
@@ -254,7 +265,8 @@ class Item:
             'tags' : ItemTags.toInt(self.tags),
             'imageName': self.imageName,
             'radius' : self.radius,
-            'timestamp' : self.timestamp
+            'timestamp' : self.timestamp,
+            'user': self.user
         }
 
         return output

@@ -134,16 +134,16 @@ def add_item():
     name = request.form['name']
     found = eval(request.form['found'].capitalize())
     desc = request.form['desc']
-    location = Location(request.get_json()['location'])
+    location = request.form['location']
     imageName = f.filename if f != None else ''
     tags = ItemTags.get(request.form['tags'])
     radius = request.form['radius']
     timestamp = time.time() # request.get_json()['timestamp']
-    
+    user = User(request.form['username'], request.form['email'], request.form['phone']).toDict()
     items = mongo.db.items
     itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags, radius=radius, timestamp=timestamp)
-
+    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags, radius=radius, timestamp=timestamp, user=user)
+    print(item.toDict())
     itemObj.insert(item)
     return jsonify(item.toDict()), 200
 
@@ -155,16 +155,17 @@ def update_item(id):
     name = request.get_json()['name']
     found = request.get_json()['found']
     desc = request.get_json()['desc']
-    location = Location(request.get_json()['location'])
+    location = request.get_json()['location']
     tags = ItemTags.get(request.get_json()['tags'])
     radius = request.get_json()['radius']
     timestamp = time.time()
+    user = User(request.form['username'], request.form['email'], request.form['phone'])
 
     # I don't think we should update the time at all?
     # It's time added, not time last modified
 
     itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp)
+    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp, user=user)
     itemObj.update(item)
     return jsonify(item.toDict()), 200
 
