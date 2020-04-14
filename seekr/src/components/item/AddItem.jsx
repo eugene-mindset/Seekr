@@ -16,7 +16,7 @@ export class AddItem extends Component {
     desc: '',
     location: [39.3299, -76.6205],
     img: '',
-    radius: ''
+    radius: 0
   }
 
   // idea: make checkboxes as a state that keeps track of checked or not
@@ -101,7 +101,7 @@ export class AddItem extends Component {
             onChange={this.onChange}
           />
           <input
-            type="text"
+            type="number"
             name="radius"
             style={{ flex: '10', padding: '5px' }}
             placeholder="Add Item Radius..."
