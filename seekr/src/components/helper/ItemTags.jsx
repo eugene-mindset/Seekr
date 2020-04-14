@@ -29,13 +29,8 @@ class ItemTags {
 
     var maps = this.getMapping();
     var result = '';
-    console.log(maps);
 
     for (var tag in maps) {
-        console.log(maps[tag]);
-        //console.log('val:' + val.toString(2));
-        //console.log('key:' + key.value.toString(2));
-        // console.log('out:' + (val & key.value).toString(2));
         if ((val & maps[tag].value) === maps[tag].value) {
             result = result + maps[tag].label + ','
         }

@@ -61,12 +61,12 @@ class ItemSimilarity():
 
         # load the default (fasttext-wiki) model if no modelName is passed,
         # if the name is NoneType, load no model, else load the specified model
-        if filepath is not '':
+        if filepath != '':
             self.model = Word2VecKeyedVectors.load(filepath)
             self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
-        elif modelName is None:
+        elif modelName == None:
             pass
-        elif modelName is not '':
+        elif modelName != '':
             self.model = api.load(modelName)
             self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
         else:

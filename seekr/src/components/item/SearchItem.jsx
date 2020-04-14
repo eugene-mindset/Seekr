@@ -54,7 +54,6 @@ export class SearchItem extends Component {
     this.props.searchItem(this.state.name, this.selectedCheckboxes, this.state.filter); // call API
     this.setState({ name: "" });
     var boxes = document.getElementsByClassName('box');
-    console.log(boxes);
     for (let box of boxes) {
         if (box.checked) {
             box.click();
