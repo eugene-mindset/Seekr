@@ -45,9 +45,6 @@ def get_all_items():
     # get list of all items using DAO and specifying the tags
     listOfItems = mongo_item_dao.findAll(tags)
     
-    """ output = []
-    for i in listOfItems:
-        output.append(i.toDict()) """
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
@@ -61,8 +58,6 @@ def get_all_items_timesorted(query):
     listOfItems = mongo_item_dao.findAll(tags)
 
     # sort items by most recently added (higher timestamp)
-    """ scoredItems = [(item.timestamp, item) for item in listOfItems]
-    scoredItems.sort(key=lambda tup: tup[0], reverse=True) """
     listOfItems.sort(key=lambda x: x.timestamp, reverse=True)
 
     #output = [pair[1].toDict() for pair in scoredItems]
@@ -146,12 +141,6 @@ def add_item():
 @items_router.route('/items/<Id>', methods=['PUT'])
 def update_item(Id):
 
-    """ name = request.get_json()['name']
-    found = request.get_json()['found']
-    desc = request.get_json()['desc']
-    location = request.get_json()['location']
-    tags = ItemTags.get(request.get_json()['tags'])
-    radius = request.get_json()['radius'] """
     name = request.form['name']
     desc = request.form['desc']
     found = eval(request.form['found'].capitalize())
