@@ -70,15 +70,6 @@ class ItemDao(DatabaseObject):
         return listOfItems
 
     def insert(self, item):
-        """ name = item.name
-        desc = item.desc
-        found = item.found
-        location = item.location
-        radius = item.radius
-        tags = ItemTags.toInt(item.tags)
-        imageName = item.imageName
-        timestamp = item.timestamp
-        user = item.user """
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id
 
@@ -92,14 +83,6 @@ class ItemDao(DatabaseObject):
 
     def update(self, item):
         Id = item.Id
-        """ name = item.name
-        desc = item.desc
-        found = item.found
-        location = item.location
-        radius = item.radius
-        tags = ItemTags.toInt(item.tags)
-        imageName = item.imageName
-        user = item.user """
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
         data.pop('timestamp') # remove the timestamp, shouldn't be updating it
@@ -277,12 +260,12 @@ class Item:
             'name'      : self.name,
             'desc'      : self.desc,
             'found'     : self.found,
-            'location'  : self.location.toDict(),
+            'location'  : self.location.toDict() if self.location is not None else 'None',
             'radius'    : self.radius,
             'tags'      : ItemTags.toInt(self.tags),
             'imageName' : self.imageName,
             'timestamp' : self.timestamp,
-            'user'      : self.user.toDict()
+            'user'      : self.user.toDict() if self.user is not None else 'None'
         }
 
         return output
