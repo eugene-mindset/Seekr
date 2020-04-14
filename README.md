@@ -2,7 +2,7 @@
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
 
 # Deployed At:
-http://ec2-18-233-101-73.compute-1.amazonaws.com/
+http://ec2-54-83-146-52.compute-1.amazonaws.com/
 
 # Running the App
 
