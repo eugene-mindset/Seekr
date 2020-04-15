@@ -21,7 +21,6 @@ mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
 @items_router.route("/")
 def hello():
-    send_mail('seekr.oose@gmail.com', 1)
     return "Hey! You're not supposed to be here!"
 
 
