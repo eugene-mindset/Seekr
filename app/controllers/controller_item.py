@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_from_directory, send_file
+from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
 from app.models.models import *
@@ -7,9 +7,10 @@ from app.models.similarity import ItemSimilarity
 import os
 import gensim.downloader as gens_api
 import time
+from flask_mail import Mail, Message
 
 items_router = Blueprint("items", __name__)
-
+app = Flask(__name__)
 # TODO: do we really need this here? delete at some point
 # tags:
 #   tech
@@ -90,22 +91,7 @@ def get_all_items_sorted(query):
     return jsonify(output), 200
 
 
-# DEPRECATED TODO: delete this at some point
-# @items_router.route('/items/<name>', methods=['GET'])
-# def get_item(name):
-#     items = mongo.db.items
-#     itemObj = ItemDao(items)
-#     output = []
-#     # Get any arguments in the query
-#     args = request.args
-#     # Get the tags if exists
-#     tags = []
-#     if (args.get('tags') != None):
-#         tags = args.get('tags').split(',')
-#     listOfItems = itemObj.findByName(name, tags)
-#     for i in listOfItems:
-#         output.append(i.toDict())
-#     return jsonify(output), 200
+
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
@@ -169,3 +155,29 @@ def delete_item(Id):
         output = {'message': 'not deleted'}
 
     return jsonify({'result': output}), 200
+
+
+
+
+# @items_router.route("/mail")
+# def send_mail():
+#     app.config.update(dict(
+#         DEBUG = True,
+#         MAIL_SERVER = 'smtp.gmail.com',
+#         MAIL_PORT = 587,
+#         MAIL_USE_TLS = True,
+#         MAIL_USE_SSL = False,
+#         MAIL_USERNAME = 'seekr.oose@gmail.com',
+#         MAIL_PASSWORD = 'Seekroose!',
+#         MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
+#     ))
+
+#     mail = Mail(app)
+#     msg = Message("Hello",
+#                   recipients=["kumar.shaurya13@gmail.com"])
+    
+#     msg.html = "<b>I am a nigerian prince please send me $100</b>"
+#     mail.send(msg)
+    
+#     return "done"
+
