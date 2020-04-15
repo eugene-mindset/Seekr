@@ -13,16 +13,6 @@ from email.mime.multipart import MIMEMultipart
 
 items_router = Blueprint("items", __name__)
 
-# TODO: do we really need this here? delete at some point
-# tags:
-#   tech
-#   clothing
-#   jewelry
-#   pet
-#   personal - wallets, keys, id's
-#   apparel - clothing, accessories, purse
-#   other - anything not in the above categories: bikes, coffee mugs, etc
-
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
