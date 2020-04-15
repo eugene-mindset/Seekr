@@ -21,7 +21,13 @@ good = []
 for m,n in matches:
     if m.distance < 0.75*n.distance:
         good.append([m])
-
+        a=len(good)
+        percent=(a*100)/len(kp2)
+    print("{} % similarity".format(percent))
+    if percent >= 75.00:
+        print('Match Found')
+    if percent < 75.00:
+        print('Match not Found')
 # cv2.drawMatchesKnn expects list of lists as matches.
 img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,good,flags=2,outImg=None)
 
