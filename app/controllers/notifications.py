@@ -37,6 +37,14 @@ def radius_cutoff(items, queriedItem):
 
 def notify(queriedItem):
     listOfItems = mongo_item_dao.findAll(tags)
+    
+    if queriedItem.found() is true:
+        listOfItems = [item for item in listOfItems if item.found() is false]
+    
+    else:
+         listOfItems = [item for item in listOfItems if item.found() is true]
+        
+
     listOfItems = radius_cutoff(listOfItems, queriedItem)
  
     simMatch = ItemSimilarity(modelName=None)
