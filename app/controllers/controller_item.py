@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from app.models.models import *
 from app import mongo
 from app.models.similarity import ItemSimilarity
-import app.controllers.notifications
+from app.controllers.notifications import *
 import os
 import gensim.downloader as gens_api
 import time
@@ -138,7 +138,7 @@ def add_item():
     mongo_item_dao.insert(item)
 
     # want to check whenever an item is added if their are similar items to send notifications to 
-    notifications.notify(item)
+    notify(item)
 
     return jsonify(item.toDict()), 200
 

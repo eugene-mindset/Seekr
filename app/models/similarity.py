@@ -244,7 +244,7 @@ class ItemSimilarity():
             tuples with item and its score
         """
 
-        results = [itemScore for itermScore in self.itemScores]
+        results = [itemScore for itemScore in self.itemScores]
         results.sort(reverse=True)
 
         return [(itemScore.item, itemScore.score) for itemScore in results]
