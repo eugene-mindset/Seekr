@@ -55,8 +55,8 @@ def notify(queriedItem):
   
 # Loop so that the scheduling task 
 # keeps on running all time. 
-while True: 
-  
+def notify_by_time(queriedItem):
+    while True: 
     # Checks whether a scheduled task  
     # is pending to run or not 
     #schedule.run_pending() 
