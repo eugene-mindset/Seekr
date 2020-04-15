@@ -18,7 +18,7 @@ mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
 app = Flask(__name__)
 
- def send_mail(item):
+ def send_mail(queriedItem, items):
      app.config.update(dict(
          DEBUG = True,
          MAIL_SERVER = 'smtp.gmail.com',
@@ -34,7 +34,10 @@ app = Flask(__name__)
      msg = Message("Similar Items Found",
                    recipients=[item.user.email])
 
-     msg.html = "<b>I am a nigerian prince please send me $100</b>"
+     msg.html = "<b>These are some items that were added that may be similar to your lost item:<b>\n"
+
+     for item in items:
+         msg.html += item.name + "\n"
      mail.send(msg)
 
      return "done"
@@ -81,12 +84,14 @@ def notify(queriedItem):
         simMatch.scoreItems(queriedItem)
 
         items = simMatch.getSortedItemsAndScores()
+        similar_items = []
 
         for item, score in items:
             print("Score: " + str(score) + "...")
             if score >= 0.75:
-                send_mail(item)
-                print("The item name is: " + str(item.name) + " Score: " + str(score) + ".")
+                similar_items.append(item)
+        if len(similar_items) != 0:
+            send_mail(similar_items)
     else:
         print("NO ITEMS")
 
