@@ -12,6 +12,7 @@ import string
 import numpy as np
 import sys
 
+
 class ItemSimilarity():
     """
         Class to handle calculating the similarity of item listings based on

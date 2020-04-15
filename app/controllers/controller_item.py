@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
-from bson.objectid import ObjectId
 from app.models.models import *
 from app import mongo
 from app.models.similarity import ItemSimilarity
@@ -11,6 +10,7 @@ import time
 
 items_router = Blueprint("items", __name__)
 
+# TODO: do we really need this here? delete at some point
 # tags:
 #   tech
 #   clothing
@@ -22,74 +22,61 @@ items_router = Blueprint("items", __name__)
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 embedding = gens_api.load('glove-wiki-gigaword-50')
+items = mongo.db.items # our items collection in mongodb
+mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
+
 
 @items_router.route("/")
 def hello():
-    return "Hello World"
+    return "Hey! You're not supposed to be here!"
+
 
 @items_router.route("/fetch_image/<filename>")
 def fetch_resource(filename):
     print("THIS IS THE FILENAME"+ filename)
     return send_from_directory('../'+IMAGE_FOLDER, filename)
 
+
 @items_router.route('/items', methods=['GET'])
 def get_all_items():
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    
-   # Get any arguments in the query
-    args = request.args
-    
-    # Get the tags if exists
+    # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
-        
-    listOfItems = itemObj.findAll(tags)
 
+    # get list of all items using DAO and specifying the tags
+    listOfItems = mongo_item_dao.findAll(tags)
     
-    output = []
-    for i in listOfItems:
-        output.append(i.toDict())
+    output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
 
 @items_router.route('/items/timesearch=<query>', methods=['GET'])
 def get_all_items_timesorted(query):
-
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-
-    # Get any arguments in the query
-    args = request.args
-    
-    # Get the tags if exists
+    # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-        
-    listOfItems = itemObj.findAll(tags)
+    # get list of all items using DAO and specifying the tags
+    listOfItems = mongo_item_dao.findAll(tags)
 
-    scoredItems = [(item.timestamp, item) for item in listOfItems]
-    scoredItems.sort(key=lambda tup: tup[0], reverse=True)
+    # sort items by most recently added (higher timestamp)
+    listOfItems.sort(key=lambda x: x.timestamp, reverse=True)
 
-    output = [pair[1].toDict() for pair in scoredItems]
+    #output = [pair[1].toDict() for pair in scoredItems]
+    output = [item.toDict() for item in listOfItems]
 
     return jsonify(output), 200
 
+
 @items_router.route('/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    
-    # Get any arguments in the query
-    args = request.args
-
     # Get the tags if exists
     tags = ItemTags.get(request.args.get('tags'))
 
-    listOfItems = itemObj.findAll(tags)
+    # get list of all items using DAO and specifying the tags
+    listOfItems = mongo_item_dao.findAll(tags)
 
+    # if nothing in db, don't do any similarity comparisons
     if not listOfItems:
-        # if nothing in db, don't do any similarity comparisons
-        return jsonify([])
+        return jsonify([]), 200
 
     queriedItem = Item(name=query, desc="")
 
@@ -103,7 +90,7 @@ def get_all_items_sorted(query):
     return jsonify(output), 200
 
 
-# DEPRECATED
+# DEPRECATED TODO: delete this at some point
 # @items_router.route('/items/<name>', methods=['GET'])
 # def get_item(name):
 #     items = mongo.db.items
@@ -130,50 +117,51 @@ def add_item():
         # Use secure_filename secure_filename(f.filename)
         f.save(os.path.join(IMAGE_FOLDER, f.filename))
 
-    items = mongo.db.items
     name = request.form['name']
-    found = eval(request.form['found'].capitalize())
     desc = request.form['desc']
-    location = request.form['location']
-    imageName = f.filename if f != None else ''
+    found = eval(request.form['found'].capitalize())
+    location = Location([float(request.form['latitude']),
+                        float(request.form['longitude'])])
+    radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    radius = request.form['radius']
-    timestamp = time.time() # request.get_json()['timestamp']
-    
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    item = Item(name=name, found=found, desc=desc, location=location, imageName=imageName, tags=tags, radius=radius, timestamp=timestamp)
-
-    itemObj.insert(item)
-    return jsonify(item.toDict()), 200
-
-
-@items_router.route('/items/<id>', methods=['PUT'])
-def update_item(id):
-    items = mongo.db.items
-
-    name = request.get_json()['name']
-    found = request.get_json()['found']
-    desc = request.get_json()['desc']
-    location = request.get_json()['location']
-    tags = ItemTags.get(request.get_json()['tags'])
-    radius = request.get_json()['radius']
+    imageName = f.filename if f != None else ''
     timestamp = time.time()
 
-    # I don't think we should update the time at all?
-    # It's time added, not time last modified
+    # TODO: placeholder, change this once user is handled on frontend
+    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
 
-    itemObj = ItemDao(items)
-    item = Item(Id=id, name=name, found=found, desc=desc, location=location, tags=tags, radius=radius, timestamp=timestamp)
-    itemObj.update(item)
+    item = Item(name=name, desc=desc, found=found, location=location,
+                radius=radius, tags=tags, imageName=imageName,
+                timestamp=timestamp, user=user)
+
+    mongo_item_dao.insert(item)
     return jsonify(item.toDict()), 200
 
 
-@items_router.route('/items/<id>', methods=['DELETE'])
-def delete_item(id):
-    items = mongo.db.items
-    itemObj = ItemDao(items)
-    numDeleted = itemObj.remove(id)
+@items_router.route('/items/<Id>', methods=['PUT'])
+def update_item(Id):
+
+    name = request.form['name']
+    desc = request.form['desc']
+    found = eval(request.form['found'].capitalize())
+    location = Location([float(request.form['latitude']),
+                        float(request.form['longitude'])])
+    radius = float(request.form['radius'])
+    tags = ItemTags.get(request.form['tags'])
+
+    # TODO: placeholder, change this once user is handled on frontend
+    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
+
+    item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
+                radius=radius, tags=tags, user=user)
+
+    mongo_item_dao.update(item)
+    return jsonify(item.toDict()), 200
+
+
+@items_router.route('/items/<Id>', methods=['DELETE'])
+def delete_item(Id):
+    numDeleted = mongo_item_dao.remove(Id)
 
     if numDeleted == 1:
         output = {'message': 'deleted'}

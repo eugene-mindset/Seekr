@@ -86,7 +86,7 @@ export class SearchItem extends Component {
         </div>
         <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
         <div style={{ display: "flex" }}>
-          <label for="filters">Sort by:  </label>
+          <label htmlFor="filters">Sort by:  </label>
           <select id="filters" onChange={this.changeFilter}>
             <option value="Best">Best match</option>
             <option value="Recent">Most Recent</option>
