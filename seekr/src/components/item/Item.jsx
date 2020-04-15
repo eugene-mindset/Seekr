@@ -25,7 +25,9 @@ export class Item extends Component {
   
   render() {
     const { id, name, found, desc, location, imageName, timestamp, tags } = this.props.item;
-    var url = "https://www.google.com/maps/place/" + location[0].toString(10) + "+" + location[1].toString(10)
+    var lat = location.coordinates[0]
+    var lng = location.coordinates[1]
+    var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>

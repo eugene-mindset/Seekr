@@ -16,7 +16,7 @@ export class AddItem extends Component {
     desc: '',
     location: [39.3299, -76.6205],
     img: '',
-    radius: '',
+    radius: 0,
     username: "",
     email: "",
     phone: ""
@@ -63,7 +63,7 @@ export class AddItem extends Component {
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: '', radius: '', username: "", email: "", phone: ""});
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: '', radius: 0, username: "", email: "", phone: ""});
     document.getElementById("imageUpload").value = "";
     
     var boxes = document.getElementsByClassName('box');
@@ -105,7 +105,7 @@ export class AddItem extends Component {
             onChange={this.onChange}
           />
           <input
-            type="text"
+            type="number"
             name="radius"
             style={{ flex: '10', padding: '5px' }}
             placeholder="Add Item Radius..."

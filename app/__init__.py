@@ -15,6 +15,7 @@ def create_app(config_obj):
     register_blueprints(app)
     return app
 
+
 def register_blueprints(application):
     from app.controllers import items_router
     application.register_blueprint(items_router)
