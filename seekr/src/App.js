@@ -5,7 +5,6 @@ import Navigation from './components/layout/Navigation';
 import About from './components/pages/About';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
-import Home from './components/pages/Home';
 
 import './App.css';
 
@@ -16,10 +15,9 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navigation />
-          <Route exact path="/" component={Home}/>
+          <Route exact path="/" component={Search}/>
           <div className="site-container">
             <Route path="/add" component={Add} />
-            <Route path="/search" component={Search} />
             <Route path="/about" component={About} />
           </div>
         </div>
