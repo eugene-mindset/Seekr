@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 from flask_cors import CORS
 from .mongo_inst import mongo
 from flask_mail import Mail, Message
+
 app = Flask(__name__)
 
 
@@ -23,21 +24,25 @@ def register_blueprints(application):
 # Testing flask mail
 # want to do bulk sending via cron
 # search thru db to find items to find similar
-@app.route('/mail/<ID>')
-def send_mail(ID):
-    app.config.update(dict(
-        DEBUG = True,
-        MAIL_SERVER = 'smtp.gmail.com',
-        MAIL_PORT = 587,
-        MAIL_USE_TLS = True,
-        MAIL_USE_SSL = False,
-        MAIL_USERNAME = 'seekr.oose@gmail.com',
-        MAIL_PASSWORD = 'Seekroose!',
-        MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
-    ))
-    mail = Mail(app)
-    msg = Message("Hello", recipients=["xiniga1163@2go-mail.com"])
+# app.config.update(dict(
+#         DEBUG = True,
+#         MAIL_SERVER = 'smtp.gmail.com',
+#         MAIL_PORT = 587,
+#         MAIL_USE_TLS = True,
+#         MAIL_USE_SSL = False,
+#         MAIL_USERNAME = 'seekr.oose@gmail.com',
+#         MAIL_PASSWORD = 'Seekroose!',
+#         MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
+#     ))
+# mail = Mail(app)
+
+
+# @app.route('/mail')
+# def send_mail():
     
-    msg.html = "<b>I am a nigerian prince</b>"
-    mail.send(msg)
-    return str(ID)
+    
+#     msg = Message("Hello", recipients=["xiniga1163@2go-mail.com"])
+    
+#     msg.html = "<b>I am a nigerian prince</b>"
+#     mail.send(msg)
+#     return "Hello"

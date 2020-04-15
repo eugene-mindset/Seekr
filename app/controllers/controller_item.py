@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
+from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
 from werkzeug.utils import secure_filename
 from app.models.models import *
@@ -7,10 +7,12 @@ from app.models.similarity import ItemSimilarity
 import os
 import gensim.downloader as gens_api
 import time
-from flask_mail import Mail, Message
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 items_router = Blueprint("items", __name__)
-app = Flask(__name__)
+
 # TODO: do we really need this here? delete at some point
 # tags:
 #   tech
@@ -29,6 +31,7 @@ mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
 @items_router.route("/")
 def hello():
+    send_mail('seekr.oose@gmail.com', 1)
     return "Hey! You're not supposed to be here!"
 
 
@@ -157,27 +160,53 @@ def delete_item(Id):
     return jsonify({'result': output}), 200
 
 
-
-
-# @items_router.route("/mail")
-# def send_mail():
-#     app.config.update(dict(
-#         DEBUG = True,
-#         MAIL_SERVER = 'smtp.gmail.com',
-#         MAIL_PORT = 587,
-#         MAIL_USE_TLS = True,
-#         MAIL_USE_SSL = False,
-#         MAIL_USERNAME = 'seekr.oose@gmail.com',
-#         MAIL_PASSWORD = 'Seekroose!',
-#         MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
-#     ))
-
-#     mail = Mail(app)
-#     msg = Message("Hello",
-#                   recipients=["kumar.shaurya13@gmail.com"])
+def send_mail(receiver_email, itemID):
+    sender_email = "seekr.oose@gmail.com"
+    password = "Seekroose!"
     
-#     msg.html = "<b>I am a nigerian prince please send me $100</b>"
-#     mail.send(msg)
+    port = 587  # For starttls
+    smtp_server = "smtp.gmail.com"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Seekr Team: We found a similar item"
+    message["From"] = sender_email
+    message["To"] = receiver_email
     
-#     return "done"
+    # Create the plain-text and HTML version of your message
+    text = """\
+    Hi,
+    How are you?
+    Real Python has many great tutorials:
+    www.realpython.com"""
+    html = f"""\
+    <html>
+    <body>
+        <p>Hi {receiver_email},<br>
+        A similar item was just uploaded to our servers.
+        <br>{itemID} is the item ID
+        </p>
+    </body>
+    </html>
+    """ 
 
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    part2 = MIMEText(html, "html")
+
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    message.attach(part2)
+
+    smtp_serv = smtplib.SMTP(smtp_server, port)
+    smtp_serv.ehlo()
+    smtp_serv.starttls()
+    smtp_serv.ehlo()
+    smtp_serv.login(sender_email, password)
+    try:
+        smtp_serv.sendmail(sender_email, receiver_email, message.as_string())
+        print("email sent")
+    except Exception as e:
+        print(e)
+    
+
+    smtp_serv.quit()
