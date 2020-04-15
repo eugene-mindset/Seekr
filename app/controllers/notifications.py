@@ -15,11 +15,10 @@ from flask_mail import Mail, Message
 embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
-schedule = sched.scheduler(time.time, time.sleep)
 
 app = Flask(__name__)
 
- def send_mail():
+ def send_mail(item):
      app.config.update(dict(
          DEBUG = True,
          MAIL_SERVER = 'smtp.gmail.com',
@@ -32,8 +31,8 @@ app = Flask(__name__)
      ))
 
      mail = Mail(app)
-     msg = Message("Hello",
-                   recipients=["kumar.shaurya13@gmail.com"])
+     msg = Message("Similar Items Found",
+                   recipients=[item.user.email])
 
      msg.html = "<b>I am a nigerian prince please send me $100</b>"
      mail.send(msg)
@@ -86,7 +85,7 @@ def notify(queriedItem):
         for item, score in items:
             print("Score: " + str(score) + "...")
             if score >= 0.75:
-                # email item.user.email
+                send_mail(item)
                 print("The item name is: " + str(item.name) + " Score: " + str(score) + ".")
     else:
         print("NO ITEMS")
@@ -97,18 +96,3 @@ def notify_all():
     for item in listOfItems:
         notify(item)
         
-
-# Task scheduling 
-# After every 10mins geeks() is called.  
-#    schedule.every(5).seconds.do(geeks) 
-  
-# Loop so that the scheduling task 
-# keeps on running all time. 
-def notify_by_time(queriedItem):
-    while True: 
-    # Checks whether a scheduled task  
-    # is pending to run or not 
-    #schedule.run_pending() 
-    #time.sleep(1) 
-        schedule.enter(60, 1, notify_all)
-        schedule.run()
