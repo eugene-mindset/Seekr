@@ -53,13 +53,13 @@ def notify(queriedItem):
         simMatch.addItems(listOfItems)
         simMatch.scoreItems(queriedItem)
 
-        items = [simMatch.getSortedItemsAndScores()]
+        items = simMatch.getSortedItemsAndScores()
 
         for item, score in items:
-            print("Score: " + score + "...")
+            print("Score: " + str(score) + "...")
             if score >= 0.75:
                 # email item.user.email
-                print("The item name is: " + item.name + " Score: " + score + ".")
+                print("The item name is: " + str(item.name) + " Score: " + str(score) + ".")
     else:
         print("NO ITEMS")
 
