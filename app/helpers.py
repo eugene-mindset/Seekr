@@ -4,8 +4,8 @@ import cv2
 
 threshold = 0.7
 
-imPath1 = './uploadedImages/testImg.jpg'
-imPath2 = './uploadedImages/testImg.jpg'
+im1 = './uploadedImages/testImg.jpg'
+im2 = './uploadedImages/testImg.jpg'
 
 def imageMatch(imPath1, imPath2):
     """
@@ -15,9 +15,9 @@ def imageMatch(imPath1, imPath2):
         ----------
 
         imPath1:str
-            image path of the first image
+            image path of the first image target image
         imPath2:str
-            image path of the second image
+            image path of the second image 
         
         Return
         ------
@@ -27,10 +27,10 @@ def imageMatch(imPath1, imPath2):
     img1 = cv2.imread(imPath1,0)  # queryImage
     img2 = cv2.imread(imPath2,0) # trainImage
 
-    # Initiate SIFT detector
+    # Currently using SIFT, but can change
     imageDetector = cv2.xfeatures2d.SIFT_create()
 
-    # find the keypoints and descriptors with SIFT
+    # Get keypoints
     kp1, des1 = imageDetector.detectAndCompute(img1,None)
     kp2, des2 = imageDetector.detectAndCompute(img2,None)
 
@@ -40,20 +40,15 @@ def imageMatch(imPath1, imPath2):
 
     # Apply ratio test
     good = []
+    percentMatch = 0
     for m,n in matches:
         if m.distance < threshold*n.distance:
             good.append([m])
-            a = len(good)
-            percent=(a*100)/len(kp2)
-    print("{} % similarity".format(percent))
-    if percent >= 75.00:
-        print('Match Found')
-    if percent < 75.00:
-        print('Match not Found')
-if __name__ == "__main__":
-    imageMatch(imPath1, imPath2)
-    # # cv2.drawMatchesKnn expects list of lists as matches.
-    # img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,good,flags=2,outImg=None)
+            goodPoints = len(good)
+            percentMatch = goodPoints / len(kp1)
+    print("{} % similarity".format(percentMatch * 100))
 
-    # plt.imshow(img3),plt.show()
-    # plt.savefig("matplotlib.png") #running in windows subsystem for linux bc no backend
+    return percentMatch
+
+if __name__ == "__main__":
+    imageMatch(im1, im2)
