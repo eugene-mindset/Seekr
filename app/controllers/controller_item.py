@@ -8,18 +8,11 @@ from app.controllers.notifications import *
 import os
 import gensim.downloader as gens_api
 import time
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 items_router = Blueprint("items", __name__)
-
-# TODO: do we really need this here? delete at some point
-# tags:
-#   tech
-#   clothing
-#   jewelry
-#   pet
-#   personal - wallets, keys, id's
-#   apparel - clothing, accessories, purse
-#   other - anything not in the above categories: bikes, coffee mugs, etc
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 embedding = gens_api.load('glove-wiki-gigaword-50')
@@ -91,22 +84,7 @@ def get_all_items_sorted(query):
     return jsonify(output), 200
 
 
-# DEPRECATED TODO: delete this at some point
-# @items_router.route('/items/<name>', methods=['GET'])
-# def get_item(name):
-#     items = mongo.db.items
-#     itemObj = ItemDao(items)
-#     output = []
-#     # Get any arguments in the query
-#     args = request.args
-#     # Get the tags if exists
-#     tags = []
-#     if (args.get('tags') != None):
-#         tags = args.get('tags').split(',')
-#     listOfItems = itemObj.findByName(name, tags)
-#     for i in listOfItems:
-#         output.append(i.toDict())
-#     return jsonify(output), 200
+
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
@@ -174,3 +152,55 @@ def delete_item(Id):
         output = {'message': 'not deleted'}
 
     return jsonify({'result': output}), 200
+
+
+def send_mail(user_item, similar_items):
+    sender_email = "seekr.oose@gmail.com"
+    password = "Seekroose!"
+    
+    port = 587  # For starttls
+    smtp_server = "smtp.gmail.com"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = f"Seekr Team: We found a similar item to you {user_item.name}"
+    message["From"] = sender_email
+    message["To"] = user_item.user.email
+    
+    # Create the plain-text and HTML version of your message
+    text = """\
+    Hi,
+    How are you?
+    Real Python has many great tutorials:
+    www.realpython.com"""
+    html = f"""\
+    <html>
+    <body>
+        <p>Hi {user_item.user.name},<br>
+        You recently added: {user_item.name}.
+        <br>Here are some similar items: {similar_items}
+        </p>
+    </body>
+    </html>
+    """ 
+
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    part2 = MIMEText(html, "html")
+
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    message.attach(part2)
+
+    smtp_serv = smtplib.SMTP(smtp_server, port)
+    smtp_serv.ehlo()
+    smtp_serv.starttls()
+    smtp_serv.ehlo()
+    smtp_serv.login(sender_email, password)
+    try:
+        smtp_serv.sendmail(sender_email, user_item.user.email, message.as_string())
+        print("email sent")
+    except Exception as e:
+        print(e)
+    
+
+    smtp_serv.quit()

@@ -6,7 +6,6 @@ from .mongo_inst import mongo
 
 app = Flask(__name__)
 
-
 #Configure app from object input and enable CORS
 def create_app(config_obj):
     app.config.from_object(config_obj)
