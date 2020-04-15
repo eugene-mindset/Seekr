@@ -61,5 +61,5 @@ while True:
     # is pending to run or not 
     #schedule.run_pending() 
     #time.sleep(1) 
-    schedule.enter(10, 1, geeks)
+    schedule.enter(300, 1, notify(queriedItem))
     schedule.run()
