@@ -49,6 +49,11 @@ def notify(queriedItem):
         if score >= 0.75:
             # email item.user.email
 
+def notify_all():
+    listOfItems = mongo_item_dao.findAll(tags)
+    for item in listOfItems:
+        notify(item)
+        
 # Task scheduling 
 # After every 10mins geeks() is called.  
 #    schedule.every(5).seconds.do(geeks) 
@@ -61,5 +66,5 @@ def notify_by_time(queriedItem):
     # is pending to run or not 
     #schedule.run_pending() 
     #time.sleep(1) 
-    schedule.enter(300, 1, notify(queriedItem))
+    schedule.enter(300, 1, notify_all)
     schedule.run()
