@@ -5,13 +5,41 @@ import sched
 import time 
 import gensim.downloader as gens_api
 from app.models.similarity import ItemSimilarity
-
+from app.helpers import *
 from math import radians, sin, cos, acos
+from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
+from flask_mail import Mail, Message
+
+
 
 embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 schedule = sched.scheduler(time.time, time.sleep)
+
+app = Flask(__name__)
+
+ def send_mail():
+     app.config.update(dict(
+         DEBUG = True,
+         MAIL_SERVER = 'smtp.gmail.com',
+         MAIL_PORT = 587,
+         MAIL_USE_TLS = True,
+         MAIL_USE_SSL = False,
+         MAIL_USERNAME = 'seekr.oose@gmail.com',
+         MAIL_PASSWORD = 'Seekroose!',
+         MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
+     ))
+
+     mail = Mail(app)
+     msg = Message("Hello",
+                   recipients=["kumar.shaurya13@gmail.com"])
+
+     msg.html = "<b>I am a nigerian prince please send me $100</b>"
+     mail.send(msg)
+
+     return "done"
+
 
 def distance(item1, item2):
     slat = radians(item1.location.coordinates[0])
