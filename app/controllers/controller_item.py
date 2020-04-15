@@ -150,16 +150,16 @@ def delete_item(Id):
     return jsonify({'result': output}), 200
 
 
-def send_mail(receiver_email, itemID):
+def send_mail(user_item, similar_items):
     sender_email = "seekr.oose@gmail.com"
     password = "Seekroose!"
     
     port = 587  # For starttls
     smtp_server = "smtp.gmail.com"
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Seekr Team: We found a similar item"
+    message["Subject"] = f"Seekr Team: We found a similar item to you {user_item.name}"
     message["From"] = sender_email
-    message["To"] = receiver_email
+    message["To"] = user_item.user.email
     
     # Create the plain-text and HTML version of your message
     text = """\
@@ -170,9 +170,9 @@ def send_mail(receiver_email, itemID):
     html = f"""\
     <html>
     <body>
-        <p>Hi {receiver_email},<br>
-        A similar item was just uploaded to our servers.
-        <br>{itemID} is the item ID
+        <p>Hi {user_item.user.name},<br>
+        You recently added: {user_item.name}.
+        <br>Here are some similar items: {similar_items}
         </p>
     </body>
     </html>
@@ -193,7 +193,7 @@ def send_mail(receiver_email, itemID):
     smtp_serv.ehlo()
     smtp_serv.login(sender_email, password)
     try:
-        smtp_serv.sendmail(sender_email, receiver_email, message.as_string())
+        smtp_serv.sendmail(sender_email, user_item.user.email, message.as_string())
         print("email sent")
     except Exception as e:
         print(e)
