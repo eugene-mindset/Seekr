@@ -24,7 +24,7 @@ export class Item extends Component {
 
   
   render() {
-    const { id, name, found, desc, location, imageName, timestamp, tags } = this.props.item;
+    const { id, name, found, desc, location, imageName, timestamp, tags, user} = this.props.item;
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
@@ -36,6 +36,9 @@ export class Item extends Component {
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
         <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
         { imageName ? this.getImage(imageName) : <span></span>}
+        <Card.Subtitle>
+          <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
+        </Card.Subtitle>
         <Card.Footer>
           <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
           <small className="text-muted">{ this.getTime(timestamp) }</small>
