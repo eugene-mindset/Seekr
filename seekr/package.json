@@ -12,7 +12,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "0.9.5",
     "sockjs": "^0.3.20",
-    "sockjs-client": "^1.4.0",
+    "sockjs-client": "1.4.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {},
