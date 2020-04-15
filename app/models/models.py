@@ -35,7 +35,6 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         # Get the item from our mongodb collection
         item = self.collection.find_one({"_id": ObjectId(Id)})
-
         # Serialize it into an Item object
         newLocation = Location(item['location']['coordinates'])
         newUser = User(name=item['user']['name'], email=item['user']['email'],
@@ -54,6 +53,8 @@ class ItemDao(DatabaseObject):
 
         for item in allItems:
             # Serialize it into an Item object
+            print("------------------------------------------------------------------------------------")
+            print(item)
             newLocation = Location(item['location']['coordinates'])
             newUser = User(name=item['user']['name'], email=item['user']['email'],
                            phone=item['user']['phone'])
