@@ -6,6 +6,17 @@ import time
 import gensim.downloader as gens_api
 from app.models.similarity import ItemSimilarity
 
+from math import radians, sin, cos, acos
+
+def distance(item1, item2):
+    slat = radians(item1.location()[0])
+    slon = radians(item1.location()[1])
+    elat = radians(item2.location()[0])
+    elon = radians(item2.location()[1])
+
+    dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
+    return dist
+
   
 embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
@@ -14,8 +25,17 @@ schedule = sched.scheduler(time.time, time.sleep)
 
 # Functions setup 
       
+def radius_cutoff(items, queriedItem):
+    results = []
+
+    for item in items:
+        if distance(queriedItem, item) <= 5: #kilometers
+            results.append(item)
+    return results
+    
 def notify(queriedItem):
     listOfItems = mongo_item_dao.findAll(tags)
+    listOfItems = radius_cutoff(listOfItems, queriedItem)
  
     simMatch = ItemSimilarity(modelName=None)
     simMatch.model = embedding
