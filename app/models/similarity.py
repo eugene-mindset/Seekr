@@ -220,7 +220,7 @@ class ItemSimilarity():
             itemScore.score = score
 
 
-    def getSortedItems(self):
+    def getSortedItems(self, returnScores=False):
         """
             Get the items in self by how well they scored.
 
@@ -232,4 +232,7 @@ class ItemSimilarity():
         results = [itemScore for itemScore in self.itemScores]
         results.sort(reverse=True)
 
-        return [itemScore.item for itemScore in results]
+        if returnScores:
+            return [(itemScore.item, itemScore.score) for itemScore in results]
+        else:
+            return [itemScore.item for itemScore in results]
