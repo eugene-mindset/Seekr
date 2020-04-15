@@ -8,6 +8,12 @@ from app.models.similarity import ItemSimilarity
 
 from math import radians, sin, cos, acos
 
+  
+embedding = gens_api.load('glove-wiki-gigaword-50')
+items = mongo.db.items # our items collection in mongodb
+mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
+schedule = sched.scheduler(time.time, time.sleep)
+
 def distance(item1, item2):
     slat = radians(item1.location()[0])
     slon = radians(item1.location()[1])
@@ -17,11 +23,6 @@ def distance(item1, item2):
     dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
 
-  
-embedding = gens_api.load('glove-wiki-gigaword-50')
-items = mongo.db.items # our items collection in mongodb
-mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
-schedule = sched.scheduler(time.time, time.sleep)
 
 # Functions setup 
       
@@ -32,7 +33,7 @@ def radius_cutoff(items, queriedItem):
         if distance(queriedItem, item) <= 5: #kilometers
             results.append(item)
     return results
-    
+
 def notify(queriedItem):
     listOfItems = mongo_item_dao.findAll(tags)
     listOfItems = radius_cutoff(listOfItems, queriedItem)
