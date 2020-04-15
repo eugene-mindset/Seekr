@@ -20,7 +20,8 @@ def distance(item1, item2):
     elat = radians(item2.location()[0])
     elon = radians(item2.location()[1])
 
-    dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
+    dist = 3958.8 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
+    # dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
 
 
@@ -30,7 +31,7 @@ def radius_cutoff(items, queriedItem):
     results = []
 
     for item in items:
-        if distance(queriedItem, item) <= 5: #kilometers
+        if distance(queriedItem, item) <= 5: #miles
             results.append(item)
     return results
 
