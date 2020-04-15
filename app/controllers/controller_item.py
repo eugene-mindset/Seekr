@@ -129,7 +129,7 @@ def add_item():
     timestamp = time.time()
 
     # TODO: placeholder, change this once user is handled on frontend
-    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
+    user = User(request.form['username'], request.form['email'], request.form['phone'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, imageName=imageName,
@@ -155,7 +155,7 @@ def update_item(Id):
     tags = ItemTags.get(request.form['tags'])
 
     # TODO: placeholder, change this once user is handled on frontend
-    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
+    user = User(request.form['username'], request.form['email'], request.form['phone'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)
