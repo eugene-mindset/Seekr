@@ -9,6 +9,11 @@ from app.helpers import *
 from math import radians, sin, cos, acos
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
 from flask_mail import Mail, Message
+import smtplib, ssl
+from email.mime.text import MIMEText	
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart	
+from email.mime.multipart import MIMEMultipart
 
 
 
@@ -16,31 +21,57 @@ embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
-app = Flask(__name__)
 
- def send_mail(queriedItem, items):
-     app.config.update(dict(
-         DEBUG = True,
-         MAIL_SERVER = 'smtp.gmail.com',
-         MAIL_PORT = 587,
-         MAIL_USE_TLS = True,
-         MAIL_USE_SSL = False,
-         MAIL_USERNAME = 'seekr.oose@gmail.com',
-         MAIL_PASSWORD = 'Seekroose!',
-         MAIL_DEFAULT_SENDER = 'seekr.oose@gmail.com'
-     ))
+def send_mail(user_item, similar_items, found):
+    sender_email = "seekr.oose@gmail.com"
+    password = "Seekroose!"
+    
+    port = 587  # For starttls
+    smtp_server = "smtp.gmail.com"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = f"Seekr Team: We found a Similar Items for You"
+    message["From"] = sender_email
+    message["To"] = user_item.user.email
+    
+    # Create the plain-text and HTML version of your message
+    text = """\
+    Hi,
+    How are you?
+    Real Python has many great tutorials:
+    www.realpython.com"""
+    html = f"""\
+    <html>
+    <body>
+        <p>Hi {user_item.user.name}!,<br>
+        You recently added: {user_item.name}.
+        <br>Here are some similar {found} items: {similar_items}
+        </p>
+    </body>
+    </html>
+    """ 
 
-     mail = Mail(app)
-     msg = Message("Similar Items Found",
-                   recipients=[item.user.email])
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    part2 = MIMEText(html, "html")
 
-     msg.html = "<b>These are some items that were added that may be similar to your lost item:<b>\n"
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    message.attach(part2)
 
-     for item in items:
-         msg.html += item.name + "\n"
-     mail.send(msg)
+    smtp_serv = smtplib.SMTP(smtp_server, port)
+    smtp_serv.ehlo()
+    smtp_serv.starttls()
+    smtp_serv.ehlo()
+    smtp_serv.login(sender_email, password)
+    try:
+        smtp_serv.sendmail(sender_email, user_item.user.email, message.as_string())
+        print("email sent")
+    except Exception as e:
+        print(e)
+    
 
-     return "done"
+    smtp_serv.quit()
 
 
 def distance(item1, item2):
@@ -67,13 +98,15 @@ def radius_cutoff(items, queriedItem):
 def notify(queriedItem):
     
     listOfItems = mongo_item_dao.findAll(tags=0b0000_0000)
+    found = "missing"
     
     # if queriedItem is a found item then only need to compare similarity with missing items and vice versa
     if queriedItem.found is True:
         listOfItems = [item for item in listOfItems if item.found is False]
     
     else:
-         listOfItems = [item for item in listOfItems if item.found is True]
+        listOfItems = [item for item in listOfItems if item.found is True]
+        found = "found"
         
     listOfItems = radius_cutoff(listOfItems, queriedItem)
  
@@ -91,7 +124,7 @@ def notify(queriedItem):
             if score >= 0.75:
                 similar_items.append(item)
         if len(similar_items) != 0:
-            send_mail(similar_items)
+            send_mail(queriedItem, similar_items, found)
     else:
         print("NO ITEMS")
 
