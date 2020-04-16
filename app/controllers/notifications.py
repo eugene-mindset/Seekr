@@ -42,7 +42,7 @@ def send_mail(user_item, similar_items, found):
     html = f"""\
     <html>
     <body>
-        <p>Hi {user_item.user.name}!,<br>
+        <p>Hi {user_item.user.name}!<br>
         You recently added: {user_item.name}.
         <br>Here are some similar {found} items: {similar_items}
         </p>
@@ -123,6 +123,11 @@ def notify(queriedItem):
             print("Score: " + str(score) + "...")
             if score >= 0.75:
                 similar_items.append(item)
+        
+        for item in similar_items:
+            if imageMatch(queriedItem, item) < 0.75:
+                similar_items.remove(item)
+
         if len(similar_items) != 0:
             send_mail(queriedItem, similar_items, found)
     else:
