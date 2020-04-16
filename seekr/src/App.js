@@ -15,9 +15,8 @@ class App extends Component {
       <Router>
         <div className="App">
           <Navigation />
-          
+          <Route exact path="/" component={Search}/>
           <div className="site-container">
-            <Route path="/search" component={Search}/>
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} />
           </div>
