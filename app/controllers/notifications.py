@@ -108,7 +108,8 @@ def notify(queriedItem):
         listOfItems = [item for item in listOfItems if item.found is True]
         found = "found"
         
-    listOfItems = radius_cutoff(listOfItems, queriedItem)
+    if len(listOfItems) != 0:
+        listOfItems = radius_cutoff(listOfItems, queriedItem)
  
     if len(listOfItems) != 0:
         simMatch = ItemSimilarity(modelName=None)
@@ -121,11 +122,11 @@ def notify(queriedItem):
 
         for item, score in items:
             print("Score: " + str(score) + "...")
-            if score >= 0.75:
+            if score >= 0.5:
                 similar_items.append(item)
         
         for item in similar_items:
-            if imageMatch(queriedItem, item) < 0.75:
+            if imageMatch(queriedItem.imageName, item.imageName) < 0.05:
                 similar_items.remove(item)
 
         if len(similar_items) != 0:

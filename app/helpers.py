@@ -6,6 +6,7 @@ threshold = 0.7
 
 im1 = './uploadedImages/testImg.jpg'
 im2 = './uploadedImages/testImg.jpg'
+IMAGE_FOLDER = './uploadedImages/'
 
 def imageMatch(imPath1, imPath2):
     """
@@ -24,8 +25,10 @@ def imageMatch(imPath1, imPath2):
         percent similarity range: [0, 1]
     """
 
-    img1 = cv2.imread(imPath1,0)  # queryImage
-    img2 = cv2.imread(imPath2,0) # trainImage
+    img1 = cv2.imread(IMAGE_FOLDER + imPath1,0)  # queryImage
+    img2 = cv2.imread(IMAGE_FOLDER + imPath2,0) # trainImage
+    print("image one path: " + str(imPath1))
+    print("image two path: " + str(imPath2))
 
     # Currently using SIFT, but can change
     imageDetector = cv2.xfeatures2d.SIFT_create()
