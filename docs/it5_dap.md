@@ -26,11 +26,12 @@
 - make a loading spinner
 - make the map smaller and look better
 - radius make it easy to read
-- document code (delete old code)
+- document code
 - opt out of email notifications
 - Add form (make it look like a form)
 - Search bar and parameters
 - Displaying search boxes (clicking search box should display bigger box and generating mini map)
 - Nav bar
 - color scheme
-
+- Remove all python wildcard imports and replace them with exact imports
+- Delete any unused code
