@@ -25,7 +25,7 @@
 * [X] Improve search algorithm word matching (Eugene and Jason)
 * [X] Allow user to input their contact information when adding an item frontend and backend (Jacob)
 * [X] Make adding an image optional instead of required (Jason)
-* [ ] Notify a user by sending them an email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location (Shaurya and Andrew)
+* [X] Notify a user by sending them an email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location (Shaurya and Andrew)
 * [X] Create a User class and Location class in the backend (Anderson)
 * [X] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
 * [X] Make database store tags as enums (Eugene)
