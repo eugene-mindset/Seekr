@@ -26,6 +26,10 @@ def imageMatch(imPath1, imPath2):
         percent similarity range: [0, 1]
     """
 
+    # Don't compute match at all if no image
+    if imPath1 == '' or imPath2 == '':
+        return 100
+    
     img1 = cv2.imread(IMAGE_FOLDER + imPath1,0)  # queryImage
     img2 = cv2.imread(IMAGE_FOLDER + imPath2,0) # trainImage
     #print("image one path: " + str(imPath1))
