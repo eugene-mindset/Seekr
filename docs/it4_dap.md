@@ -35,3 +35,7 @@
 * [X] Display contact information of a user on the item listing that they posted (Jacob)
 * [X] Clear the search when not searching (Andrew)
 * [X] Figure out how to deploy better (Jason)
+
+## Retrospective
+
+In this iteration, we were able to finalize our features: automatic email notifications for a similar item, improved word matching similarity algorithm, and added image recognition. Our previously deployed app crashed because the AWS instance was too small for our algorithm, so we upgraded to a t2.medium instead of a t2.micro for improved performance. The good from this iteration was we accomplished our main features. The bad is our program is still a bit ugly because different people had differing ideas on implementing the frontend. In the next iteration, we plan on making final changes to the frontend to make everything consistent, as well as implementing authorization and authentication for Users. 
