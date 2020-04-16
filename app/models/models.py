@@ -42,7 +42,7 @@ class ItemDao(DatabaseObject):
         newItem = Item(str(item['_id']), item['name'], item['desc'],
                        item['found'], newLocation, item['radius'],
                        ItemTags(item['tags']), item['imageName'],
-                       item['timestamp'], newUser)
+                       item['timestamp'], newUser, item['distance'])
 
         return newItem
 
@@ -53,15 +53,13 @@ class ItemDao(DatabaseObject):
 
         for item in allItems:
             # Serialize it into an Item object
-            print("------------------------------------------------------------------------------------")
-            print(item)
             newLocation = Location(item['location']['coordinates'])
             newUser = User(name=item['user']['name'], email=item['user']['email'],
                            phone=item['user']['phone'])
             newItem = Item(str(item['_id']), item['name'], item['desc'],
                            item['found'], newLocation, item['radius'],
                            ItemTags(item['tags']), item['imageName'],
-                           item['timestamp'], newUser)
+                           item['timestamp'], newUser, item['distance'])
 
             # check if we're not searching with tags
             # or if item has all the tags being searched for
@@ -108,7 +106,7 @@ class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
                  radius=None, tags=None, imageName=None, timestamp=None,
-                 user=None):
+                 user=None, distance=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -119,6 +117,7 @@ class Item:
         self.imageName = imageName  # Should be a string
         self.timestamp = timestamp  # Should be a float
         self.user = user            # Should be a User object
+        self.distance = distance    # Should be a float
 
     @property
     def Id(self):
@@ -199,6 +198,14 @@ class Item:
     def user(self, user):
         self.__user = user
 
+    @property
+    def distance(self):
+        return self.__distance
+    
+    @distance.setter
+    def distance(self, distance):
+        self.__distance = distance
+
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
@@ -219,6 +226,8 @@ class Item:
         if self.timestamp != otherItem.timestamp:
             return False
         if self.user != otherItem.user:
+            return False
+        if self.distance != otherItem.distance:
             return False
         return True
 
@@ -266,7 +275,8 @@ class Item:
             'tags'      : ItemTags.toInt(self.tags),
             'imageName' : self.imageName,
             'timestamp' : self.timestamp,
-            'user'      : self.user.toDict() if self.user is not None else 'None'
+            'user'      : self.user.toDict() if self.user is not None else 'None',
+            'distance'  : self.distance
         }
 
         return output

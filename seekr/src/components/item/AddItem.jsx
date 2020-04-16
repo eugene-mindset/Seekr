@@ -156,6 +156,7 @@ export class AddItem extends Component {
           />
         </form>
         <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
+        <h1 className="text-center">Drop a marker on location of lost item.</h1>
         <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
     )
