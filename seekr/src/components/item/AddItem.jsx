@@ -106,6 +106,7 @@ export class AddItem extends Component {
           />
           <input
             type="number"
+            min="0"
             name="radius"
             style={{ flex: '10', padding: '5px' }}
             placeholder="Add Item Radius..."
