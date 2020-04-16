@@ -19,18 +19,6 @@ a, .navbar-nav, .nav-link {
   }
 }
 
-.fill-window {
-  height: 100%;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  background-image: url("../public/testImg.jpg");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
 .tags {
   background-color: darkblue;
   margin-right: 5px;

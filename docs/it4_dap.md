@@ -29,7 +29,7 @@
 * [X] Create a User class and Location class in the backend (Anderson)
 * [X] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
 * [X] Make database store tags as enums (Eugene)
-* [ ] Implement algorithm to match similar item images, give a matching score (Anderson)
+* [X] Implement algorithm to match similar item images, give a matching score (Anderson)
 * [X] Make frontend store tags as enums (Eugene)
 * [X] Display the tags an item has on its listing (Andrew)
 * [ ] Display contact information of a user on the item listing that they posted (Jacob)
