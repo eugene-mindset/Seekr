@@ -123,7 +123,7 @@ def notify(queriedItem):
                 similar_items.append(item)
         
         for item in similar_items:
-            if imageMatch(queriedItem.imageName, item.imageName) < 0.05:
+            if imageMatch(queriedItem.imageName, item.imageName) < 35: #Under 35 key point matches
                 similar_items.remove(item)
 
         if len(similar_items) != 0:

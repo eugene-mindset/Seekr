@@ -1,11 +1,12 @@
 import numpy as np
 import cv2
+# from matplotlib import pyplot as plt
 
 
-threshold = 0.7
+threshold = 0.85
 
-im1 = './uploadedImages/testImg.jpg'
-im2 = './uploadedImages/testImg.jpg'
+# im1 = './testImages/iphon11p2.jpg'
+# im2 = './testImages/iphone11.jpg'
 IMAGE_FOLDER = './uploadedImages/'
 
 def imageMatch(imPath1, imPath2):
@@ -42,16 +43,19 @@ def imageMatch(imPath1, imPath2):
     matches = bf.knnMatch(des1,des2, k=2)
 
     # Apply ratio test
-    good = []
-    percentMatch = 0
+    countGood = 0
     for m,n in matches:
         if m.distance < threshold*n.distance:
-            good.append([m])
-            goodPoints = len(good)
-            percentMatch = goodPoints / len(kp1)
-    print("{} % similarity".format(percentMatch * 100))
+            countGood += 1
+    print(countGood)
+    # print("{} % similarity".format(percentMatch * 100))
+    # cv2.drawMatchesKnn expects list of lists as matches.
+    # img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,good,flags=2,outImg=None)
 
-    return percentMatch
+    # plt.imshow(img3),plt.show()
+    # plt.savefig("matplotlib.png") #running in windows subsystem for linux bc no backend 
 
-if __name__ == "__main__":
-    imageMatch(im1, im2)
+    return countGood
+
+# if __name__ == "__main__":
+#     imageMatch(im1, im2)
