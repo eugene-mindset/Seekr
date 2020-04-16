@@ -83,7 +83,6 @@ def distance(item1, item2):
     dist = 3958.8 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     # dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
-# Functions setup 
       
 
 def radius_cutoff(items, queriedItem):
