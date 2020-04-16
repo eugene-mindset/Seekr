@@ -21,17 +21,17 @@
 ## Tasks
 
 
-* [ ] Allow searching based on proximity to a specified location frontend and backend (Jacob)
+* [X] Allow searching based on proximity to a specified location frontend and backend (Jacob)
 * [X] Improve search algorithm word matching (Eugene and Jason)
-* [ ] Allow user to input their contact information when adding an item frontend and backend (Jacob)
+* [X] Allow user to input their contact information when adding an item frontend and backend (Jacob)
 * [X] Make adding an image optional instead of required (Jason)
-* [ ] Notify a user by sending them an email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location (Shaurya and Andrew)
+* [X] Notify a user by sending them an email if someone posts a found item similar to their lost item (and vice versa) based on matching the item images and location (Shaurya and Andrew)
 * [X] Create a User class and Location class in the backend (Anderson)
 * [X] Modify the DAO to properly serialize and deserialize the new Item object structure from the database (Anderson)
 * [X] Make database store tags as enums (Eugene)
 * [X] Implement algorithm to match similar item images, give a matching score (Anderson)
 * [X] Make frontend store tags as enums (Eugene)
 * [X] Display the tags an item has on its listing (Andrew)
-* [ ] Display contact information of a user on the item listing that they posted (Jacob)
+* [X] Display contact information of a user on the item listing that they posted (Jacob)
 * [X] Clear the search when not searching (Andrew)
 * [X] Figure out how to deploy better (Jason)
