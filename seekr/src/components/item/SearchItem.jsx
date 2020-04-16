@@ -97,13 +97,11 @@ export class SearchItem extends Component {
           <select id="filters" onChange={this.changeFilter}>
             <option value="Best">Best match</option>
             <option value="Recent">Most Recent</option>
-            <option value="Closest">Closest</option>
+            <option value="Proximity">Proximity</option>
           </select>
         </div>
         <h6 className="text-center">Supply a location to find nearby items.</h6>
-        <div style={{ alignItems: 'left', justifyContent: 'left' }}>
-          <GoogleMap parentCallback={this.callbackFunction}/>
-        </div>
+        <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
       
       
