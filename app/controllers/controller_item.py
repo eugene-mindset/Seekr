@@ -4,21 +4,15 @@ from werkzeug.utils import secure_filename
 from app.models.models import *
 from app import mongo
 from app.models.similarity import ItemSimilarity
+from app.controllers.notifications import *
 import os
 import gensim.downloader as gens_api
 import time
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 items_router = Blueprint("items", __name__)
-
-# TODO: do we really need this here? delete at some point
-# tags:
-#   tech
-#   clothing
-#   jewelry
-#   pet
-#   personal - wallets, keys, id's
-#   apparel - clothing, accessories, purse
-#   other - anything not in the above categories: bikes, coffee mugs, etc
 
 IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 embedding = gens_api.load('glove-wiki-gigaword-50')
@@ -90,23 +84,6 @@ def get_all_items_sorted(query):
     return jsonify(output), 200
 
 
-# DEPRECATED TODO: delete this at some point
-# @items_router.route('/items/<name>', methods=['GET'])
-# def get_item(name):
-#     items = mongo.db.items
-#     itemObj = ItemDao(items)
-#     output = []
-#     # Get any arguments in the query
-#     args = request.args
-#     # Get the tags if exists
-#     tags = []
-#     if (args.get('tags') != None):
-#         tags = args.get('tags').split(',')
-#     listOfItems = itemObj.findByName(name, tags)
-#     for i in listOfItems:
-#         output.append(i.toDict())
-#     return jsonify(output), 200
-
 @items_router.route('/items', methods=['POST'])
 def add_item():
     
@@ -121,20 +98,23 @@ def add_item():
     desc = request.form['desc']
     found = eval(request.form['found'].capitalize())
     location = Location([float(request.form['latitude']),
-                        float(request.form['longitude'])])
+                         float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
     imageName = f.filename if f != None else ''
     timestamp = time.time()
-
-    # TODO: placeholder, change this once user is handled on frontend
-    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
+    user = User(request.form['username'], request.form['email'],
+                request.form['phone'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, imageName=imageName,
                 timestamp=timestamp, user=user)
 
     mongo_item_dao.insert(item)
+
+    # want to check whenever an item is added if their are similar items to send notifications to 
+    notify(item)
+
     return jsonify(item.toDict()), 200
 
 
@@ -145,12 +125,11 @@ def update_item(Id):
     desc = request.form['desc']
     found = eval(request.form['found'].capitalize())
     location = Location([float(request.form['latitude']),
-                        float(request.form['longitude'])])
+                         float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-
-    # TODO: placeholder, change this once user is handled on frontend
-    user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
+    user = User(request.form['username'], request.form['email'],
+                request.form['phone'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)
