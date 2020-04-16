@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Checkbox from "./Checkbox";
+import GoogleMap from '../pages/GoogleMap';
 import ItemTags from "../helper/ItemTags";
 
 export class SearchItem extends Component {
@@ -11,8 +12,13 @@ export class SearchItem extends Component {
 
   state = {
     name: "",
-    filter: "Best"
+    filter: "Best",
+    location: [39.3299, -76.6205]
   };
+
+  callbackFunction = (coordinates) => {
+    this.setState({location: coordinates})
+  }
 
   changeFilter = () => this.setState({filter: document.getElementById("filters").value})
 
@@ -51,7 +57,7 @@ export class SearchItem extends Component {
       alert("Item must have a name!");
       return false;
     }
-    this.props.searchItem(this.state.name, this.selectedCheckboxes, this.state.filter); // call API
+    this.props.searchItem(this.state.name, this.selectedCheckboxes, this.state.filter, this.state.location); // call API
     this.setState({ name: "" });
     var boxes = document.getElementsByClassName('box');
     for (let box of boxes) {
@@ -82,6 +88,7 @@ export class SearchItem extends Component {
                 style={{ flex: "1" }}
               />
             </form>
+            
           </div>
         </div>
         <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
@@ -90,9 +97,14 @@ export class SearchItem extends Component {
           <select id="filters" onChange={this.changeFilter}>
             <option value="Best">Best match</option>
             <option value="Recent">Most Recent</option>
+            <option value="Proximity">Proximity</option>
           </select>
         </div>
+        <h6 className="text-center">Supply a location to find nearby items.</h6>
+        <GoogleMap parentCallback={this.callbackFunction}/>
       </div>
+      
+      
     );
   }
 }

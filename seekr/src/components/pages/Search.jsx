@@ -17,18 +17,24 @@ export default class Search extends Component {
     items: []
   }
 
-  searchItem = (name, tags, filter) => {
+  searchItem = (name, tags, filter, location) => {
     this.setState({items:[]})
     if (filter === 'Best') {
       axios.get('/items/search=' + name + '?tags=' + tags).then(res =>
         res.data.map((item) => {
-          this.setState({ items: [...this.state.items, item] })
+          return this.setState({ items: [...this.state.items, item] })
+        })
+      );
+    } else if (filter === 'Recent') {
+      axios.get('/items/timesearch=' + name + '?tags=' + tags).then(res =>
+        res.data.map((item) => {
+          return this.setState({ items: [...this.state.items, item] })
         })
       );
     } else {
-      axios.get('/items/timesearch=' + name + '?tags=' + tags).then(res =>
+      axios.get('/items/proximitysearch=' + name + '?tags=' + tags + '&lat=' + location[0] + '&lon=' + location[1]).then(res =>
         res.data.map((item) => {
-          this.setState({ items: [...this.state.items, item] })
+          return this.setState({ items: [...this.state.items, item] })
         })
       );
     }

@@ -8,6 +8,7 @@ from app.controllers.notifications import *
 import os
 import gensim.downloader as gens_api
 import time
+import math
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -56,6 +57,43 @@ def get_all_items_timesorted(query):
 
     #output = [pair[1].toDict() for pair in scoredItems]
     output = [item.toDict() for item in listOfItems]
+
+    return jsonify(output), 200
+
+@items_router.route('/items/proximitysearch=<query>', methods=['GET'])
+def get_all_items_proximitysorted(query):
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    # get list of all items using DAO and specifying the tags
+    listOfItems = mongo_item_dao.findAll(tags)
+
+    #Calculate distance between objects
+    distItems = []
+    for item in listOfItems:
+        R = 6373.0
+        lat1 = math.radians(float(lat))
+        lon1 = math.radians(float(lon))
+        lat2 = math.radians(float(item.location.coordinates[0]))
+        lon2 = math.radians(float(item.location.coordinates[1]))
+
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+
+        a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        distance = R * c
+        item.distance = distance
+        distItems.append(item)
+        print(item.name + " " + str(item.distance))
+
+    # sort items by most recently added (higher timestamp)
+    distItems.sort(key=lambda x: x.distance, reverse=False)
+
+    #output = [pair[1].toDict() for pair in scoredItems]
+    output = [item.toDict() for item in distItems]
 
     return jsonify(output), 200
 
@@ -108,7 +146,7 @@ def add_item():
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, imageName=imageName,
-                timestamp=timestamp, user=user)
+                timestamp=timestamp, user=user, distance=0.0)
 
     mongo_item_dao.insert(item)
 
@@ -132,7 +170,7 @@ def update_item(Id):
                 request.form['phone'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, user=user)
+                radius=radius, tags=tags, user=user, distance=0.0)
 
     mongo_item_dao.update(item)
     return jsonify(item.toDict()), 200
