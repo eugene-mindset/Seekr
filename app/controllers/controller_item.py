@@ -84,8 +84,6 @@ def get_all_items_sorted(query):
     return jsonify(output), 200
 
 
-
-
 @items_router.route('/items', methods=['POST'])
 def add_item():
     
@@ -100,14 +98,13 @@ def add_item():
     desc = request.form['desc']
     found = eval(request.form['found'].capitalize())
     location = Location([float(request.form['latitude']),
-                        float(request.form['longitude'])])
+                         float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
     imageName = f.filename if f != None else ''
     timestamp = time.time()
-
-    # TODO: placeholder, change this once user is handled on frontend
-    user = User(request.form['username'], request.form['email'], request.form['phone'])
+    user = User(request.form['username'], request.form['email'],
+                request.form['phone'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, imageName=imageName,
@@ -128,12 +125,11 @@ def update_item(Id):
     desc = request.form['desc']
     found = eval(request.form['found'].capitalize())
     location = Location([float(request.form['latitude']),
-                        float(request.form['longitude'])])
+                         float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-
-    # TODO: placeholder, change this once user is handled on frontend
-    user = User(request.form['username'], request.form['email'], request.form['phone'])
+    user = User(request.form['username'], request.form['email'],
+                request.form['phone'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)
@@ -152,55 +148,3 @@ def delete_item(Id):
         output = {'message': 'not deleted'}
 
     return jsonify({'result': output}), 200
-
-
-def send_mail(user_item, similar_items):
-    sender_email = "seekr.oose@gmail.com"
-    password = "Seekroose!"
-    
-    port = 587  # For starttls
-    smtp_server = "smtp.gmail.com"
-    message = MIMEMultipart("alternative")
-    message["Subject"] = f"Seekr Team: We found a similar item to you {user_item.name}"
-    message["From"] = sender_email
-    message["To"] = user_item.user.email
-    
-    # Create the plain-text and HTML version of your message
-    text = """\
-    Hi,
-    How are you?
-    Real Python has many great tutorials:
-    www.realpython.com"""
-    html = f"""\
-    <html>
-    <body>
-        <p>Hi {user_item.user.name},<br>
-        You recently added: {user_item.name}.
-        <br>Here are some similar items: {similar_items}
-        </p>
-    </body>
-    </html>
-    """ 
-
-    # Turn these into plain/html MIMEText objects
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-    message.attach(part1)
-    message.attach(part2)
-
-    smtp_serv = smtplib.SMTP(smtp_server, port)
-    smtp_serv.ehlo()
-    smtp_serv.starttls()
-    smtp_serv.ehlo()
-    smtp_serv.login(sender_email, password)
-    try:
-        smtp_serv.sendmail(sender_email, user_item.user.email, message.as_string())
-        print("email sent")
-    except Exception as e:
-        print(e)
-    
-
-    smtp_serv.quit()

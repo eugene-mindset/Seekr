@@ -194,6 +194,7 @@ class Item:
     @property
     def user(self):
         return self.__user
+
     @user.setter
     def user(self, user):
         self.__user = user

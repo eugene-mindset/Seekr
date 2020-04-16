@@ -27,8 +27,8 @@ def imageMatch(imPath1, imPath2):
 
     img1 = cv2.imread(IMAGE_FOLDER + imPath1,0)  # queryImage
     img2 = cv2.imread(IMAGE_FOLDER + imPath2,0) # trainImage
-    print("image one path: " + str(imPath1))
-    print("image two path: " + str(imPath2))
+    #print("image one path: " + str(imPath1))
+    #print("image two path: " + str(imPath2))
 
     # Currently using SIFT, but can change
     imageDetector = cv2.xfeatures2d.SIFT_create()

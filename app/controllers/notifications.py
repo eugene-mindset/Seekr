@@ -8,13 +8,11 @@ from app.models.similarity import ItemSimilarity
 from app.helpers import *
 from math import radians, sin, cos, acos
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
-from flask_mail import Mail, Message
 import smtplib, ssl
 from email.mime.text import MIMEText	
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart	
 from email.mime.multipart import MIMEMultipart
-
 
 
 embedding = gens_api.load('glove-wiki-gigaword-50')
