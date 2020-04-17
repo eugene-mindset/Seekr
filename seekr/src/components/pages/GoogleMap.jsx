@@ -47,7 +47,7 @@ export class GoogleMap extends Component {
       <div>
         <Map
           google={this.props.google}
-          style={{ width: "50%" }}
+          style={{ width: "490px", height:"350px"}}
           className={"map"}
           zoom={14}
           onClick={this.onClick}

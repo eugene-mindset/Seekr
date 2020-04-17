@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Checkbox from "./Checkbox";
-import GoogleMap from '../pages/GoogleMap';
+import GoogleMap from "../pages/GoogleMap";
 import ItemTags from "../helper/ItemTags";
+import "../../App.css";
 
 export class SearchItem extends Component {
   componentDidMount = () => {
@@ -13,24 +14,25 @@ export class SearchItem extends Component {
   state = {
     name: "",
     filter: "Best",
-    location: [39.3299, -76.6205]
+    location: [39.3299, -76.6205],
   };
 
   callbackFunction = (coordinates) => {
-    this.setState({location: coordinates})
-  }
+    this.setState({ location: coordinates });
+  };
 
-  changeFilter = () => this.setState({filter: document.getElementById("filters").value})
+  changeFilter = () =>
+    this.setState({ filter: document.getElementById("filters").value });
 
-  toggleCheckbox = val => {
+  toggleCheckbox = (val) => {
     if ((this.selectedCheckboxes & val) === val) {
-      this.selectedCheckboxes = this.selectedCheckboxes & ~(val);
+      this.selectedCheckboxes = this.selectedCheckboxes & ~val;
     } else {
       this.selectedCheckboxes = this.selectedCheckboxes | val;
     }
   };
 
-  createCheckbox = tag => (
+  createCheckbox = (tag) => (
     <Checkbox
       label={tag.label}
       flagValue={tag.value}
@@ -41,37 +43,48 @@ export class SearchItem extends Component {
 
   createCheckboxes = () => ItemTags.getMapping().map(this.createCheckbox);
 
-  onChange = e => {
+  onChange = (e) => {
     if (this.state.name === "") {
       // console.log("empty");
       this.props.clearSearch();
     }
-    this.setState({ [e.target.name]: e.target.value })
+    this.setState({ [e.target.name]: e.target.value });
     // if the name is empty, clear the search contents
-    
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
     if (this.state.name === "") {
       alert("Item must have a name!");
       return false;
     }
-    this.props.searchItem(this.state.name, this.selectedCheckboxes, this.state.filter, this.state.location); // call API
+    this.props.searchItem(
+      this.state.name,
+      this.selectedCheckboxes,
+      this.state.filter,
+      this.state.location
+    ); // call API
     this.setState({ name: "" });
-    var boxes = document.getElementsByClassName('box');
+    var boxes = document.getElementsByClassName("box");
     for (let box of boxes) {
-        if (box.checked) {
-            box.click();
-        }
+      if (box.checked) {
+        box.click();
+      }
     }
   };
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
+      <div
+        className="container"
+        style={{
+          backgroundColor: "lightblue",
+          maxWidth: "500px",
+          alignItems: "start",
+        }}
+      >
+        <div className="row" style={{ backgroundColor: "red" }}>
+          <div className="col" style={{ paddingLeft: "5px" }}>
             <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
               <input
                 type="text"
@@ -88,29 +101,69 @@ export class SearchItem extends Component {
                 style={{ flex: "1" }}
               />
             </form>
-            
           </div>
         </div>
-        <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
-        <div style={{ display: "flex" }}>
-          <label htmlFor="filters">Sort by:  </label>
+        <div className="row">
+          <div style={{ display: "flex", paddingLeft: "5px" }}>
+            {this.createCheckboxes()}
+          </div>
+        </div>
+        <div className="row" style={{ display: "flex", paddingLeft: "5px", alignItems: "baseline"}}>
+          <label htmlFor="filters" style={{ paddingRight: "5px" }}>Sort by: </label>
           <select id="filters" onChange={this.changeFilter}>
-            <option value="Best">Best match</option>
+            <option value="Best">Best Match</option>
             <option value="Recent">Most Recent</option>
-            <option value="Proximity">Proximity</option>
+            <option value="Proximity">Closest Distance</option>
           </select>
         </div>
-        <h6 className="text-center">Supply a location to find nearby items.</h6>
-        <GoogleMap parentCallback={this.callbackFunction}/>
+
+        <div className="row" style={{ paddingLeft: "5px" }}>
+          Supply a location to find nearby items.
+        </div>
+        <div className="row" style={{ paddingLeft: "5px" }}>
+          <GoogleMap parentCallback={this.callbackFunction} />
+        </div>
       </div>
-      
-      
+      // <div className="container">
+      //   <div className="row">
+      //     <div className="col-sm-12">
+      //       <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
+      //         <input
+      //           type="text"
+      //           name="name"
+      //           style={{ flex: "10", padding: "5px" }}
+      //           placeholder="Search Item..."
+      //           value={this.state.name}
+      //           onChange={this.onChange}
+      //         />
+      //         <input
+      //           type="submit"
+      //           value="Submit"
+      //           className="btn"
+      //           style={{ flex: "1" }}
+      //         />
+      //       </form>
+
+      //     </div>
+      //   </div>
+      //   <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
+      //   <div style={{ display: "flex" }}>
+      //     <label htmlFor="filters">Sort by:  </label>
+      //     <select id="filters" onChange={this.changeFilter}>
+      //       <option value="Best">Best match</option>
+      //       <option value="Recent">Most Recent</option>
+      //       <option value="Proximity">Proximity</option>
+      //     </select>
+      //   </div>
+      //   <h6 className="text-center">Supply a location to find nearby items.</h6>
+      //   <GoogleMap parentCallback={this.callbackFunction}/>
+      // </div>
     );
   }
 }
 
 SearchItem.propTypes = {
-  searchItem: PropTypes.func.isRequired
+  searchItem: PropTypes.func.isRequired,
 };
 
 export default SearchItem;

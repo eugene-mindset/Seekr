@@ -35,3 +35,13 @@ a, .navbar-nav, .nav-link {
   flex-wrap: wrap;
 
 }
+
+.searchbar {
+  border-radius: 8px;
+}
+
+.search-container {
+  max-width: 300px;
+  background-color: lightblue;
+}
+
