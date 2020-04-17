@@ -1,17 +1,21 @@
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import math
+import os
+import smtplib
+import ssl
+import time
+
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
-from werkzeug.utils import secure_filename
-from app.models.models import *
-from app import mongo
-from app.models.similarity import ItemSimilarity
-from app.controllers.notifications import *
-import os
 import gensim.downloader as gens_api
-import time
-import math
-import smtplib, ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from werkzeug.utils import secure_filename
+
+from app import mongo
+from app.controllers.notifications import *
+from app.models.models import *
+from app.models.similarity import ItemSimilarity
+
 
 items_router = Blueprint("items", __name__)
 

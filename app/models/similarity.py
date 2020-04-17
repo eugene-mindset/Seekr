@@ -1,16 +1,17 @@
-from .models import Item
+import numpy as np
+import string
+import sys
+
 import gensim
-from gensim.matutils import softcossim
 from gensim import corpora
 import gensim.downloader as api
-from gensim.utils import simple_preprocess
+from gensim.matutils import softcossim
 from gensim.models.keyedvectors import Word2VecKeyedVectors
 from gensim.models import WordEmbeddingSimilarityIndex
 from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
+from gensim.utils import simple_preprocess
 
-import string
-import numpy as np
-import sys
+from .models import Item
 
 
 class ItemSimilarity():

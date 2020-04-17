@@ -1,18 +1,18 @@
-# Schedule Library imported 
-from app.models.models import *
-from app import mongo
-import sched
-import time 
-import gensim.downloader as gens_api
-from app.models.similarity import ItemSimilarity
-from app.helpers import *
-from math import radians, sin, cos, acos
-from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
-import smtplib, ssl
-from email.mime.text import MIMEText	
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart	
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from math import radians, sin, cos, acos
+import sched
+import smtplib
+import ssl
+import time 
+
+from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
+import gensim.downloader as gens_api
+
+from app import mongo
+from app.helpers import *
+from app.models.models import *
+from app.models.similarity import ItemSimilarity
 
 
 embedding = gens_api.load('glove-wiki-gigaword-50')

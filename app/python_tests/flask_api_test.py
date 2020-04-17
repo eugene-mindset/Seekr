@@ -1,10 +1,12 @@
+import json
 import unittest
+
+from flask_pymongo import MongoClient, PyMongo
+
 from app import create_app
 from app.mongo_inst import mongo
 from app.models import *
-from flask_pymongo import MongoClient, PyMongo
 from config import *
-import json
 
 
 class ApiTest(unittest.TestCase):

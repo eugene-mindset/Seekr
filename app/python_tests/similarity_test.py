@@ -1,7 +1,10 @@
 import unittest
+
+import gensim.downloader as api
+
 from app.models import Item
 from app.models.similarity import ItemSimilarity
-import gensim.downloader as api
+
 
 class ItemSimTest(unittest.TestCase):
 

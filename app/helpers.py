@@ -1,12 +1,9 @@
-import numpy as np
 import cv2
-# from matplotlib import pyplot as plt
+import numpy as np
 
 
 threshold = 0.85
 
-# im1 = './testImages/iphon11p2.jpg'
-# im2 = './testImages/iphone11.jpg'
 IMAGE_FOLDER = './uploadedImages/'
 
 def imageMatch(imPath1, imPath2):
@@ -60,6 +57,3 @@ def imageMatch(imPath1, imPath2):
     # plt.savefig("matplotlib.png") #running in windows subsystem for linux bc no backend 
 
     return countGood
-
-# if __name__ == "__main__":
-#     imageMatch(im1, im2)
