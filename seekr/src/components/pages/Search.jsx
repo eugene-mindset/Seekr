@@ -10,7 +10,7 @@ const columnStyle = {
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
-  marginTop: "50px",
+  marginTop: "70px",
   marginLeft: "10px"
 
 };

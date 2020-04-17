@@ -45,7 +45,6 @@ export class SearchItem extends Component {
 
   onChange = (e) => {
     if (this.state.name === "") {
-      // console.log("empty");
       this.props.clearSearch();
     }
     this.setState({ [e.target.name]: e.target.value });
@@ -78,30 +77,30 @@ export class SearchItem extends Component {
       <div
         className="container"
         style={{
-          // backgroundColor: "lightblue",
-          maxWidth: "500px",
+          maxWidth: "450px",
           alignItems: "start",
-          marginTop: "50px"
+          marginTop: "70px",
+          marginLeft: "15px"
         }}
       >
         <h1 align="left">Search for an item</h1>
 
-        <div className="row" style={{ backgroundColor: "red" }}>
+        <div className="row">
           <div className="col" style={{ paddingLeft: "5px" }}>
             <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
               <input
                 type="text"
                 name="name"
-                style={{ flex: "10", padding: "5px" }}
+                style={{ flex: "7", padding: "5px" }}
                 placeholder="Search Item..."
                 value={this.state.name}
                 onChange={this.onChange}
               />
               <input
                 type="submit"
-                value="Submit"
+                value="Search"
                 className="btn"
-                style={{ flex: "1" }}
+                style={{ flex: "1", fontWeight: "bold" }}
               />
             </form>
           </div>
