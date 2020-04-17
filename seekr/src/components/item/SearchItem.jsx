@@ -83,6 +83,8 @@ export class SearchItem extends Component {
           alignItems: "start",
         }}
       >
+        <h1 align="left">Search for an item</h1>
+
         <div className="row" style={{ backgroundColor: "red" }}>
           <div className="col" style={{ paddingLeft: "5px" }}>
             <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
@@ -108,8 +110,17 @@ export class SearchItem extends Component {
             {this.createCheckboxes()}
           </div>
         </div>
-        <div className="row" style={{ display: "flex", paddingLeft: "5px", alignItems: "baseline"}}>
-          <label htmlFor="filters" style={{ paddingRight: "5px" }}>Sort by: </label>
+        <div
+          className="row"
+          style={{
+            display: "flex",
+            paddingLeft: "5px",
+            alignItems: "baseline",
+          }}
+        >
+          <label htmlFor="filters" style={{ paddingRight: "5px" }}>
+            Sort by:{" "}
+          </label>
           <select id="filters" onChange={this.changeFilter}>
             <option value="Best">Best Match</option>
             <option value="Recent">Most Recent</option>

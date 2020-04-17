@@ -67,12 +67,14 @@ export default class Search extends Component {
   render() {
     return (
       <React.Fragment>
-        <div>
-          <h1>Search</h1>
-          <SearchItem
-            searchItem={this.searchItem}
-            clearSearch={this.clearSearch}
-          />
+        <div className="search-sidebar">
+          <div className="search">
+            <SearchItem
+              searchItem={this.searchItem}
+              clearSearch={this.clearSearch}
+            />
+          </div>
+
           <br />
           <CardColumns style={columnStyle}>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
