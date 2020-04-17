@@ -78,9 +78,10 @@ export class SearchItem extends Component {
       <div
         className="container"
         style={{
-          backgroundColor: "lightblue",
+          // backgroundColor: "lightblue",
           maxWidth: "500px",
           alignItems: "start",
+          marginTop: "50px"
         }}
       >
         <h1 align="left">Search for an item</h1>

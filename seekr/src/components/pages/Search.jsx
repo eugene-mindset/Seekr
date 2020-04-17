@@ -10,6 +10,9 @@ const columnStyle = {
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
+  marginTop: "50px",
+  marginLeft: "10px"
+
 };
 
 export default class Search extends Component {
@@ -68,15 +71,15 @@ export default class Search extends Component {
     return (
       <React.Fragment>
         <div className="search-sidebar">
-          <div className="search">
-            <SearchItem
-              searchItem={this.searchItem}
-              clearSearch={this.clearSearch}
-            />
-          </div>
+          <SearchItem
+            searchItem={this.searchItem}
+            clearSearch={this.clearSearch}
+          />
+        </div>
 
-          <br />
-          <CardColumns style={columnStyle}>
+        <br />
+        <div className="results">
+          <CardColumns style={columnStyle} >
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
         </div>
