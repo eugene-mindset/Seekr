@@ -116,7 +116,6 @@ export class SearchItem extends Component {
             <option value="Proximity">Closest Distance</option>
           </select>
         </div>
-
         <div className="row" style={{ paddingLeft: "5px" }}>
           Supply a location to find nearby items.
         </div>
