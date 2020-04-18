@@ -9,6 +9,7 @@ from gensim.utils import simple_preprocess
 
 from .models import Item
 
+np.seterr(all="ignore")
 
 class ItemSimilarity():
     """
@@ -28,14 +29,11 @@ class ItemSimilarity():
             self.sentence = None
             self.score = 0
 
-
         def __lt__(self, other):
             return self.score < other.score
 
-
         def __le__(self, other):
             return self.score <= other.score
-
 
         def __str__(self):
             return self.item.name.lower() + ": " + self.item.desc.lower()
@@ -63,7 +61,6 @@ class ItemSimilarity():
 
         return tokenized
 
-
     def addItem(self, item):
         """
             Add `item` to use for computing its similarity to queried items.
@@ -82,7 +79,6 @@ class ItemSimilarity():
         # add new entries to items and dictionary, update flags
         self.itemScores.append(newEntry)
         self.dictionary.merge_with(newDictEntry)
-
 
     def addItems(self, items):
         """
@@ -169,7 +165,6 @@ class ItemSimilarity():
         simMatrix = SparseTermSimilarityMatrix(self.wordEmbedding, corpus)
         return SoftCosineSimilarity([x.sentence for x in self.itemScores], simMatrix)
 
-
     def scoreItems(self, itemToCompare):
         """
             Score every item listing in self. The score is how similar that item
@@ -202,7 +197,6 @@ class ItemSimilarity():
         for score, itemScore in zip(scores, self.itemScores):
             itemScore.score = score
 
-
     def getSortedItems(self):
         """
             Get the items in self by how well they scored.
@@ -216,10 +210,10 @@ class ItemSimilarity():
         results.sort(reverse=True)
 
         return [itemScore.item for itemScore in results]
-    
+
     def getSortedItemsAndScores(self):
         """
-            Get the items in self by how well they scored and 
+            Get the items in self by how well they scored and
             also return item with corresponding score
 
             Return

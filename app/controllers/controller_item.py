@@ -29,7 +29,7 @@ mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
 # the name of the model for item similarity to download
 # for more models: https://github.com/RaRe-Technologies/gensim-data
-simModelName = 'glove-twitter-100'
+simModelName = 'glove-wiki-gigaword-50'
 simModel = None
 
 # Load in the proper gensim files
