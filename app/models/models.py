@@ -1,5 +1,4 @@
 from abc import abstractmethod
-import base64
 from enum import IntFlag
 
 from bson.objectid import ObjectId

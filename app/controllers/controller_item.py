@@ -138,13 +138,11 @@ def add_item():
         f.save(os.path.join(IMAGE_FOLDER, f.filename)) """
 
     uploadedImages = request.files.getlist('image')
-    print(uploadedImages)
     images = []
     for i in uploadedImages:
-        encoded = base64.urlsafe_b64encode(i.read())
+        encoded = base64.standard_b64encode(i.read())
         encodedAsStr = encoded.decode()
         images.append(ItemImage(i.filename, i.mimetype, encodedAsStr))
-    print(images)
 
     name = request.form['name']
     desc = request.form['desc']

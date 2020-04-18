@@ -81,14 +81,13 @@ export class AddItem extends Component {
     // Check to make sure images are below 12 Mib, and that they are only png or jpg
     let totalSize = 0;
 
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      let currFile = uploadedFiles[i]
-      if (currFile.type !== 'image/png' && currFile.type !== 'image/jpeg') {
+    uploadedFiles.forEach(imgFile => {
+      if (imgFile.type !== 'image/png' && imgFile.type !== 'image/jpeg') {
         alert('png and jpeg only');
         return false;
       }
-      totalSize += currFile.size
-    }
+      totalSize += imgFile.size
+    });
 
     totalSize = (totalSize / 1024) / 1024 // Convert from bytes to MiB
     totalSize *= (4/3) // convert to size of base64 encoded string

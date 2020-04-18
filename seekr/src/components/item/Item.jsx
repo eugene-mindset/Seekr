@@ -38,7 +38,7 @@ export class Item extends Component {
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
 
 
-        
+
         <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
