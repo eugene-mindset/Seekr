@@ -89,7 +89,6 @@ def get_all_items_proximitysorted(query):
     lat = request.args.get('lat')
     lon = request.args.get('lon')
 
-
     listOfItems = mongo_item_dao.findByLocation(tags, lat, lon)
 
     output = [item.toDict() for item in listOfItems]
