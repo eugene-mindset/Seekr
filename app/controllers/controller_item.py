@@ -1,3 +1,4 @@
+from base64 import standard_b64encode
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import math
@@ -23,7 +24,6 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors
 
 items_router = Blueprint("items", __name__)
 
-IMAGE_FOLDER = os.path.dirname('uploadedImages/')
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
@@ -52,12 +52,6 @@ else:
 @items_router.route("/")
 def hello():
     return "Hey! You're not supposed to  be here!"
-
-
-@items_router.route("/fetch_image/<filename>")
-def fetch_resource(filename):
-    print("THIS IS THE FILENAME"+ filename)
-    return send_from_directory('../'+IMAGE_FOLDER, filename)
 
 
 @items_router.route('/items', methods=['GET'])
@@ -151,28 +145,29 @@ def get_all_items_sorted(query):
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
-    
-    f = None
-    # save image to local folder
-    if 'image' in request.files:
-        f = request.files['image']
-        # Use secure_filename secure_filename(f.filename)
-        f.save(os.path.join(IMAGE_FOLDER, f.filename))
 
     name = request.form['name']
     desc = request.form['desc']
-    found = eval(request.form['found'].capitalize())
+    found = request.form['found'] == 'true'
     location = Location([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    imageName = f.filename if f != None else ''
+    
+    # Get the list of uploaded images and convert them to ItemImage objects
+    uploadedImages = request.files.getlist('image')
+    images = []
+    for img in uploadedImages:
+        encoded = standard_b64encode(img.read())
+        encodedAsStr = encoded.decode()
+        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
+
     timestamp = time.time()
     user = User(request.form['username'], request.form['email'],
                 request.form['phone'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, imageName=imageName,
+                radius=radius, tags=tags, images=images,
                 timestamp=timestamp, user=user, distance=0.0)
 
     mongo_item_dao.insert(item)
@@ -194,10 +189,12 @@ def add_item():
 
 @items_router.route('/items/<Id>', methods=['PUT'])
 def update_item(Id):
+    # TODO: Update this to match the new architecture of objects
+    # Actually let the user update items on the frontend
 
     name = request.form['name']
     desc = request.form['desc']
-    found = eval(request.form['found'].capitalize())
+    found = request.form['found'] == 'true'
     location = Location([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
