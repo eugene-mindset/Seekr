@@ -1,12 +1,11 @@
+from base64 import standard_b64decode
 import cv2
 import numpy as np
 
 
 threshold = 0.85
 
-IMAGE_FOLDER = './uploadedImages/'
-
-def imageMatch(imPath1, imPath2):
+def imageMatch(item1, item2):
     """
         Creates the class.
 
@@ -23,37 +22,42 @@ def imageMatch(imPath1, imPath2):
         percent similarity range: [0, 1]
     """
 
-    # Don't compute match at all if no image
-    if imPath1 == '' or imPath2 == '':
+    # Don't compute match at all if one of the items has no images
+    if not item1.images or not item2.images:
         return 100
-    
-    img1 = cv2.imread(IMAGE_FOLDER + imPath1,0)  # queryImage
-    img2 = cv2.imread(IMAGE_FOLDER + imPath2,0) # trainImage
-    #print("image one path: " + str(imPath1))
-    #print("image two path: " + str(imPath2))
 
-    # Currently using SIFT, but can change
-    imageDetector = cv2.xfeatures2d.SIFT_create()
+    # Pairwise compare all of item1's images with item2's images, return highest
+    # number of matches found between the images of the two items
+    max_matches = 0
 
-    # Get keypoints
-    kp1, des1 = imageDetector.detectAndCompute(img1,None)
-    kp2, des2 = imageDetector.detectAndCompute(img2,None)
+    for img1 in item1.images:
+        # Convert from base64 string to an actual image
+        img1_bytes = standard_b64decode(img1.imageData)
+        img1_data = cv2.imdecode(np.frombuffer(img1_bytes, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
 
-    # BFMatcher with default params
-    bf = cv2.BFMatcher()
-    matches = bf.knnMatch(des1,des2, k=2)
+        for img2 in item2.images:
+            # Convert from base64 string to an actual image
+            img2_bytes = standard_b64decode(img2.imageData)
+            img2_data = cv2.imdecode(np.frombuffer(img2_bytes, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
 
-    # Apply ratio test
-    countGood = 0
-    for m,n in matches:
-        if m.distance < threshold*n.distance:
-            countGood += 1
-    print(countGood)
-    # print("{} % similarity".format(percentMatch * 100))
-    # cv2.drawMatchesKnn expects list of lists as matches.
-    # img3 = cv2.drawMatchesKnn(img1,kp1,img2,kp2,good,flags=2,outImg=None)
+            # Currently using SIFT, but can change
+            imageDetector = cv2.xfeatures2d.SIFT_create()
 
-    # plt.imshow(img3),plt.show()
-    # plt.savefig("matplotlib.png") #running in windows subsystem for linux bc no backend 
+            # Get keypoints and descriptors
+            kp1, des1 = imageDetector.detectAndCompute(img1_data,None)
+            kp2, des2 = imageDetector.detectAndCompute(img2_data,None)
 
-    return countGood
+            # BFMatcher with default params
+            bf = cv2.BFMatcher()
+            matches = bf.knnMatch(des1,des2, k=2)
+
+            # Apply ratio test
+            countGood = 0
+            for m,n in matches:
+                if m.distance < threshold*n.distance:
+                    countGood += 1
+            
+            if countGood > max_matches:
+                max_matches = countGood
+
+    return max_matches

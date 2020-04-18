@@ -94,7 +94,7 @@ def radius_cutoff(items, queriedItem):
 
 def notify(queriedItem):
     
-    listOfItems = mongo_item_dao.findAll(tags=0b0000_0000)
+    listOfItems = mongo_item_dao.findAll(ItemTags.NONE)
     found = "missing"
     
     # if queriedItem is a found item then only need to compare similarity with missing items and vice versa
@@ -123,7 +123,8 @@ def notify(queriedItem):
                 similar_items.append(item)
         
         for item in similar_items:
-            if imageMatch(queriedItem.imageName, item.imageName) < 35: #Under 35 key point matches
+
+            if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
                 similar_items.remove(item)
 
         if len(similar_items) != 0:

@@ -45,8 +45,9 @@ class ItemDao(DatabaseObject):
                        phone=item['user']['phone'])
 
         images = []
-        for i in item['images']:
-            images.append(ItemImage(i['imageName'], i['imageType'], i['imageData']))
+        for img in item['images']:
+            images.append(ItemImage(img['imageName'], img['imageType'],
+                                    img['imageData']))
 
         newItem = Item(str(item['_id']), item['name'], item['desc'],
                        item['found'], newLocation, item['radius'],
@@ -66,10 +67,11 @@ class ItemDao(DatabaseObject):
 
             newUser = User(name=item['user']['name'], email=item['user']['email'],
                            phone=item['user']['phone'])
-                           
+
             images = []
-            for i in item['images']:
-                images.append(ItemImage(i['imageName'], i['imageType'], i['imageData']))
+            for img in item['images']:
+                images.append(ItemImage(img['imageName'], img['imageType'],
+                                        img['imageData']))
 
             newItem = Item(str(item['_id']), item['name'], item['desc'],
                         item['found'], newLocation, item['radius'],
@@ -252,33 +254,6 @@ class Item:
     def __repr__(self):
         return str(self)
 
-    # TODO: delete this, no longer used because we have a better search algo now
-    # magical formula to determine if a word is similar to another word
-    # def compareItem(self, otherItem: 'Item', comparator=None):
-    #     if comparator is None:
-    #         total = []
-    #         unique = set()
-
-    #         if type(self.name) == str and type(self.desc) == str:
-    #             tokensName = set(self.name.lower().split())
-    #             tokensDesc = set(self.desc.lower().split())
-
-    #             total += list(tokensName.union(tokensDesc))
-
-    #         if type(otherItem.name) == str and type(otherItem.desc) == str:
-    #             tokensName = set(otherItem.name.lower().split())
-    #             tokensDesc = set(otherItem.desc.lower().split())
-
-    #             total += list(tokensName.union(tokensDesc))
-
-    #         unique = set(total)
-    #         matches = len(total) - len(unique)
-    #         result = matches
-
-    #         return result
-
-    #     return 1
-
     def toDict(self):
         output = {
             'id'        : self.Id,
@@ -391,7 +366,7 @@ class ItemImage:
     def __init__(self, imageName=None, imageType=None, imageData=None):
         self.imageName = imageName  # Should be a string
         self.imageType = imageType  # Should be a string (image/png or image/jpeg)
-        self.imageData = imageData  # Should be bytes encoded as a URL safe base64 string
+        self.imageData = imageData  # Should be a string (standard base64)
 
     @property
     def imageName(self):
