@@ -20,7 +20,7 @@ export default class Add extends Component {
       // Append multiple files to request form
       data.append('image', i);
     });
-      
+
     axios({
       method: 'post',
       url: '/items',

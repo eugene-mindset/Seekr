@@ -18,7 +18,7 @@ export class GoogleMap extends Component {
   sendData = () => {
     this.props.parentCallback(this.state.location);
   }
-  
+
   onClick(t, map, coord) {
     const { latLng } = coord;
     const lat = latLng.lat();
@@ -42,7 +42,6 @@ export class GoogleMap extends Component {
   }
 
   render() {
-    
     return (
       <div>
         <Map

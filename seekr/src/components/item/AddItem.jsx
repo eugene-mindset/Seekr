@@ -54,7 +54,7 @@ export class AddItem extends Component {
   }
 
   onSubmit = (e) => {
-    
+
     e.preventDefault();
     if (this.state.name === '') {
       alert("Item must have a name!");

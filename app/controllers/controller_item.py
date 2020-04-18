@@ -208,7 +208,7 @@ def update_item(Id):
 
 
 @items_router.route('/items/<Id>', methods=['DELETE'])
-def delete_item(Id):
+def delete_item(Id):    
     numDeleted = mongo_item_dao.remove(Id)
 
     if numDeleted == 1:

@@ -4,6 +4,7 @@ from enum import IntFlag
 from bson.objectid import ObjectId
 
 
+
 class DatabaseObject:
 
     def __init__(self, collection):
