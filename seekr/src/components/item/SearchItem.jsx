@@ -134,40 +134,6 @@ export class SearchItem extends Component {
           <GoogleMap parentCallback={this.callbackFunction} />
         </div>
       </div>
-      // <div className="container">
-      //   <div className="row">
-      //     <div className="col-sm-12">
-      //       <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
-      //         <input
-      //           type="text"
-      //           name="name"
-      //           style={{ flex: "10", padding: "5px" }}
-      //           placeholder="Search Item..."
-      //           value={this.state.name}
-      //           onChange={this.onChange}
-      //         />
-      //         <input
-      //           type="submit"
-      //           value="Submit"
-      //           className="btn"
-      //           style={{ flex: "1" }}
-      //         />
-      //       </form>
-
-      //     </div>
-      //   </div>
-      //   <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
-      //   <div style={{ display: "flex" }}>
-      //     <label htmlFor="filters">Sort by:  </label>
-      //     <select id="filters" onChange={this.changeFilter}>
-      //       <option value="Best">Best match</option>
-      //       <option value="Recent">Most Recent</option>
-      //       <option value="Proximity">Proximity</option>
-      //     </select>
-      //   </div>
-      //   <h6 className="text-center">Supply a location to find nearby items.</h6>
-      //   <GoogleMap parentCallback={this.callbackFunction}/>
-      // </div>
     );
   }
 }
