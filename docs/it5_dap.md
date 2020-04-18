@@ -18,9 +18,9 @@
 - [ ] Clean up add item page (Anderson)
   - [ ] Make map look smaller? (Andrew)
   - [ ] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
-- [ ] Limit so people can only upload a 12 mb picture (Anderson)
-- [ ] Change the database so that items save images as binaries rather than images locally (Anderson)
-- [ ] Allow the user to add multiple images when creating a listing (Anderson)
+- [X] Limit so people can only upload a 12 mb picture (Anderson)
+- [X] Change the database so that items save images as binaries rather than images locally (Anderson)
+- [X] Allow the user to add multiple images when creating a listing (Anderson)
 
 ### Search
 
