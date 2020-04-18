@@ -7,20 +7,17 @@ threshold = 0.85
 
 # TODO: the doc comment needs to be updated
 def imageMatch(item1, item2):
-    """
-        Creates the class.
+    """Compares the similarities of the images between two items.
 
-        Parameters
-        ----------
+    Pairwise compares all the images of two given items using SIFT.
 
-        imPath1:str
-            image path of the first image target image
-        imPath2:str
-            image path of the second image
+    Args:
+        item1: The first item to compare.
+        item2: The second item to compare.
 
-        Return
-        ------
-        percent similarity range: [0, 1]
+    Returns:
+        The number of matches found between the two best matching images from
+        item1 and item2.
     """
 
     # Don't compute match at all if one of the items has no images
