@@ -4,34 +4,50 @@
 
 ### UML Diagram
 
-
 ## Wireframe
-
 
 ## Iteration Backlog
 
 ### User Stories to implement
 
-
 ## Tasks
-- Set boundary for radius (no negative) should be front end
-- clean up add item page
-- move the search bar to side
-- change in db so that items save images as binaries rather than images locally
-- limit so people can only upload a 12 mb picture
-- change front end design
-- add user auth
-- show mini map
-- deploy in prod mode
-- make a loading spinner
-- make the map smaller and look better
-- radius make it easy to read
-- document code
-- opt out of email notifications
-- Add form (make it look like a form)
-- Search bar and parameters
-- Displaying search boxes (clicking search box should display bigger box and generating mini map)
-- Nav bar
-- color scheme
-- Remove all python wildcard imports and replace them with exact imports
-- Delete any unused code
+
+### Add
+
+- [X] Set boundary for radius (no negative) should be front end (Anderson)
+- [ ] Clean up add item page (Anderson)
+  - [ ] Make map look smaller? (Andrew)
+  - [ ] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
+- [ ] Limit so people can only upload a 12 mb picture (Anderson)
+- [ ] Change the database so that items save images as binaries rather than images locally (Anderson)
+- [ ] Allow the user to add multiple images when creating a listing (Anderson)
+
+### Search
+
+- [ ] Move the search bar to side (Andrew)
+- [ ] Displaying search boxes (clicking search box should display bigger box and generating mini map) (Jacob)
+- [ ] Make mini-map for item listing cards be attached to the respective cards (Jacob)
+- [ ] Prevent the client from sending multiple search requests to the backend until it gets the information from the first request (Jacob)
+- [ ] Have a loading symbol appear on the search page when the user is searching for an item but has yet to get results back (Jacob)
+- [ ] Have gensim download file if it is not on directory, otherwise use the one in there (Eugene)
+
+### User Accounts
+
+- [ ] Add user authentication (Shaurya, Andrew)
+- [ ] Provide the option to opt out of email notifications for users (Shaurya, Andrew)
+- [ ] Users can only delete a post (Shaurya, Andrew)
+- [ ] Add the button for authentication (Shaurya, Andrew)
+
+### General
+
+- [ ] Improve design of the website
+  - [ ] Improve navbar (Jason)
+  - [ ] Get rid of ugly fonts and colors (Collaboration)
+  - [ ] Logo for the project (Eugene)
+  - [ ] Footer for page, get rid of the about page (Jason)
+- [ ] Document existing code (Everyone)
+- [ ] Delete any unused code (Eugene)
+- [ ] Deploy in production mode (Jason)
+- [ ] Remove all python wildcard imports and replace them with exact imports (Eugene)
+- [ ] Add more test cases (Eugene, Anderson, Jacob, Shaurya)
+- [ ] Update dependencies (Jason)
