@@ -36,7 +36,7 @@ class ItemDao(DatabaseObject):
         item = self.collection.find_one({"_id": ObjectId(Id)})
 
         # Serialize it into an Item object
-        newLocation = Location(item['location']['coordinates'])
+        newLocation = ItemLocation(item['location']['coordinates'])
 
         newUser = User(name=item['user']['name'], email=item['user']['email'],
                        phone=item['user']['phone'])
@@ -60,7 +60,7 @@ class ItemDao(DatabaseObject):
 
         for item in allItems:
             # Serialize it into an Item object
-            newLocation = Location(item['location']['coordinates'])
+            newLocation = ItemLocation(item['location']['coordinates'])
 
             newUser = User(name=item['user']['name'], email=item['user']['email'],
                            phone=item['user']['phone'])
@@ -125,7 +125,7 @@ class Item:
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
         self.found = found          # Should be a bool
-        self.location = location    # Should be a Location object
+        self.location = location    # Should be a ItemLocation object
         self.radius = radius        # Should be a float or int
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
@@ -176,11 +176,11 @@ class Item:
     @property
     def radius(self):
         return self.__radius
-    
+
     @radius.setter
     def radius(self, radius):
         self.__radius = radius
-        
+
     @property
     def tags(self):
         return self.__tags
@@ -215,7 +215,7 @@ class Item:
     @property
     def distance(self):
         return self.__distance
-    
+
     @distance.setter
     def distance(self, distance):
         self.__distance = distance
@@ -325,7 +325,7 @@ class User:
         return output
 
 
-class Location:
+class ItemLocation:
 
     def __init__(self, coordinates=None):
         self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats

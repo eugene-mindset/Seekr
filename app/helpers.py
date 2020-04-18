@@ -5,6 +5,7 @@ import numpy as np
 
 threshold = 0.85
 
+# TODO: the doc comment needs to be updated
 def imageMatch(item1, item2):
     """
         Creates the class.
@@ -15,8 +16,8 @@ def imageMatch(item1, item2):
         imPath1:str
             image path of the first image target image
         imPath2:str
-            image path of the second image 
-        
+            image path of the second image
+
         Return
         ------
         percent similarity range: [0, 1]
@@ -56,7 +57,7 @@ def imageMatch(item1, item2):
             for m,n in matches:
                 if m.distance < threshold*n.distance:
                     countGood += 1
-            
+
             if countGood > max_matches:
                 max_matches = countGood
 

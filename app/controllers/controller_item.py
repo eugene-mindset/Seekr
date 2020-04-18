@@ -1,26 +1,24 @@
 from base64 import standard_b64encode
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import math
-import os
-import smtplib
-import ssl
-import time
+
+from time import time as currTime
+
 from pathlib import Path
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
-import gensim.downloader as gens_api
-from werkzeug.utils import secure_filename
 
 from app import mongo
 from app.controllers.notifications import *
 from app.models.models import *
 from app.models.similarity import ItemSimilarity
 
-import gensim.downloader as api
-from gensim.models.keyedvectors import Word2VecKeyedVectors
+from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
+import gensim.downloader as gens_api
 
+import math
 
 items_router = Blueprint("items", __name__)
 
@@ -40,12 +38,12 @@ if modelLocation.exists():
     # there should be two files, 'sim_model_encoding' and the same but with an
     # extension of vectors.npy
     print(' * Loading model from local')
-    simModel = Word2VecKeyedVectors.load(str(modelLocation))
+    simModel = word2vec.load(str(modelLocation))
 else:
     # get the gensim model from online and save it for future use if
     # there is no file
     print(' * Loading model remotely')
-    simModel = api.load(simModelName)
+    simModel = gens_api.load(simModelName)
     simModel.save(str(modelLocation))
 
 
@@ -149,7 +147,7 @@ def add_item():
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
-    location = Location([float(request.form['latitude']),
+    location = ItemLocation([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
@@ -162,7 +160,7 @@ def add_item():
         encodedAsStr = encoded.decode()
         images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
 
-    timestamp = time.time()
+    timestamp = currTime()
     user = User(request.form['username'], request.form['email'],
                 request.form['phone'])
 
@@ -195,7 +193,7 @@ def update_item(Id):
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
-    location = Location([float(request.form['latitude']),
+    location = ItemLocation([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])

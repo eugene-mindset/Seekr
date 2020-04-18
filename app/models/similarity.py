@@ -198,7 +198,7 @@ class ItemSimilarity():
         for score, itemScore in zip(scores, self.itemScores):
             itemScore.score = score
 
-    def getSortedItems(self):
+    def getSortedItems(self, getScores=False):
         """
             Get the items in self by how well they scored.
 
@@ -210,19 +210,7 @@ class ItemSimilarity():
         results = [itemScore for itemScore in self.itemScores]
         results.sort(reverse=True)
 
-        return [itemScore.item for itemScore in results]
-
-    def getSortedItemsAndScores(self):
-        """
-            Get the items in self by how well they scored and
-            also return item with corresponding score
-
-            Return
-            ------
-            tuples with item and its score
-        """
-
-        results = [itemScore for itemScore in self.itemScores]
-        results.sort(reverse=True)
-
-        return [(itemScore.item, itemScore.score) for itemScore in results]
+        if getScores:
+            return [(itemScore.item, itemScore.score) for itemScore in results]
+        else:
+            return [itemScore.item for itemScore in results]

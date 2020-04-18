@@ -1,26 +1,25 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from math import radians, sin, cos, acos
-
 from smtplib import SMTP
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
 
 from app.helpers import *
-from app.models.models import *
+
+import math
 
 def send_mail(user_item, similar_items, found):
     sender_email = "seekr.oose@gmail.com"
     password = "Seekroose!"
-    
+
     port = 587  # For starttls
     smtp_server = "smtp.gmail.com"
     message = MIMEMultipart("alternative")
     message["Subject"] = f"Seekr Team: We found a Similar Items for You"
     message["From"] = sender_email
     message["To"] = user_item.user.email
-    
+
     # Create the plain-text and HTML version of your message
     text = """\
     Hi,
@@ -57,21 +56,21 @@ def send_mail(user_item, similar_items, found):
         print("email sent")
     except Exception as e:
         print(e)
-    
 
     smtp_serv.quit()
 
 
 def distance(item1, item2):
-    slat = radians(item1.location.coordinates[0])
-    slon = radians(item1.location.coordinates[1])
-    elat = radians(item2.location.coordinates[0])
-    elon = radians(item2.location.coordinates[1])
+    slat = math.radians(item1.location.coordinates[0])
+    slon = math.radians(item1.location.coordinates[1])
+    elat = math.radians(item2.location.coordinates[0])
+    elon = math.radians(item2.location.coordinates[1])
 
-    dist = 3958.8 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
+    dist = 3958.8 * math.acos(math.sin(slat)*math.sin(elat)
+        + math.cos(slat)*math.cos(elat)*math.cos(slon - elon))
     # dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
-      
+
 
 def radius_cutoff(items, queriedItem):
     results = []
@@ -91,10 +90,13 @@ def notify(queriedItem, simMatch):
         print("NO ITEMS")
         return
 
-    listOfItems = radius_cutoff(simMatch.get, queriedItem)
+    print(simMatch.getSortedItems())
+    listOfItems = radius_cutoff(simMatch.getSortedItems(), queriedItem)
+    simMatch.clearItems()
+    simMatch.addItems(listOfItems)
+    simMatch.scoreItems(queriedItem)
 
-
-    items = simMatch.getSortedItemsAndScores()
+    items = simMatch.getSortedItems(getScores=True)
     similar_items = []
 
     for item, score in items:
@@ -103,13 +105,8 @@ def notify(queriedItem, simMatch):
             similar_items.append(item)
 
     for item in similar_items:
-        if imageMatch(queriedItem.imageName, item.imageName) < 35: #Under 35 key point matches
+        if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
             similar_items.remove(item)
 
     if len(similar_items) != 0:
         send_mail(queriedItem, similar_items, found)
-
-def notify_all():
-    listOfItems = mongo_item_dao.findAll(tags)
-    for item in listOfItems:
-        notify(item)
