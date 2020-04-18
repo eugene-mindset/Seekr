@@ -63,6 +63,7 @@ export class AddItem extends Component {
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
+
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
     document.getElementById("imagesUpload").value = "";
     

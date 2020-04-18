@@ -125,7 +125,7 @@ def add_item():
 
     name = request.form['name']
     desc = request.form['desc']
-    found = request.form['found'] == 'True'
+    found = request.form['found'] == 'true'
     location = Location([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
@@ -162,7 +162,7 @@ def update_item(Id):
 
     name = request.form['name']
     desc = request.form['desc']
-    found = request.form['found'] == 'True'
+    found = request.form['found'] == 'true'
     location = Location([float(request.form['latitude']),
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
