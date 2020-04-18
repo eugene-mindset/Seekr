@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 import gensim.downloader as api
 
 from app.models import Item

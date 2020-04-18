@@ -1,13 +1,15 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+import math
+
 from smtplib import SMTP
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
 
 from app.helpers import *
 
-import math
+
 
 def send_mail(user_item, similar_items, found):
     sender_email = "seekr.oose@gmail.com"

@@ -1,5 +1,7 @@
 from base64 import standard_b64encode
 
+import math
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -10,15 +12,14 @@ from pathlib import Path
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
 
+from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
+import gensim.downloader as gens_api
+
 from app import mongo
 from app.controllers.notifications import *
 from app.models.models import *
 from app.models.similarity import ItemSimilarity
 
-from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
-import gensim.downloader as gens_api
-
-import math
 
 items_router = Blueprint("items", __name__)
 

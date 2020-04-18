@@ -1,8 +1,8 @@
 from abc import abstractmethod
+
 from enum import IntFlag
 
 from bson.objectid import ObjectId
-
 
 
 class DatabaseObject:

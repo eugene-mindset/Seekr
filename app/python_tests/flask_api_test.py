@@ -1,5 +1,7 @@
 import json
+
 from unittest import TestCase
+
 from flask_pymongo import MongoClient
 
 from app import create_app
