@@ -16,15 +16,13 @@
 
 ### Add
 
-<<<<<<< HEAD
-- [X] Set boundary for radius (no negative) should be front end (Anderson)
-- [ ] Clean up add item page (Anderson)
-  - [ ] Make map look smaller? (Andrew)
-  - [ ] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
-- [X] Limit so people can only upload a 12 mb picture (Anderson)
-- [X] Change the database so that items save images as binaries rather than images locally (Anderson)
-- [X] Allow the user to add multiple images when creating a listing (Anderson)
->>>>>>> d8fd6b5e9c96e5abc10dfda476bea20af4f14d86
+* [X] Set boundary for radius (no negative) should be front end (Anderson)
+* [ ] Clean up add item page (Anderson)
+  * [ ] Make map look smaller? (Andrew)
+  * [ ] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
+* [X] Limit so people can only upload a 12 mb picture (Anderson)
+* [X] Change the database so that items save images as binaries rather than images locally (Anderson)
+* [X] Allow the user to add multiple images when creating a listing (Anderson)
 
 ### Search
 
