@@ -50,7 +50,7 @@ else:
 
 @items_router.route("/")
 def hello():
-    return "Hey! You're not supposed to  be here!"
+    return "This is the API for the Seekr App!"
 
 
 @items_router.route('/items', methods=['GET'])
@@ -81,12 +81,14 @@ def get_all_items_timesorted(query):
 
     return jsonify(output), 200
 
+
 @items_router.route('/items/proximitysearch=<query>', methods=['GET'])
 def get_all_items_proximitysorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
     lat = request.args.get('lat')
     lon = request.args.get('lon')
+
     # get list of all items using DAO and specifying the tags
     listOfItems = mongo_item_dao.findAll(tags)
 
@@ -149,7 +151,7 @@ def add_item():
     desc = request.form['desc']
     found = request.form['found'] == 'true'
     location = ItemLocation([float(request.form['latitude']),
-                         float(request.form['longitude'])])
+                             float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
     
@@ -195,7 +197,7 @@ def update_item(Id):
     desc = request.form['desc']
     found = request.form['found'] == 'true'
     location = ItemLocation([float(request.form['latitude']),
-                         float(request.form['longitude'])])
+                             float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
     user = User(request.form['username'], request.form['email'],
