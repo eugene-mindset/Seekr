@@ -7,7 +7,7 @@ from flask_pymongo import MongoClient
 from app import create_app
 from app.mongo_inst import mongo
 from app.models import *
-from config import *
+from config import TestConfig
 
 
 class ApiTest(TestCase):
