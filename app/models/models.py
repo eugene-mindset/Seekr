@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import base64
 from enum import IntFlag
 
 from bson.objectid import ObjectId
@@ -37,13 +38,20 @@ class ItemDao(DatabaseObject):
     def findById(self, Id):
         # Get the item from our mongodb collection
         item = self.collection.find_one({"_id": ObjectId(Id)})
+
         # Serialize it into an Item object
         newLocation = Location(item['location']['coordinates'])
+
         newUser = User(name=item['user']['name'], email=item['user']['email'],
                        phone=item['user']['phone'])
+
+        images = []
+        for i in item['images']:
+            images.append(ItemImage(i['imageName'], i['imageType'], i['imageData']))
+
         newItem = Item(str(item['_id']), item['name'], item['desc'],
                        item['found'], newLocation, item['radius'],
-                       ItemTags(item['tags']), item['imageName'],
+                       ItemTags(item['tags']), images,
                        item['timestamp'], newUser, item['distance'])
 
         return newItem
@@ -56,12 +64,18 @@ class ItemDao(DatabaseObject):
         for item in allItems:
             # Serialize it into an Item object
             newLocation = Location(item['location']['coordinates'])
+
             newUser = User(name=item['user']['name'], email=item['user']['email'],
                            phone=item['user']['phone'])
+                           
+            images = []
+            for i in item['images']:
+                images.append(ItemImage(i['imageName'], i['imageType'], i['imageData']))
+
             newItem = Item(str(item['_id']), item['name'], item['desc'],
-                           item['found'], newLocation, item['radius'],
-                           ItemTags(item['tags']), item['imageName'],
-                           item['timestamp'], newUser, item['distance'])
+                        item['found'], newLocation, item['radius'],
+                        ItemTags(item['tags']), images,
+                        item['timestamp'], newUser, item['distance'])
 
             # check if we're not searching with tags
             # or if item has all the tags being searched for
@@ -72,7 +86,7 @@ class ItemDao(DatabaseObject):
 
     def insert(self, item):
         data = item.toDict() # Get item info formatted in a JSON friendly manner
-        data.pop('id') # Remove the id
+        data.pop('id') # Remove the id field
 
         # Insert the item into our mongodb collection,
         # get the ID it was assigned, give the item that id
@@ -87,7 +101,7 @@ class ItemDao(DatabaseObject):
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
         data.pop('timestamp') # remove the timestamp, shouldn't be updating it
-        data.pop('imageName') # remove imageName, don't know how we would handle an update to an image???
+        #data.pop('imageName') # remove imageName, don't know how we would handle an update to an image???
         # TODO: handle image updates
 
         # find the item in our mongodb collection by its id,
@@ -107,7 +121,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
-                 radius=None, tags=None, imageName=None, timestamp=None,
+                 radius=None, tags=None, images=[], timestamp=None,
                  user=None, distance=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
@@ -116,7 +130,7 @@ class Item:
         self.location = location    # Should be a Location object
         self.radius = radius        # Should be a float or int
         self.tags = tags            # Should be an ItemTags enum
-        self.imageName = imageName  # Should be a string
+        self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
         self.user = user            # Should be a User object
         self.distance = distance    # Should be a float
@@ -178,12 +192,12 @@ class Item:
         self.__tags = tags
 
     @property
-    def imageName(self):
-        return self.__imageName
+    def images(self):
+        return self.__images
 
-    @imageName.setter
-    def imageName(self, imageName):
-        self.__imageName = imageName
+    @images.setter
+    def images(self, images):
+        self.__images = images
     
     @property
     def timestamp(self):
@@ -223,7 +237,7 @@ class Item:
             return False
         if self.tags != otherItem.tags:
             return False
-        if self.imageName != otherItem.imageName:
+        if self.images != otherItem.images:
             return False
         if self.timestamp != otherItem.timestamp:
             return False
@@ -275,7 +289,7 @@ class Item:
             'location'  : self.location.toDict() if self.location is not None else 'None',
             'radius'    : self.radius,
             'tags'      : ItemTags.toInt(self.tags),
-            'imageName' : self.imageName,
+            'images'    : [i.toDict() for i in self.images],
             'timestamp' : self.timestamp,
             'user'      : self.user.toDict() if self.user is not None else 'None',
             'distance'  : self.distance
@@ -343,7 +357,7 @@ class User:
 class Location:
 
     def __init__(self, coordinates=None):
-        self.coordinates = coordinates # Should be a list or tuple with two elements, both floats
+        self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats
 
     @property
     def coordinates(self):
@@ -368,6 +382,62 @@ class Location:
         output = {
             'type'        : 'Point',
             'coordinates' : self.coordinates
+        }
+
+        return output
+
+
+class ItemImage:
+
+    def __init__(self, imageName=None, imageType=None, imageData=None):
+        self.imageName = imageName  # Should be a string
+        self.imageType = imageType  # Should be a string (image/png or image/jpeg)
+        self.imageData = imageData  # Should be bytes encoded as a URL safe base64 string
+
+    @property
+    def imageName(self):
+        return self.__imageName
+
+    @imageName.setter
+    def imageName(self, imageName):
+        self.__imageName = imageName
+
+    @property
+    def imageType(self):
+        return self.__imageType
+
+    @imageType.setter
+    def imageType(self, imageType):
+        self.__imageType = imageType
+
+    @property
+    def imageData(self):
+        return self.__imageData
+
+    @imageData.setter
+    def imageData(self, imageData):
+        self.__imageData = imageData
+
+    def __eq__(self, otherItemImage):
+        if self.imageName != otherItemImage.imageName:
+            return False
+        if self.imageType != otherItemImage.imageType:
+            return False
+        if self.imageData != otherItemImage.imageData:
+            return False
+        return True
+
+    def __str__(self):
+        return self.imageName
+
+    def __rept__(self):
+        return str(self)
+
+    def toDict(self):
+        output = {
+            'imageName' : self.imageName,
+            'imageType' : self.imageType,
+            'imageData' : self.imageData
         }
 
         return output

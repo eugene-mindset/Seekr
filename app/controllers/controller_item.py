@@ -1,3 +1,4 @@
+import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import math
@@ -129,12 +130,21 @@ def get_all_items_sorted(query):
 @items_router.route('/items', methods=['POST'])
 def add_item():
     
-    f = None
+    """ f = None
     # save image to local folder
     if 'image' in request.files:
         f = request.files['image']
         # Use secure_filename secure_filename(f.filename)
-        f.save(os.path.join(IMAGE_FOLDER, f.filename))
+        f.save(os.path.join(IMAGE_FOLDER, f.filename)) """
+
+    uploadedImages = request.files.getlist('image')
+    print(uploadedImages)
+    images = []
+    for i in uploadedImages:
+        encoded = base64.urlsafe_b64encode(i.read())
+        encodedAsStr = encoded.decode()
+        images.append(ItemImage(i.filename, i.mimetype, encodedAsStr))
+    print(images)
 
     name = request.form['name']
     desc = request.form['desc']
@@ -143,19 +153,18 @@ def add_item():
                          float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    imageName = f.filename if f != None else ''
     timestamp = time.time()
     user = User(request.form['username'], request.form['email'],
                 request.form['phone'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, imageName=imageName,
+                radius=radius, tags=tags, images=images,
                 timestamp=timestamp, user=user, distance=0.0)
 
     mongo_item_dao.insert(item)
 
     # want to check whenever an item is added if their are similar items to send notifications to 
-    notify(item)
+    #notify(item)
 
     return jsonify(item.toDict()), 200
 

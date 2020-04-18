@@ -15,7 +15,7 @@ export class AddItem extends Component {
     found: false,
     desc: '',
     location: [39.3299, -76.6205],
-    img: '',
+    img: [],
     radius: 0,
     username: "",
     email: "",
@@ -63,7 +63,7 @@ export class AddItem extends Component {
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: '', radius: 0, username: "", email: "", phone: ""});
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
     document.getElementById("imageUpload").value = "";
     
     var boxes = document.getElementsByClassName('box');
@@ -77,10 +77,48 @@ export class AddItem extends Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  validateFiles = (uploadedFiles) => {
+    // Check to make sure images are below 12 Mib, and that they are only png or jpg
+    let totalSize = 0;
+
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      let currFile = uploadedFiles[i]
+      if (currFile.type !== 'image/png' && currFile.type !== 'image/jpeg') {
+        alert('png and jpeg only');
+        return false;
+      }
+      totalSize += currFile.size
+    }
+
+    totalSize = (totalSize / 1024) / 1024 // Convert from bytes to MiB
+    totalSize *= (4/3) // convert to size of base64 encoded string
+    if (totalSize >= 12) {
+      alert('file sizes too large');
+      return false;
+    }
+    return true;
+  }
+
   fileSelectedHandler = (e) => {
     this.setState({
-      img: e.target.files[0]
-    })
+      img: []
+    });
+
+    var uploadedFiles = []
+    for (let i = 0; i < e.target.files.length; i++) {
+      uploadedFiles.push(e.target.files[i])
+    }
+
+    let filesOK = this.validateFiles(uploadedFiles);
+
+    if (!filesOK) {
+      document.getElementById("imageUpload").value = "";
+      return false;
+    }
+
+    this.setState({
+      img: uploadedFiles
+    });
   }
 
   render() {
@@ -141,6 +179,8 @@ export class AddItem extends Component {
           <input
             type="file"
             id="imageUpload"
+            multiple
+            accept="image/png, image/jpeg"
             onChange={this.fileSelectedHandler}
           />
           <input
