@@ -6,25 +6,22 @@ import Tags from './Tags'
 import ItemTags from '../helper/ItemTags'
 
 export class Item extends Component {
-  getStyle = () => {
-    return{
-      background: '#f4f4f4',
-      padding: '10px',
-      borderBottom: '1px #ccc dotted',
-    }
-  }
 
-  getImage = imageName => <Card.Img variant="bottom" src={`/fetch_image/${ imageName }`} />;
+  getImage = images => {
+    // Only returns the first image for now
+    let imageLink = 'data:' + images[0].imageType + ';base64,' + images[0].imageData;
+    return(<Card.Img variant="bottom" src={ imageLink } />)
+  };
+
 
   getTime = timestamp => {
     var date = new Date(timestamp * 1000);
     return date.toLocaleString();
   }
 
-
   
   render() {
-    const { id, name, found, desc, location, imageName, timestamp, tags, user} = this.props.item;
+    const { id, name, found, desc, location, images, timestamp, tags, user} = this.props.item;
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
@@ -35,7 +32,7 @@ export class Item extends Component {
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
         <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
-        { imageName ? this.getImage(imageName) : <span></span>}
+        { images.length !== 0 ? this.getImage(images) : <span></span>}
         <Card.Subtitle>
           <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
         </Card.Subtitle>
@@ -47,6 +44,7 @@ export class Item extends Component {
     )
   }
 }
+
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,

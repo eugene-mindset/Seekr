@@ -16,7 +16,10 @@ export default class Add extends Component {
     data.append('username', username);
     data.append('email', email);
     data.append('phone', phone);
-    data.append('image', img);
+    img.forEach(i => {
+      // Append multiple files to request form
+      data.append('image', i);
+    });
       
     axios({
       method: 'post',
