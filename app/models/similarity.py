@@ -1,14 +1,15 @@
 import numpy as np
-import string
-import sys
+
+from string import punctuation as punct
 
 from gensim import corpora
 from gensim.models import WordEmbeddingSimilarityIndex
 from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
-from gensim.utils import simple_preprocess
 
 from .models import Item
 
+
+# ignore all outputs to stderr from numpy
 np.seterr(all="ignore")
 
 class ItemSimilarity():
@@ -56,7 +57,7 @@ class ItemSimilarity():
         self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
 
     def preprocess(self, preStr):
-        processed = "".join(l if l not in string.punctuation else " " for l in preStr)
+        processed = "".join(l if l not in punct else " " for l in preStr)
         tokenized = processed.split()
 
         return tokenized

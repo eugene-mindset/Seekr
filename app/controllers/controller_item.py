@@ -141,7 +141,6 @@ def get_all_items_sorted(query):
     queriedItem = Item(name=query, desc="")
 
     simMatch = ItemSimilarity(simModel)
-    simMatch.model = embedding
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
 
@@ -178,8 +177,17 @@ def add_item():
 
     mongo_item_dao.insert(item)
 
-    # want to check whenever an item is added if their are similar items to send notifications to 
-    notify(item)
+    # want to check whenever an item is added if their are similar items to send notifications to
+    listOfItems = mongo_item_dao.findAll(tags)
+    if item.found is True:
+        listOfItems = [item for item in listOfItems if item.found is False]
+    else:
+        listOfItems = [item for item in listOfItems if item.found is True]
+
+    simMatch = ItemSimilarity(simModel)
+    simMatch.addItems(listOfItems)
+
+    notify(item, simMatch)
 
     return jsonify(item.toDict()), 200
 

@@ -1,6 +1,5 @@
 import json
-import unittest
-
+from unittest import TestCase
 from flask_pymongo import MongoClient, PyMongo
 
 from app import create_app
@@ -9,7 +8,7 @@ from app.models import *
 from config import *
 
 
-class ApiTest(unittest.TestCase):
+class ApiTest(TestCase):
 
     def setUp(self):
         # Set up test database

@@ -2,9 +2,6 @@ from abc import abstractmethod
 from enum import IntFlag
 
 from bson.objectid import ObjectId
-from flask import jsonify
-
-from app import mongo
 
 
 class DatabaseObject:

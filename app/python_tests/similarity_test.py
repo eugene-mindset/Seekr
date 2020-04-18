@@ -1,12 +1,11 @@
-import unittest
-
+from unittest import TestCase
 import gensim.downloader as api
 
 from app.models import Item
 from app.models.similarity import ItemSimilarity
 
 
-class ItemSimTest(unittest.TestCase):
+class ItemSimTest(TestCase):
 
     @classmethod
     def setUpClass(cls):

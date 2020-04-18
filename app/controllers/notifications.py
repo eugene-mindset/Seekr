@@ -1,24 +1,14 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from math import radians, sin, cos, acos
-import sched
-import smtplib
-import ssl
-import time 
+
+from smtplib import SMTP
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
-import gensim.downloader as gens_api
 
-from app import mongo
 from app.helpers import *
 from app.models.models import *
-from app.models.similarity import ItemSimilarity
-
-
-embedding = gens_api.load('glove-wiki-gigaword-50')
-items = mongo.db.items # our items collection in mongodb
-mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
-
 
 def send_mail(user_item, similar_items, found):
     sender_email = "seekr.oose@gmail.com"
@@ -57,7 +47,7 @@ def send_mail(user_item, similar_items, found):
     message.attach(part1)
     message.attach(part2)
 
-    smtp_serv = smtplib.SMTP(smtp_server, port)
+    smtp_serv = SMTP(smtp_server, port)
     smtp_serv.ehlo()
     smtp_serv.starttls()
     smtp_serv.ehlo()
@@ -92,48 +82,34 @@ def radius_cutoff(items, queriedItem):
     return results
 
 
-def notify(queriedItem):
-    
-    listOfItems = mongo_item_dao.findAll(tags=0b0000_0000)
-    found = "missing"
-    
-    # if queriedItem is a found item then only need to compare similarity with missing items and vice versa
-    if queriedItem.found is True:
-        listOfItems = [item for item in listOfItems if item.found is False]
-    
-    else:
-        listOfItems = [item for item in listOfItems if item.found is True]
-        found = "found"
-        
-    if len(listOfItems) != 0:
-        listOfItems = radius_cutoff(listOfItems, queriedItem)
- 
-    if len(listOfItems) != 0:
-        simMatch = ItemSimilarity(modelName=None)
-        simMatch.model = embedding
-        simMatch.addItems(listOfItems)
-        simMatch.scoreItems(queriedItem)
+def notify(queriedItem, simMatch):
+    # get right string to return
+    found = 'found' if queriedItem.found == True else 'missing'
 
-        items = simMatch.getSortedItemsAndScores()
-        similar_items = []
-
-        for item, score in items:
-            print("Score: " + str(score) + "...")
-            if score >= 0.5:
-                similar_items.append(item)
-        
-        for item in similar_items:
-            if imageMatch(queriedItem.imageName, item.imageName) < 35: #Under 35 key point matches
-                similar_items.remove(item)
-
-        if len(similar_items) != 0:
-            send_mail(queriedItem, similar_items, found)
-    else:
+    # if no items, return
+    if len(simMatch.itemScores) == 0:
         print("NO ITEMS")
+        return
 
+    listOfItems = radius_cutoff(simMatch.get, queriedItem)
+
+
+    items = simMatch.getSortedItemsAndScores()
+    similar_items = []
+
+    for item, score in items:
+        print("Score: " + str(score) + "...")
+        if score >= 0.5:
+            similar_items.append(item)
+
+    for item in similar_items:
+        if imageMatch(queriedItem.imageName, item.imageName) < 35: #Under 35 key point matches
+            similar_items.remove(item)
+
+    if len(similar_items) != 0:
+        send_mail(queriedItem, similar_items, found)
 
 def notify_all():
     listOfItems = mongo_item_dao.findAll(tags)
     for item in listOfItems:
         notify(item)
-        
