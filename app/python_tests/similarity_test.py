@@ -22,8 +22,7 @@ class ItemSimTest(unittest.TestCase):
                                                     + ", is a google pixel")
 
     def setUp(self):
-        self.itemSim = ItemSimilarity(modelName=None)
-        self.itemSim.model = self.model
+        self.itemSim = ItemSimilarity(self.model)
 
     def tearDown(self):
         return

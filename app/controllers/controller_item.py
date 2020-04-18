@@ -6,6 +6,7 @@ import os
 import smtplib
 import ssl
 import time
+from pathlib import Path
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
 from flask_pymongo import PyMongo
@@ -17,17 +18,40 @@ from app.controllers.notifications import *
 from app.models.models import *
 from app.models.similarity import ItemSimilarity
 
+import gensim.downloader as api
+from gensim.models.keyedvectors import Word2VecKeyedVectors
+
 
 items_router = Blueprint("items", __name__)
 
-embedding = gens_api.load('glove-wiki-gigaword-50')
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
+
+# the name of the model for item similarity to download
+# for more models: https://github.com/RaRe-Technologies/gensim-data
+simModelName = 'glove-wiki-gigaword-50'
+simModel = None
+
+# Load in the proper gensim files
+modelLocation = Path('./sim_model_encoding')
+
+if modelLocation.exists():
+    # if the file exists, load that file
+    # there should be two files, 'sim_model_encoding' and the same but with an
+    # extension of vectors.npy
+    print(' * Loading model from local')
+    simModel = Word2VecKeyedVectors.load(str(modelLocation))
+else:
+    # get the gensim model from online and save it for future use if
+    # there is no file
+    print(' * Loading model remotely')
+    simModel = api.load(simModelName)
+    simModel.save(str(modelLocation))
 
 
 @items_router.route("/")
 def hello():
-    return "Hey! You're not supposed to be here!"
+    return "Hey! You're not supposed to  be here!"
 
 
 @items_router.route('/items', methods=['GET'])
@@ -37,7 +61,7 @@ def get_all_items():
 
     # get list of all items using DAO and specifying the tags
     listOfItems = mongo_item_dao.findAll(tags)
-    
+
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
@@ -110,7 +134,7 @@ def get_all_items_sorted(query):
 
     queriedItem = Item(name=query, desc="")
 
-    simMatch = ItemSimilarity(modelName=None)
+    simMatch = ItemSimilarity(simModel)
     simMatch.model = embedding
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)

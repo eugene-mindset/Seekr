@@ -46,7 +46,7 @@ def send_mail(user_item, similar_items, found):
         </p>
     </body>
     </html>
-    """ 
+    """
 
     # Turn these into plain/html MIMEText objects
     part1 = MIMEText(text, "plain")

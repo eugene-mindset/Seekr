@@ -2,17 +2,14 @@ import numpy as np
 import string
 import sys
 
-import gensim
 from gensim import corpora
-import gensim.downloader as api
-from gensim.matutils import softcossim
-from gensim.models.keyedvectors import Word2VecKeyedVectors
 from gensim.models import WordEmbeddingSimilarityIndex
 from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
 from gensim.utils import simple_preprocess
 
 from .models import Item
 
+np.seterr(all="ignore")
 
 class ItemSimilarity():
     """
@@ -32,19 +29,16 @@ class ItemSimilarity():
             self.sentence = None
             self.score = 0
 
-
         def __lt__(self, other):
             return self.score < other.score
-
 
         def __le__(self, other):
             return self.score <= other.score
 
-
         def __str__(self):
             return self.item.name.lower() + ": " + self.item.desc.lower()
 
-    def __init__(self, modelName: str='', filepath: str=''):
+    def __init__(self, model):
         """
             Creates the class.
 
@@ -58,29 +52,14 @@ class ItemSimilarity():
         # public properties
         self.itemScores = []
         self.dictionary = corpora.Dictionary()
-        self.model = None
-        self.wordEmbedding = None
-
-        # load the default (fasttext-wiki) model if no modelName is passed,
-        # if the name is NoneType, load no model, else load the specified model
-        if filepath != '':
-            self.model = Word2VecKeyedVectors.load(filepath)
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
-        elif modelName == None:
-            pass
-        elif modelName != '':
-            self.model = api.load(modelName)
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
-        else:
-            self.model = api.load('fasttext-wiki-news-subwords-300')
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+        self.model = model
+        self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
 
     def preprocess(self, preStr):
         processed = "".join(l if l not in string.punctuation else " " for l in preStr)
         tokenized = processed.split()
 
         return tokenized
-
 
     def addItem(self, item):
         """
@@ -100,7 +79,6 @@ class ItemSimilarity():
         # add new entries to items and dictionary, update flags
         self.itemScores.append(newEntry)
         self.dictionary.merge_with(newDictEntry)
-
 
     def addItems(self, items):
         """
@@ -187,7 +165,6 @@ class ItemSimilarity():
         simMatrix = SparseTermSimilarityMatrix(self.wordEmbedding, corpus)
         return SoftCosineSimilarity([x.sentence for x in self.itemScores], simMatrix)
 
-
     def scoreItems(self, itemToCompare):
         """
             Score every item listing in self. The score is how similar that item
@@ -220,7 +197,6 @@ class ItemSimilarity():
         for score, itemScore in zip(scores, self.itemScores):
             itemScore.score = score
 
-
     def getSortedItems(self):
         """
             Get the items in self by how well they scored.
@@ -234,10 +210,10 @@ class ItemSimilarity():
         results.sort(reverse=True)
 
         return [itemScore.item for itemScore in results]
-    
+
     def getSortedItemsAndScores(self):
         """
-            Get the items in self by how well they scored and 
+            Get the items in self by how well they scored and
             also return item with corresponding score
 
             Return
