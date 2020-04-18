@@ -1,8 +1,9 @@
 from abc import abstractmethod
-
 from enum import IntFlag
 
 from bson.objectid import ObjectId
+
+from app.mongo_inst import mongo
 
 
 class DatabaseObject:
@@ -32,6 +33,10 @@ class ItemDao(DatabaseObject):
     def __init__(self, collection):
         super().__init__(collection)
 
+        # Register the location attribute for documents in mongo to be used as a
+        # geospatial index for querying
+        self.collection.create_index([('location', '2dsphere' )])
+
     def findById(self, Id):
         # Get the item from our mongodb collection
         item = self.collection.find_one({"_id": ObjectId(Id)})
@@ -58,6 +63,41 @@ class ItemDao(DatabaseObject):
         # Get all the items from our mongodb collection
         listOfItems = []
         allItems = self.collection.find()
+
+        for item in allItems:
+            # Serialize it into an Item object
+            newLocation = ItemLocation(item['location']['coordinates'])
+
+            newUser = User(name=item['user']['name'], email=item['user']['email'],
+                           phone=item['user']['phone'])
+
+            images = []
+            for img in item['images']:
+                images.append(ItemImage(img['imageName'], img['imageType'],
+                                        img['imageData']))
+
+            newItem = Item(str(item['_id']), item['name'], item['desc'],
+                        item['found'], newLocation, item['radius'],
+                        ItemTags(item['tags']), images,
+                        item['timestamp'], newUser, item['distance'])
+
+            # check if we're not searching with tags
+            # or if item has all the tags being searched for
+            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags):
+                listOfItems.append(newItem)
+
+        return listOfItems
+
+    def findByLocation(self, tags, lat, lon):
+        listOfItems = []
+
+        # Execute mongo query to retrieve the items sorted by proximty to the
+        # latitude and longitude
+        allItems = self.collection.find({
+            "location": {
+                '$nearSphere': [float(lat), float(lon)]
+            }
+        })
 
         for item in allItems:
             # Serialize it into an Item object

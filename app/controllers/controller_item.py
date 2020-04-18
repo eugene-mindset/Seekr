@@ -10,7 +10,7 @@ from time import time as currTime
 from pathlib import Path
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
-from flask_pymongo import PyMongo
+#from flask_pymongo import PyMongo
 
 from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
@@ -89,35 +89,10 @@ def get_all_items_proximitysorted(query):
     lat = request.args.get('lat')
     lon = request.args.get('lon')
 
-    # get list of all items using DAO and specifying the tags
-    listOfItems = mongo_item_dao.findAll(tags)
 
-    #Calculate distance between objects
-    distItems = []
-    for item in listOfItems:
-        R = 6373.0
-        lat1 = math.radians(float(lat))
-        lon1 = math.radians(float(lon))
-        lat2 = math.radians(float(item.location.coordinates[0]))
-        lon2 = math.radians(float(item.location.coordinates[1]))
+    listOfItems = mongo_item_dao.findByLocation(tags, lat, lon)
 
-        dlon = lon2 - lon1
-        dlat = lat2 - lat1
-
-        a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
-
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance = R * c
-        item.distance = distance
-        distItems.append(item)
-        print(item.name + " " + str(item.distance))
-
-    # sort items by most recently added (higher timestamp)
-    distItems.sort(key=lambda x: x.distance, reverse=False)
-
-    #output = [pair[1].toDict() for pair in scoredItems]
-    output = [item.toDict() for item in distItems]
-
+    output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
 
