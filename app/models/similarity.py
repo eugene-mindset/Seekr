@@ -2,11 +2,7 @@ import numpy as np
 import string
 import sys
 
-import gensim
 from gensim import corpora
-import gensim.downloader as api
-from gensim.matutils import softcossim
-from gensim.models.keyedvectors import Word2VecKeyedVectors
 from gensim.models import WordEmbeddingSimilarityIndex
 from gensim.similarities import Similarity, SparseTermSimilarityMatrix, SoftCosineSimilarity
 from gensim.utils import simple_preprocess
@@ -44,7 +40,7 @@ class ItemSimilarity():
         def __str__(self):
             return self.item.name.lower() + ": " + self.item.desc.lower()
 
-    def __init__(self, modelName: str='', filepath: str=''):
+    def __init__(self, model):
         """
             Creates the class.
 
@@ -58,22 +54,8 @@ class ItemSimilarity():
         # public properties
         self.itemScores = []
         self.dictionary = corpora.Dictionary()
-        self.model = None
-        self.wordEmbedding = None
-
-        # load the default (fasttext-wiki) model if no modelName is passed,
-        # if the name is NoneType, load no model, else load the specified model
-        if filepath != '':
-            self.model = Word2VecKeyedVectors.load(filepath)
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
-        elif modelName == None:
-            pass
-        elif modelName != '':
-            self.model = api.load(modelName)
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
-        else:
-            self.model = api.load('fasttext-wiki-news-subwords-300')
-            self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
+        self.model = model
+        self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
 
     def preprocess(self, preStr):
         processed = "".join(l if l not in string.punctuation else " " for l in preStr)

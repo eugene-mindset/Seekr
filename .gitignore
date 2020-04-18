@@ -327,7 +327,8 @@ Temporary Items
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
-test.py
-word2vec
-word2vec.vectors.npy
+
+# files to be downloaded locally only
+sim_model_encoding
+sim_model_encoding.vectors.npy
 

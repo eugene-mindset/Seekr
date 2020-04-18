@@ -34,7 +34,7 @@
 
 * As someone who lost something, I want to be able to filter items based on designated tags, so I can have an easier time finding an item by its properties or functionality.
 * As a user, I want to upload my contact information so someone else knows how to reach me for a lost/found item.
-* As a user, I want to log in with my jhed id, so I don’t have to make a new account.
+* As a user, I want to log in with my Facebook or Google account, so I don’t have to make a new account.
 * As someone who has lost something, I want to be notified if someone finds an item similar to mine so I don't have to constantly check the website.
 
 ## Software Architecture
