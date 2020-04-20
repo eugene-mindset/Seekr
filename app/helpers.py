@@ -41,9 +41,9 @@ def imageMatch(item1, item2):
             # Currently using SIFT, but can change
             imageDetector = cv2.xfeatures2d.SIFT_create()
 
-            # Get keypoints and descriptors
-            kp1, des1 = imageDetector.detectAndCompute(img1_data,None)
-            kp2, des2 = imageDetector.detectAndCompute(img2_data,None)
+            # Get the descriptors (but not keypoints)
+            _, des1 = imageDetector.detectAndCompute(img1_data,None)
+            _, des2 = imageDetector.detectAndCompute(img2_data,None)
 
             # BFMatcher with default params
             bf = cv2.BFMatcher()
