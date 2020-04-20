@@ -4,6 +4,8 @@
 
 ### UML Diagram
 
+![UML Diagram](./additional/uml5.png)
+
 ## Wireframe
 
 ## Iteration Backlog
