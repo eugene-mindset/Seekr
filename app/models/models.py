@@ -49,25 +49,18 @@ class ItemDao(DatabaseObject):
     def findAll(self, tags):
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
-        listOfItems = []
         filteredItems = self.collection.find({
             'tags': {
                 '$bitsAllSet': int(tags)
             }
         })
 
-        for itemDoc in filteredItems:
-            # Serialize it into an Item object
-            newItem = Item.fromDict(itemDoc)
-
-            listOfItems.append(newItem)
-
-        return listOfItems
+        # Serialize documents into Item objects and return them in a list
+        return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByLocation(self, tags, lat, lon):
         # Mongo query to retrieve the items sorted by proximty to the
         # latitude and longitude and also have the specified tags
-        listOfItems = []
         filteredItems = self.collection.find({
             '$and': [
                 {
@@ -83,31 +76,26 @@ class ItemDao(DatabaseObject):
             ]
         })
 
-        for itemDoc in filteredItems:
-            # Serialize it into an Item object
-            newItem = Item.fromDict(itemDoc)
-
-            listOfItems.append(newItem)
-
-        return listOfItems
+        # Serialize documents into Item objects and return them in a list
+        return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByMostRecent(self, tags):
         # Mongo query to retrieve the items sorted by their timestamp in
         # descending order and also have the speicifed tags
-        listOfItems = []
         filteredItems = self.collection.find({
             'tags': {
                 '$bitsAllSet': int(tags)
             }
         }).sort([('timestamp', -1)])
 
-        for itemDoc in filteredItems:
-            # Serialize it into an Item object
-            newItem = Item.fromDict(itemDoc)
+        # Serialize documents into Item objects and return them in a list
+        return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
-            listOfItems.append(newItem)
+    def findByQuery(self, query):
+        queriedItems = self.collection.find(query)
 
-        return listOfItems
+        # Serialize documents into Item objects and return them in a list
+        return [Item.fromDict(itemDoc) for itemDoc in queriedItems]
 
     def insert(self, item):
         data = item.toDict() # Get item info formatted in a JSON friendly manner
