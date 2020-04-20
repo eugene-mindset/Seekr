@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Checkbox from "./Checkbox";
 import GoogleMap from "../pages/GoogleMap";
 import ItemTags from "../helper/ItemTags";
-import "../../App.css";
+import "../../../public/css/Search.css";
 
 export class SearchItem extends Component {
   componentDidMount = () => {

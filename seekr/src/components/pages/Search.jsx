@@ -4,7 +4,7 @@ import Items from "../item/Items";
 import axios from "axios";
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
-import "../../App.css";
+import "../../../public/css/Search.css";
 
 const columnStyle = {
   display: "flex",

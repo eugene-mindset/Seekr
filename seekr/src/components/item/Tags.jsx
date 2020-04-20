@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../../App.css";
+import "../../../public/css/Search.css";
 
 export default class Tags extends Component {
   getTag = (tag) => {

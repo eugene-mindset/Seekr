@@ -21,9 +21,6 @@ export class AddItem extends Component {
     email: "",
     phone: ""
   }
-
-  // idea: make checkboxes as a state that keeps track of checked or not
-  // would need to modify for SearchItem as well
   
   toggleCheckbox = val => {
     if ((this.selectedCheckboxes & val) === val) {
