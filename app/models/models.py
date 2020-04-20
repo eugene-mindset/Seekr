@@ -39,87 +39,73 @@ class ItemDao(DatabaseObject):
 
     def findById(self, Id):
         # Get the item from our mongodb collection
-        item = self.collection.find_one({"_id": ObjectId(Id)})
+        itemDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
         # Serialize it into an Item object
-        newLocation = ItemLocation(item['location']['coordinates'])
-
-        newUser = User(name=item['user']['name'], email=item['user']['email'],
-                       phone=item['user']['phone'])
-
-        images = []
-        for img in item['images']:
-            images.append(ItemImage(img['imageName'], img['imageType'],
-                                    img['imageData']))
-
-        newItem = Item(str(item['_id']), item['name'], item['desc'],
-                       item['found'], newLocation, item['radius'],
-                       ItemTags(item['tags']), images,
-                       item['timestamp'], newUser, item['distance'])
+        newItem = Item.fromDict(itemDoc)
 
         return newItem
 
     def findAll(self, tags):
-        # Get all the items from our mongodb collection
+        # Mongo query to get the items that have the specified tags from our
+        # mongodb collection
         listOfItems = []
-        allItems = self.collection.find()
+        filteredItems = self.collection.find({
+            'tags': {
+                '$bitsAllSet': int(tags)
+            }
+        })
 
-        for item in allItems:
+        for itemDoc in filteredItems:
             # Serialize it into an Item object
-            newLocation = ItemLocation(item['location']['coordinates'])
+            newItem = Item.fromDict(itemDoc)
 
-            newUser = User(name=item['user']['name'], email=item['user']['email'],
-                           phone=item['user']['phone'])
-
-            images = []
-            for img in item['images']:
-                images.append(ItemImage(img['imageName'], img['imageType'],
-                                        img['imageData']))
-
-            newItem = Item(str(item['_id']), item['name'], item['desc'],
-                        item['found'], newLocation, item['radius'],
-                        ItemTags(item['tags']), images,
-                        item['timestamp'], newUser, item['distance'])
-
-            # check if we're not searching with tags
-            # or if item has all the tags being searched for
-            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags):
-                listOfItems.append(newItem)
+            listOfItems.append(newItem)
 
         return listOfItems
 
     def findByLocation(self, tags, lat, lon):
+        # Mongo query to retrieve the items sorted by proximty to the
+        # latitude and longitude and also have the specified tags
         listOfItems = []
-
-        # Execute mongo query to retrieve the items sorted by proximty to the
-        # latitude and longitude
-        allItems = self.collection.find({
-            "location": {
-                '$nearSphere': [float(lat), float(lon)]
-            }
+        filteredItems = self.collection.find({
+            '$and': [
+                {
+                    "location": {
+                        '$nearSphere': [float(lat), float(lon)]
+                    }
+                },
+                {
+                    'tags': {
+                        '$bitsAllSet': int(tags)
+                    }
+                }
+            ]
         })
 
-        for item in allItems:
+        for itemDoc in filteredItems:
             # Serialize it into an Item object
-            newLocation = ItemLocation(item['location']['coordinates'])
+            newItem = Item.fromDict(itemDoc)
 
-            newUser = User(name=item['user']['name'], email=item['user']['email'],
-                           phone=item['user']['phone'])
+            listOfItems.append(newItem)
 
-            images = []
-            for img in item['images']:
-                images.append(ItemImage(img['imageName'], img['imageType'],
-                                        img['imageData']))
+        return listOfItems
 
-            newItem = Item(str(item['_id']), item['name'], item['desc'],
-                        item['found'], newLocation, item['radius'],
-                        ItemTags(item['tags']), images,
-                        item['timestamp'], newUser, item['distance'])
+    def findByMostRecent(self, tags):
+        # Mongo query to retrieve the items sorted by their timestamp in
+        # descending order and also have the speicifed tags
+        listOfItems = []
+        filteredItems = self.collection.find({
+            'tags': {
+                '$bitsAllSet': int(tags)
+            }
+        }).sort([('timestamp', -1)])
 
-            # check if we're not searching with tags
-            # or if item has all the tags being searched for
-            if (tags == ItemTags.NONE) or (tags & newItem.tags == tags):
-                listOfItems.append(newItem)
+        for itemDoc in filteredItems:
+            # Serialize it into an Item object
+            newItem = Item.fromDict(itemDoc)
+
+            listOfItems.append(newItem)
 
         return listOfItems
 
@@ -161,7 +147,7 @@ class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
                  radius=None, tags=None, images=[], timestamp=None,
-                 user=None, distance=None):
+                 user=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -172,7 +158,29 @@ class Item:
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
         self.user = user            # Should be a User object
-        self.distance = distance    # Should be a float
+
+    @classmethod
+    def fromDict(cls, doc):
+        item = cls()
+        item.Id = str(doc['_id'])
+        item.name = doc['name']
+        item.desc = doc['desc']
+        item.found = doc['found']
+        item.location = ItemLocation(doc['location']['coordinates'])
+        item.radius = doc['radius']
+        item.tags = ItemTags(doc['tags'])
+        
+        images = []
+        for img in doc['images']:
+            images.append(ItemImage(img['imageName'], img['imageType'],
+                                    img['imageData']))
+        item.images = images
+
+        item.timestamp = doc['timestamp']
+        item.user = User(name=doc['user']['name'], email=doc['user']['email'],
+                         phone=doc['user']['phone'])
+
+        return item
 
     @property
     def Id(self):
@@ -253,14 +261,6 @@ class Item:
     def user(self, user):
         self.__user = user
 
-    @property
-    def distance(self):
-        return self.__distance
-
-    @distance.setter
-    def distance(self, distance):
-        self.__distance = distance
-
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
             return False
@@ -282,8 +282,6 @@ class Item:
             return False
         if self.user != otherItem.user:
             return False
-        if self.distance != otherItem.distance:
-            return False
         return True
 
     def __str__(self):
@@ -303,8 +301,7 @@ class Item:
             'tags'      : ItemTags.toInt(self.tags),
             'images'    : [i.toDict() for i in self.images],
             'timestamp' : self.timestamp,
-            'user'      : self.user.toDict() if self.user is not None else 'None',
-            'distance'  : self.distance
+            'user'      : self.user.toDict() if self.user is not None else 'None'
         }
 
         return output

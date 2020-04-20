@@ -70,15 +70,9 @@ def get_all_items_timesorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-    # get list of all items using DAO and specifying the tags
-    listOfItems = mongo_item_dao.findAll(tags)
+    listOfItems = mongo_item_dao.findByMostRecent(tags)
 
-    # sort items by most recently added (higher timestamp)
-    listOfItems.sort(key=lambda x: x.timestamp, reverse=True)
-
-    #output = [pair[1].toDict() for pair in scoredItems]
     output = [item.toDict() for item in listOfItems]
-
     return jsonify(output), 200
 
 
@@ -143,7 +137,7 @@ def add_item():
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=timestamp, user=user, distance=0.0)
+                timestamp=timestamp, user=user)
 
     mongo_item_dao.insert(item)
 
@@ -178,7 +172,7 @@ def update_item(Id):
                 request.form['phone'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, user=user, distance=0.0)
+                radius=radius, tags=tags, user=user)
 
     mongo_item_dao.update(item)
     return jsonify(item.toDict()), 200
