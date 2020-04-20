@@ -8,6 +8,8 @@
 
 ## Wireframe
 
+![Wireframe](./additional/wireframe3.bmp)
+
 ## Iteration Backlog
 
 ### User Stories to implement
