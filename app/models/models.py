@@ -166,19 +166,12 @@ class Item:
         item.name = doc['name']
         item.desc = doc['desc']
         item.found = doc['found']
-        item.location = ItemLocation(doc['location']['coordinates'])
+        item.location = ItemLocation.fromDict(doc['location'])
         item.radius = doc['radius']
         item.tags = ItemTags(doc['tags'])
-        
-        images = []
-        for img in doc['images']:
-            images.append(ItemImage(img['imageName'], img['imageType'],
-                                    img['imageData']))
-        item.images = images
-
+        item.images = [ItemImage.fromDict(img) for img in doc['images']]
         item.timestamp = doc['timestamp']
-        item.user = User(name=doc['user']['name'], email=doc['user']['email'],
-                         phone=doc['user']['phone'])
+        item.user = User.fromDict(doc['user'])
 
         return item
 
@@ -314,6 +307,15 @@ class User:
         self.email = email  # Should be a string
         self.phone = phone  # Should be a string
 
+    @classmethod
+    def fromDict(cls, doc):
+        user = cls()
+        user.name = doc['name']
+        user.email = doc['email']
+        user.phone = doc['phone']
+
+        return user
+
     @property
     def name(self):
         return self.__name
@@ -368,6 +370,13 @@ class ItemLocation:
     def __init__(self, coordinates=None):
         self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats
 
+    @classmethod
+    def fromDict(cls, doc):
+        location = cls()
+        location.coordinates = doc['coordinates']
+
+        return location
+
     @property
     def coordinates(self):
         return self.__coordinates
@@ -402,6 +411,15 @@ class ItemImage:
         self.imageName = imageName  # Should be a string
         self.imageType = imageType  # Should be a string (image/png or image/jpeg)
         self.imageData = imageData  # Should be a string (standard base64)
+
+    @classmethod
+    def fromDict(cls, doc):
+        image = cls()
+        image.imageName = doc['imageName']
+        image.imageType = doc['imageType']
+        image.imageData = doc['imageData']
+
+        return image
 
     @property
     def imageName(self):
