@@ -13,6 +13,7 @@ export default class Navigation extends React.Component {
               <Nav.Link href="/add">Add</Nav.Link>
               <Nav.Link href="/">Search</Nav.Link>
               <Nav.Link href="/about">About</Nav.Link>
+              <Nav.Link href="/userinfo">User Info</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
