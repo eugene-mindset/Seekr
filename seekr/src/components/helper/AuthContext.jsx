@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
-export const RootContext = React.createContext();
+export const AuthContext = React.createContext();
 
-export default function AuthContext({children}) {
+// this component will store the authentication status as well as the 
+// authenticated information that we need.
+export const AuthContextProvider = ({children}) => {
 	// check cookie for auth
 	// previous status of authentication
 	const prevAuth = document.cookie.match(new RegExp('(^| )auth=([^;]+)')) || false;
@@ -22,7 +24,7 @@ export default function AuthContext({children}) {
 		[auth, authBody]
 	)
 	
-	const defailtContext = {
+	const defaultContext = {
 		auth,
 		setAuth,
 		authBody,
@@ -30,8 +32,8 @@ export default function AuthContext({children}) {
 	}
 
 	return (
-		<RootContext.Provider value = {defaultContext}>
+		<AuthContext.Provider value={defaultContext}>
 			{children}
-		</RootContext.Provider>
+		</AuthContext.Provider>
 	);
 };
