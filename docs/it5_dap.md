@@ -54,6 +54,6 @@
 * [ ] Document existing code (Everyone)
 * [X] Delete any unused code (Eugene)
 * [ ] Deploy in production mode (Jason)
-* [ ] Remove all python wildcard imports and replace them with exact imports (Eugene)
+* [X] Remove all python wildcard imports and replace them with exact imports (Eugene)
 * [ ] Add more test cases (Eugene, Anderson, Jacob, Shaurya)
 * [ ] Update dependencies (Jason)
