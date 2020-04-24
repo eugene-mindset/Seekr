@@ -5,10 +5,10 @@ import Navigation from './components/layout/Navigation';
 import About from './components/pages/About';
 import Search from './components/pages/Search';
 import Add from './components/pages/Add';
-import Facebook from './FacebookLogin'; 
+import Facebook from './components/Users/Facebook'; 
 
 import './App.css';
-import FacebookLogin from './FacebookLogin';
+import FacebookLogin from './components/Users/Facebook';
 
 class App extends Component {
 

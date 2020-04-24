@@ -1,5 +1,7 @@
 import React from 'react'
 import { Nav, Navbar } from 'react-bootstrap';
+import Facebook from '../Users/Facebook';
+
 
 export default class Navigation extends React.Component {
   render() {
@@ -13,6 +15,8 @@ export default class Navigation extends React.Component {
               <Nav.Link href="/add">Add</Nav.Link>
               <Nav.Link href="/">Search</Nav.Link>
               <Nav.Link href="/about">About</Nav.Link>
+              <Nav.Link as={Facebook}>Other Sign</Nav.Link>
+              <Nav.Link href="/user-login">Sign In</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
