@@ -39,9 +39,9 @@ export const AuthContextProvider = ({children}) => {
 	)
 	
 	const defaultContext = {
-		auth: '',
+		auth,
 		setAuth,
-		authBody: '',
+		authBody,
 		setAuthBody
 	}
 

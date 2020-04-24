@@ -56,3 +56,5 @@ const Facebook = () => {
         </div>
     )
     }
+
+    export default Facebook;

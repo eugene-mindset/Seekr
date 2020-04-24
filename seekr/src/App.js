@@ -18,15 +18,7 @@ import { AuthContext, AuthContextProvider } from "./components/helper/AuthContex
 //<Facebook parentCallback={this.callbackFunction}/>
 
 const App = () => {
-  const { auth, setAuth, authBody, setAuthBody } = useContext(AuthContext)
-
-  const checkAuth = () => {
-    if (auth != '') {
-      return true
-    } else {
-      return false
-    }
-  }
+  
   return (
     <AuthContextProvider>
       <Router>
@@ -37,7 +29,7 @@ const App = () => {
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} />
             <Route path="/unauthorized" component={Errorpage}/>}
-            <ProtectedRoute exact path='/user-login' user={true} component={About} />
+            <ProtectedRoute exact path='/user-login' user={false} component={About} />
             {/* login should redirect if logged in */}
             <Route path="/login" component={Login}/>  
             
