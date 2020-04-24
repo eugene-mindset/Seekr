@@ -5,13 +5,18 @@ import { Redirect } from 'react-router-dom'
 
 
 export default class Facebook extends Component {
-    state = {
-        isLoggedIn: false,
-        userID: '',
-        name: '',
-        email: '',
-        picture: ''
-    }
+    constructor(props) {
+        super(props);
+        state = {
+            isLoggedIn: false,
+            userID: '',
+            name: '',
+            email: '',
+            picture: ''
+        }
+      }
+    
+
 
     componentClicked = () => console.log('clicked');
 
