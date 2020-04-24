@@ -21,7 +21,6 @@ class App extends Component {
           <div className="site-container">
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} />
-            <Route path="/user-login" component={Facebook} />
           </div>
         </div>
       </Router>
