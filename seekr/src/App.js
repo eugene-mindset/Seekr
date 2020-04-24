@@ -31,7 +31,7 @@ const App = () => {
             <Route path="/unauthorized" component={Errorpage}/>}
             <ProtectedRoute exact path='/user-login' user={false} component={About} />
             {/* login should redirect if logged in */}
-            <Route path="/login" component={Login}/>  
+            <Route path="/login" component={Facebook}/>  
             
             {/* userinfo and logout should redirect if not logged in */}
             <Route path="/userinfo" component={UserInfo}/>  

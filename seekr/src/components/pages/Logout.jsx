@@ -13,7 +13,7 @@ const Logout = () => {
 		setAuthBody(null);
 	}
 	
-	if (auth == "user") {
+	if (auth != 'null' && auth != 'undefined') {
 		return (
 			<div style={{marginTop: "100px"}}>			
 				<button onClick={onClick} >

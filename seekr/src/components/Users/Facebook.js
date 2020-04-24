@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Button from 'react-bootstrap'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+//import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import FacebookLogin from 'react-facebook-login'
 import { Redirect } from 'react-router-dom'
 import ProtectedRoute from '../../ProtectedRoute';
 import { useContext } from 'react'
@@ -15,7 +16,7 @@ const Facebook = () => {
     }
 
     const doRedirect = () => {
-        return <Redirect to='/user-login' />
+        return <Redirect to='/userinfo' />
     }
 
     const componentClicked = () => {
@@ -27,6 +28,7 @@ const Facebook = () => {
 
         setAuth(response.userID);
         setAuthBody(response.email);
+
     }
     let faceContent;
 
@@ -42,12 +44,12 @@ const Facebook = () => {
                 fields="name,email,picture"
                 onClick={componentClicked}
                 callback={responseFacebook}
-                render={renderProps => (
-                <button onClick={renderProps.onClick}>This is my custom FB button</button>
-                )}
+                //render={renderProps => (
+                //<button onClick={renderProps.onClick}>This is my custom FB button</button>
+                //)}
             />
-            );
-            
+        );
+        return <Redirect to="/userinfo" />
 
     }
     return (
