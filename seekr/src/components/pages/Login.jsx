@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../helper/AuthContext';
+import { Redirect } from 'react-router';
 
 const Login = () => {
   const { auth, setAuth, authBody, setAuthBody } = useContext(AuthContext)
@@ -12,14 +13,22 @@ const Login = () => {
 		console.log("authBody is now: " + authBody);
 	}
 
-	return (
-		<div style={{marginTop: "100px"}}>
-			{/* press button to login */}
-			<button onClick={onClick}>
-				Log in!
-			</button>
-		</div>
-	);
+
+	if (auth == "user") {
+		// if logged in already, redirect to search page
+		return ( 
+			<Redirect to="/userinfo" />
+		);
+	} else {		
+		return (
+			<div style={{marginTop: "100px"}}>
+				{/* press button to login */}
+				<button onClick={onClick}>
+					Log in!
+				</button>
+			</div>
+		);
+	}
 };
 
 export default Login;
