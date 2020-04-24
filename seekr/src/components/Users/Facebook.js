@@ -2,21 +2,24 @@ import React, { Component } from 'react'
 import Button from 'react-bootstrap'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { Redirect } from 'react-router-dom'
+import ProtectedRoute from '../../ProtectedRoute';
 
 
 export default class Facebook extends Component {
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             isLoggedIn: false,
-            userID: '',
             name: '',
             email: '',
             picture: ''
-        }
+        };
+        this.responseFacebook = this.responseFacebook.bind(this);
       }
     
-
+    sendData = () => {
+        this.props.parentCallback(this.state.isLoggedIn);
+    }
 
     componentClicked = () => console.log('clicked');
 
@@ -34,12 +37,17 @@ export default class Facebook extends Component {
             picture: response.picture.data.url
         });
 
+        this.props.updateParent;
+
+        this.sendData();
+
     }
     render() {
         let faceContent;
 
         if(this.state.isLoggedIn) {
-            return <Redirect to='/user-login' />
+
+            //return <Redirect to='/user-login' user={true}/>
         } else {
 
             faceContent = (

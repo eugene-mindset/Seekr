@@ -14,6 +14,13 @@ import FacebookLogin from './components/Users/Facebook';
 
 class App extends Component {
 
+  state = {
+    user: false
+  }
+  callbackFunction = (isLoggedIn) => {
+    this.setState({user: isLoggedIn})
+  }
+
   render() {
     return (
       <Router>
@@ -23,7 +30,8 @@ class App extends Component {
           <div className="site-container">
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} />
-            <ProtectedRoute exact path='/user-login' user={user} component={About} />
+            <Facebook parentCallback={this.callbackFunction}/>
+            <ProtectedRoute exact path='/user-login' user={this.user} component={About} />
           </div>
         </div>
       </Router>
