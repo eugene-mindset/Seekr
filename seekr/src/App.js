@@ -6,6 +6,8 @@ import About from "./components/pages/About";
 import Search from "./components/pages/Search";
 import Add from "./components/pages/Add";
 import UserInfo from "./components/pages/UserInfo";
+import Login from "./components/pages/Login";
+import Logout from "./components/pages/Logout";
 
 import "./App.css";
 import { AuthContext, AuthContextProvider } from "./components/helper/AuthContext";
@@ -20,7 +22,13 @@ const App = () => {
           <div className="site-container">
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} /> 
-            <Route path="/userinfo" component={UserInfo}/>           
+
+            {/* login should redirect if logged in */}
+            <Route path="/login" component={Login}/>  
+            
+            {/* userinfo and logout should redirect if not logged in */}
+            <Route path="/userinfo" component={UserInfo}/>  
+            <Route path="/logout" component={Logout}/>  
           </div>
         </div>
       </Router>
