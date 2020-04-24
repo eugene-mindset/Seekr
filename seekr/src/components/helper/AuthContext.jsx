@@ -18,6 +18,14 @@ export const AuthContextProvider = ({children}) => {
 	const prevAuthBody = getCookieValue("authBody") || null;
 	
 	const [auth, setAuth] = useState(prevAuth);
+	/**
+	 * state {
+	 * 	auth: prevAuth
+	 * }
+	 * 
+	 * this.setState{ auth: hello } == setAuth(hello)
+	 * 
+	 */
 	const [authBody, setAuthBody] = useState(prevAuthBody);
 
 	// whenever auth or authBody is changed, execute useEffect

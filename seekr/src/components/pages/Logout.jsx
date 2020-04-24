@@ -7,6 +7,7 @@ const Logout = () => {
 
 	const onClick = () => {
 		console.log("logging out!");
+		
 		// log out
 		setAuth(null);
 		setAuthBody(null);
