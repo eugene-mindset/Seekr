@@ -3,7 +3,7 @@ import { Nav, Navbar } from "react-bootstrap";
 import { AuthContext } from "../helper/AuthContext";
 
 const Navigation = () => {
-  const { auth } = useContext(AuthContext)
+  const { auth, authBody } = useContext(AuthContext)
   return (
 
     <div>
@@ -15,7 +15,8 @@ const Navigation = () => {
             <Nav.Link href="/add">Add</Nav.Link>
             <Nav.Link href="/">Search</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
-            {auth ? <Nav.Link href="/userinfo">User Info</Nav.Link> : null}
+            {auth=="user" ?  <Nav.Link href="/userinfo">User Info</Nav.Link> : null}
+            {auth=="user" ? <Nav.Link href="/logout">Log Out</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

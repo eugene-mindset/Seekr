@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react'
 
 export const AuthContext = React.createContext();
 
+function getCookieValue(a) {
+	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : null;
+}
+
 // this component will store the authentication status as well as the 
 // authenticated information that we need.
 export const AuthContextProvider = ({children}) => {
 	// check cookie for auth
 	// previous status of authentication
-	const prevAuth = document.cookie.match(new RegExp('(^| )auth=([^;]+)')) || false;
+	const prevAuth = getCookieValue("auth") || null;
 	
 	// previous authentication information
-	const prevAuthBody = document.cookie.match(new RegExp('(^| )authBody=([^;]+)')) || false;
+	const prevAuthBody = getCookieValue("authBody") || null;
 	
 	const [auth, setAuth] = useState(prevAuth);
 	const [authBody, setAuthBody] = useState(prevAuthBody);
@@ -19,7 +24,8 @@ export const AuthContextProvider = ({children}) => {
 	useEffect(
 		// this anonymous function will automatically update the cookies
 		() => {
-			document.cookie = "auth=" + auth + "; authBody=" + authBody + ";path=/";
+			document.cookie = "auth=" + auth + "; path=/";
+			document.cookie = "authBody=" + authBody + "; path=/";
 		},
 		[auth, authBody]
 	)
