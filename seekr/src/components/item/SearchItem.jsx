@@ -17,6 +17,7 @@ export class SearchItem extends Component {
     location: [39.3299, -76.6205],
   };
 
+
   callbackFunction = (coordinates) => {
     this.setState({ location: coordinates });
   };

@@ -3,72 +3,56 @@ import Button from 'react-bootstrap'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { Redirect } from 'react-router-dom'
 import ProtectedRoute from '../../ProtectedRoute';
+import { useContext } from 'react'
+import { AuthContext } from '../helper/AuthContext';
 
 
-export default class Facebook extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoggedIn: false,
-            name: '',
-            email: '',
-            picture: ''
-        };
-        this.responseFacebook = this.responseFacebook.bind(this);
-      }
+const Facebook = () => {
+    const { auth, setAuth, authBody, setAuthBody } = useContext(AuthContext)
     
-    sendData = () => {
+    const sendData = () => {
         this.props.parentCallback(this.state.isLoggedIn);
     }
 
-    componentClicked = () => console.log('clicked');
-
-    doRedirect = () => {
+    const doRedirect = () => {
         return <Redirect to='/user-login' />
     }
 
-    responseFacebook = response => {
+    const componentClicked = () => {
+        console.log('CLICK!!!!')
+    }
+
+    const responseFacebook = response => {
         console.log(response);
 
-        this.setState({
-            isLoggedIn: true,
-            name: response.userID,
-            email: response.email,
-            picture: response.picture.data.url
-        });
+        setAuth(response.userID);
+        setAuthBody(response.email);
+    }
+    let faceContent;
 
-        this.props.updateParent;
+    if(auth=='' && authBody == '') {
 
-        this.sendData();
+        return <Redirect to='/user-login'/>
+    } else {
+
+        faceContent = (
+            <FacebookLogin
+                appId="232984641269662"
+                autoLoad={false}
+                fields="name,email,picture"
+                onClick={componentClicked}
+                callback={responseFacebook}
+                render={renderProps => (
+                <button onClick={renderProps.onClick}>This is my custom FB button</button>
+                )}
+            />
+            );
+            
 
     }
-    render() {
-        let faceContent;
-
-        if(this.state.isLoggedIn) {
-
-            //return <Redirect to='/user-login' user={true}/>
-        } else {
-
-            faceContent = (
-                <FacebookLogin
-                  appId="232984641269662"
-                  autoLoad={false}
-                  fields="name,email,picture"
-                  onClick={this.componentClicked}
-                  callback={this.responseFacebook}
-                  render={renderProps => (
-                  <button onClick={renderProps.onClick}>This is my custom FB button</button>
-                  )}
-                />
-              );
-              
-
-        }
-        return (
-            <div>
-                {faceContent}
-            </div>
-        )
+    return (
+        <div>
+            {faceContent}
+        </div>
+    )
     }
-}
