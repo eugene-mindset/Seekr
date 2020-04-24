@@ -11,8 +11,7 @@ const columnStyle = {
   flexWrap: "wrap",
   justifyContent: "center",
   marginTop: "70px",
-  marginLeft: "10px"
-
+  marginLeft: "10px",
 };
 
 export default class Search extends Component {
@@ -79,7 +78,7 @@ export default class Search extends Component {
 
         <br />
         <div className="results">
-          <CardColumns style={columnStyle} >
+          <CardColumns style={columnStyle}>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
         </div>
