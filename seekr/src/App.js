@@ -7,6 +7,7 @@ import Search from './components/pages/Search';
 import Add from './components/pages/Add';
 import Facebook from './components/Users/Facebook';
 import ProtectedRoute from './ProtectedRoute';
+import Errorpage from './components/pages/Errorpage'
 
 
 import './App.css';
@@ -18,6 +19,7 @@ class App extends Component {
     user: false
   }
   callbackFunction = (isLoggedIn) => {
+    console.log(isLoggedIn);
     this.setState({user: isLoggedIn})
   }
 
@@ -31,6 +33,7 @@ class App extends Component {
             <Route path="/add" component={Add} />
             <Route path="/about" component={About} />
             <Facebook parentCallback={this.callbackFunction}/>
+            <Route path="/unauthorized" component={Errorpage}/>}
             <ProtectedRoute exact path='/user-login' user={this.user} component={About} />
           </div>
         </div>
