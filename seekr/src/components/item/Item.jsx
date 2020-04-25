@@ -25,13 +25,15 @@ export class Item extends Component {
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
+    // dummy stuff cuz too lazy to convert to hooks
+    var auth = 'hello'
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
         <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
-        <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
+        {auth!='null' && auth!='undefined' ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
         { images.length !== 0 ? this.getImage(images) : <span></span>}
         <Card.Subtitle>
           <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
@@ -45,6 +47,7 @@ export class Item extends Component {
   }
 }
 
+// 
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
