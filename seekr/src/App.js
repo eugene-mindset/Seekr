@@ -26,10 +26,9 @@ const App = () => {
           <Navigation />
           <Route exact path="/" component={Search} />
           <div className="site-container">
-            <Route path="/add" component={Add} />
+            <ProtectedRoute path="/add" user={false} component={Add} />
             <Route path="/about" component={About} />
             <Route path="/unauthorized" component={Errorpage}/>}
-            <ProtectedRoute exact path='/user-login' user={false} component={About} />
             {/* login should redirect if logged in */}
             <Route path="/login" component={Facebook}/>  
             

@@ -11,6 +11,7 @@ const Logout = () => {
 		// log out
 		setAuth(null);
 		setAuthBody(null);
+		return <Redirect to="/" />
 	}
 	
 	if (auth != 'null' && auth != 'undefined') {

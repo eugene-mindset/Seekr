@@ -14,7 +14,7 @@ const Login = () => {
 	}
 
 
-	if (auth == "user") {
+	if (auth != "null" && auth != 'undefined') {
 		// if logged in already, redirect to search page
 		return ( 
 			<Redirect to="/userinfo" />

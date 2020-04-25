@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-export default class Errorpage extends Component {
-    render() {
-        return (
+const Errorpage = () => {
+    return (
             <div>
-                Did not Login Error
+                <h1>Did not Login Please Try Again</h1>
             </div>
-        )
-    }
+    )
 }
+
+export default Errorpage;
