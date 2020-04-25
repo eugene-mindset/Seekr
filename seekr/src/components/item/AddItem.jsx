@@ -18,8 +18,7 @@ export class AddItem extends Component {
     img: [],
     radius: 0,
     username: "",
-    email: "",
-    phone: ""
+    email: ""
   }
   
   toggleCheckbox = val => {
@@ -59,9 +58,9 @@ export class AddItem extends Component {
     }
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
-      this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
+      this.state.img, this.state.radius, this.state.username, this.state.email);
 
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: ""});
     document.getElementById("imagesUpload").value = "";
     
     var boxes = document.getElementsByClassName('box');
@@ -163,14 +162,6 @@ export class AddItem extends Component {
             style={{ flex: '10', padding: '5px' }}
             placeholder="email..."
             value={this.state.email}
-            onChange={this.onChange}
-          />
-          <input
-            type="text"
-            name="phone"
-            style={{ flex: '10', padding: '5px' }}
-            placeholder="phone number..."
-            value={this.state.phone}
             onChange={this.onChange}
           />
           <input

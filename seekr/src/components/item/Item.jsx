@@ -26,7 +26,7 @@ export class Item extends Component {
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     // dummy stuff cuz too lazy to convert to hooks
-    var auth = 'hello'
+    var auth = 'null'
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
@@ -36,7 +36,7 @@ export class Item extends Component {
         {auth!='null' && auth!='undefined' ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
         { images.length !== 0 ? this.getImage(images) : <span></span>}
         <Card.Subtitle>
-          <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
+          <small className="text-muted">{"Contact: " + user.name + " " + user.email}</small>
         </Card.Subtitle>
         <Card.Footer>
           <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>

@@ -290,17 +290,15 @@ class Item:
 
 class User:
 
-    def __init__(self, name=None, email=None, phone=None):
+    def __init__(self, name=None, email=None):
         self.name = name    # Should be a string
         self.email = email  # Should be a string
-        self.phone = phone  # Should be a string
 
     @classmethod
     def fromDict(cls, doc):
         user = cls()
         user.name = doc['name']
         user.email = doc['email']
-        user.phone = doc['phone']
 
         return user
 
@@ -320,25 +318,15 @@ class User:
     def email(self, email):
         self.__email = email
 
-    @property
-    def phone(self):
-        return self.__phone
-
-    @phone.setter
-    def phone(self, phone):
-        self.__phone = phone
-
     def __eq__(self, otherUser):
         if self.name != otherUser.name:
             return False
         if self.email != otherUser.email:
             return False
-        if self.phone != otherUser.phone:
-            return False
         return True
 
     def __str__(self):
-        return self.name + ': ' + self.email + ', ' + self.phone
+        return self.name + ': ' + self.email
 
     def __repr__(self):
         return str(self)
@@ -347,7 +335,6 @@ class User:
         output = {
             'name'  : self.name,
             'email' : self.email,
-            'phone' : self.phone
         }
 
         return output

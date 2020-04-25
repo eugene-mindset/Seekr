@@ -15,7 +15,6 @@ export default class Add extends Component {
     data.append('tags', tags);
     data.append('username', username);
     data.append('email', email);
-    data.append('phone', phone);
     img.forEach(i => {
       // Append multiple files to request form
       data.append('image', i);
