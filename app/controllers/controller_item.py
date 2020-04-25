@@ -16,8 +16,8 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
 
 from app import mongo
-from app.controllers.notifications import *
-from app.models.models import *
+from app.controllers.notifications import notify
+from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User
 from app.models.similarity import ItemSimilarity
 
 
