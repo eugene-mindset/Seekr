@@ -22,6 +22,7 @@ a, .navbar-nav, .nav-link {
 .profile {
   display: flex;
   margin-top: 50px;
+  background-color: blueviolet;
 }
 
 .profile-pic {
@@ -33,4 +34,16 @@ a, .navbar-nav, .nav-link {
   font-weight: bold;
   margin-left: 10px;
   
+}
+
+.user-results {
+  background-color: bisque;
+  /* margin-left: -500px; */
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  background-color: yellow;
+  align-items: stretch;
 }
