@@ -346,7 +346,8 @@ class UserDao(DatabaseObject):
 
 class User:
 
-    def __init__(self, name=None, email=None, optIn=None):
+    def __init__(self, Id=None, name=None, email=None, optIn=None):
+        self.Id = Id
         self.name = name    # Should be a string
         self.email = email  # Should be a string
         self.optIn = optIn  # Should be a boolean
@@ -354,11 +355,20 @@ class User:
     @classmethod
     def fromDict(cls, doc):
         user = cls()
+        user.Id = str(doc['_id'])
         user.name = doc['name']
         user.email = doc['email']
         user.optIn = doc['optIn']
 
         return user
+
+    @property
+    def Id(self):
+        return self.__Id
+    
+    @Id.setter
+    def Id(self, Id):
+        self.__Id = Id
 
     @property
     def name(self):
@@ -385,6 +395,8 @@ class User:
         self.__optIn = optIn
 
     def __eq__(self, otherUser):
+        if self.Id != otherUser.Id:
+            return False
         if self.name != otherUser.name:
             return False
         if self.email != otherUser.email:
@@ -401,6 +413,7 @@ class User:
 
     def toDict(self):
         output = {
+            'id'    : self.Id,
             'name'  : self.name,
             'email' : self.email,
             'optIn' : self.optIn

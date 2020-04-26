@@ -3,6 +3,8 @@ import FacebookLogin from "react-facebook-login";
 import { Redirect } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
+import axios from "axios";
+
 
 const Facebook = () => {
   const { setName, setEmail, userID, setUserID, setProfilePic } = useContext(
@@ -29,7 +31,21 @@ const Facebook = () => {
     setName(response.name);
     setProfilePic(response.profilePic);
     console.log(response.email);
-    return <Redirect to="/userinfo" />;
+    
+    var optin = false;
+    var data = new FormData();
+    data.append("username", response.name);
+    data.append("email", response.email);
+    data.append("optIn", optin);
+
+    axios({
+        method: "post",
+        url: "/userinfo",
+        data: data,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    
+      return <Redirect to="/userinfo" />;
   };
   let faceContent;
 
