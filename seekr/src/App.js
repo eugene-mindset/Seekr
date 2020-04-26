@@ -29,8 +29,8 @@ const App = () => {
             <ProtectedRoute path="/add" user={false} component={Add} />
             <Route path="/about" component={About} />
             <Route path="/unauthorized" component={Errorpage}/>}
-            {/* login should redirect if logged in */}
-            <Route path="/login" component={Facebook}/>  
+            {/* Temporarily using Login component instead of Facebook Component */}
+            <Route path="/login" component={Login}/>  
             
             {/* userinfo and logout should redirect if not logged in */}
             <Route path="/userinfo" component={UserInfo}/>  

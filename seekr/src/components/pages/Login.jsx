@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../helper/AuthContext';
 import { Redirect } from 'react-router';
+import Facebook from '../Users/Facebook';
 
 const Login = () => {
   const { auth, setAuth, authBody, setAuthBody } = useContext(AuthContext)
@@ -27,6 +28,7 @@ const Login = () => {
 					Log in!
 				</button>
 			</div>
+			// <Facebook></Facebook>
 		);
 	}
 };

@@ -19,3 +19,18 @@ a, .navbar-nav, .nav-link {
   }
 }
 
+.profile {
+  display: flex;
+  margin-top: 50px;
+}
+
+.profile-pic {
+  height: 150px;
+  width: 150px;
+}
+
+.contact-info {
+  font-weight: bold;
+  margin-left: 10px;
+  
+}

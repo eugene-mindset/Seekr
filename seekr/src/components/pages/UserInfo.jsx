@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../helper/AuthContext";
+import Profile from "../Users/Profile";
+import UserSearchedItems from "../Users/UserSearchedItems";
 
 const UserInfo = () => {
-  const { auth, authBody } = useContext(AuthContext);
-
   return (
-		<div style={{ marginTop: "100px" }}>
-			Hi {authBody}, you are {auth}
-		</div>
-	);
+    <div>
+      <Profile></Profile>
+      <UserSearchedItems></UserSearchedItems>
+    </div>
+  );
 };
+
 
 
 export default UserInfo;
