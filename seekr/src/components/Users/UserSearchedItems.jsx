@@ -1,16 +1,45 @@
-import React from 'react'
+import React, { useState, useContext } from "react";
+import CardColumns from "react-bootstrap/CardColumns";
+import Items from "../item/Items";
+import axios from "axios";
+import { AuthContext } from "../helper/AuthContext";
 
-export default function UserSearchedItems() {
-	return (
-		<div>
-			
-		</div>
-	)
+const columnStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  marginTop: "70px",
+  marginLeft: "10px",
+};
+
+function UserSearchedItems() {
+  const [items, setItems] = useState([]);
+	const {email} = useContext(AuthContext);
+
+  const searchItem = () => {
+    setItems([]);
+    axios.get("/items/user=" + email).then((res) =>
+      res.data.map((item) => {
+        setItems(items => [...items, item]);
+      })
+    );
+  };
+
+  let onClick = () => {
+    searchItem();
+  };
+
+  return (
+    <div className="user-results">
+      <button onClick={onClick}>Click me</button>
+      <div>
+				Items that you posted:
+        <CardColumns style={columnStyle}>
+          <Items items={items} />
+        </CardColumns>
+      </div>
+    </div>
+  );
 }
 
-// Axios call to get recent items
-// axios.get("/items/timesearch=" + name + "?tags=" + tags).then((res) =>
-// res.data.map((item) => {
-// 	return this.setState({ items: [...this.state.items, item] });
-// })
-// );
+export default UserSearchedItems;
