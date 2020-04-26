@@ -16,7 +16,7 @@ export class AddItem extends Component {
     desc: "",
     location: [39.3299, -76.6205],
     img: [],
-    radius: 0,
+    radius: 0
   };
 
   toggleCheckbox = (val) => {
@@ -69,9 +69,7 @@ export class AddItem extends Component {
       desc: "",
       location: [39.3299, -76.6205],
       img: [],
-      radius: 0,
-      username: "",
-      email: "",
+      radius: 0
     });
     document.getElementById("imagesUpload").value = "";
 

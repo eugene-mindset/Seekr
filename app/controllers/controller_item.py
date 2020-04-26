@@ -159,7 +159,8 @@ def add_item():
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
 
-    notify(item, simMatch)
+    if item.user.optIn:
+        notify(item, simMatch)
 
     return jsonify(item.toDict()), 200
 
