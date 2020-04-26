@@ -11,16 +11,16 @@ from app.helpers import *
 
 
 
-def send_mail(user_item, similar_items, found):
+def send_mail(user_item, similar_item, found):
     sender_email = "seekr.oose@gmail.com"
     password = "Seekroose!"
 
     port = 587  # For starttls
     smtp_server = "smtp.gmail.com"
     message = MIMEMultipart("alternative")
-    message["Subject"] = f"Seekr Team: We found a Similar Items for You"
+    message["Subject"] = f"Seekr Team: a Similar Item was Added!"
     message["From"] = sender_email
-    message["To"] = user_item.user.email
+    message["To"] = similar_item.user.email
 
     # Create the plain-text and HTML version of your message
     text = """\
@@ -31,9 +31,9 @@ def send_mail(user_item, similar_items, found):
     html = f"""\
     <html>
     <body>
-        <p>Hi {user_item.user.name}!<br>
-        You recently added: {user_item.name}.
-        <br>Here are some similar {found} items: {similar_items}
+        <p>Hi {similar_item.user.name}!<br>
+        You recently added: {similar_item.name}.
+        <br>An item was added that was similar to what you're looking for! {found}: {user_item}
         </p>
     </body>
     </html>
@@ -110,5 +110,7 @@ def notify(queriedItem, simMatch):
         if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
             similar_items.remove(item)
 
-    if len(similar_items) != 0:
-        send_mail(queriedItem, similar_items, found)
+    for item in similar_items:
+        send_mail(queriedItem, item, found)
+    #if len(similar_items) != 0:
+    #    send_mail(queriedItem, similar_items, found)
