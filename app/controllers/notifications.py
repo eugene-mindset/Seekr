@@ -11,7 +11,7 @@ from app.helpers import *
 
 
 
-def send_mail(user_item, similar_items, found):
+def sendMail(user_item, similar_items, found):
     sender_email = "seekr.oose@gmail.com"
     password = "Seekroose!"
 
@@ -74,7 +74,7 @@ def distance(item1, item2):
     return dist
 
 
-def radius_cutoff(items, queriedItem):
+def radiusCutOff(items, queriedItem):
     results = []
 
     for item in items:
@@ -83,17 +83,16 @@ def radius_cutoff(items, queriedItem):
     return results
 
 
-def notify(queriedItem, simMatch):
+def getSimItems(queriedItem, simMatch):
     # get right string to return
     found = 'found' if queriedItem.found == True else 'missing'
 
     # if no items, return
     if len(simMatch.itemScores) == 0:
         print("NO ITEMS")
-        return
+        return [], ''
 
-    print(simMatch.getSortedItems())
-    listOfItems = radius_cutoff(simMatch.getSortedItems(), queriedItem)
+    listOfItems = radiusCutOff(simMatch.getSortedItems(), queriedItem)
     simMatch.clearItems()
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
@@ -110,5 +109,4 @@ def notify(queriedItem, simMatch):
         if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
             similar_items.remove(item)
 
-    if len(similar_items) != 0:
-        send_mail(queriedItem, similar_items, found)
+    return similar_items, found

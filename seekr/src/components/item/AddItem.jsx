@@ -5,23 +5,27 @@ import Checkbox from "./Checkbox";
 import ItemTags from "../helper/ItemTags";
 
 export class AddItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      found: false,
+      desc: '',
+      location: [39.3299, -76.6205],
+      img: [],
+      radius: 0,
+      username: "",
+      email: "",
+      phone: "",
+      
+    }
+  }
+
   componentDidMount = () => {
     // create a set of checked boxes when component is created
     this.selectedCheckboxes = 0;
   };
 
-  state = {
-    name: '',
-    found: false,
-    desc: '',
-    location: [39.3299, -76.6205],
-    img: [],
-    radius: 0,
-    username: "",
-    email: "",
-    phone: ""
-  }
-  
   toggleCheckbox = val => {
     if ((this.selectedCheckboxes & val) === val) {
       this.selectedCheckboxes = this.selectedCheckboxes & ~(val);
@@ -41,9 +45,21 @@ export class AddItem extends Component {
 
 
   createCheckboxes = () => ItemTags.getMapping().map(this.createCheckbox);
-  
+
   callbackFunction = (coordinates) => {
     this.setState({location: coordinates})
+  }
+
+  clearForm = () => {
+    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
+    document.getElementById("imagesUpload").value = "";
+
+    var boxes = document.getElementsByClassName('box');
+    for (let box of boxes) {
+      if (box.checked) {
+        box.click();
+      }
+    }
   }
 
   onClick = (e) => {
@@ -61,16 +77,7 @@ export class AddItem extends Component {
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
 
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
-    document.getElementById("imagesUpload").value = "";
-    
-    var boxes = document.getElementsByClassName('box');
-    console.log(boxes);
-    for (let box of boxes) {
-        if (box.checked) {
-            box.click();
-        }
-    }
+    this.clearForm();
   }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -203,7 +210,8 @@ export class AddItem extends Component {
 }
 
 AddItem.propTypes = {
-  addItem: PropTypes.func.isRequired
+  addItem: PropTypes.func.isRequired,
+  submitted: PropTypes.bool.isRequired
 }
 
 export default AddItem;
