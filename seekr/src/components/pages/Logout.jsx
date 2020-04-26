@@ -4,13 +4,10 @@ import { Redirect } from 'react-router';
 
 const Logout = () => {
   const {
-		name,
 		setName,
-		email,
 		setEmail,
 		userID,
 		setUserID,
-		profilePic,
 		setProfilePic
 	} = useContext(AuthContext)
 
