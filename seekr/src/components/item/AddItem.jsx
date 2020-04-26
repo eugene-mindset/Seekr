@@ -78,12 +78,6 @@ export class AddItem extends Component {
 
   onSubmit = (e) => {
 
-    e.preventDefault();
-    if (this.state.name === '') {
-      alert("Item must have a name!");
-      return false;
-    }
-
     this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
 
@@ -164,6 +158,7 @@ export class AddItem extends Component {
               name='lostfoundradio'
               value='false'
               onClick={this.lostFoundClick}
+              required
             />
             <Form.Check
               type='radio'
@@ -182,6 +177,7 @@ export class AddItem extends Component {
               placeholder='Enter item name...'
               value={this.state.name}
               onChange={this.onChange}
+              required
             />
             <Form.Text className='text-muted'>
               Enter the name of the item.
