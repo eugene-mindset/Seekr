@@ -13,7 +13,6 @@ class Items extends React.Component {
 //PropTypes for expected props
 Items.propTypes = {
   items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func.isRequired
 }
 
 export default Items;

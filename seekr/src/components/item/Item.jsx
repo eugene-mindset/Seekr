@@ -51,7 +51,6 @@ export class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
-  deleteItem: PropTypes.func.isRequired
 }
 
 export default Item
