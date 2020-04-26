@@ -293,12 +293,14 @@ class User:
     def __init__(self, name=None, email=None):
         self.name = name    # Should be a string
         self.email = email  # Should be a string
+        self.optIn = optIn  # Should be a boolean
 
     @classmethod
     def fromDict(cls, doc):
         user = cls()
         user.name = doc['name']
         user.email = doc['email']
+        user.optIn = doc['optIn']
 
         return user
 
@@ -318,15 +320,25 @@ class User:
     def email(self, email):
         self.__email = email
 
+    @property
+    def optIn(self):
+        return self.__optIn
+    
+    @optIn.setter
+    def optIn(self, optIn):
+        self.__optIn = optIn
+
     def __eq__(self, otherUser):
         if self.name != otherUser.name:
             return False
         if self.email != otherUser.email:
             return False
+        if self.optIn != otherUser.optIn:
+            return False
         return True
 
     def __str__(self):
-        return self.name + ': ' + self.email
+        return self.name + ': ' + self.email + '; ' + self.optIn
 
     def __repr__(self):
         return str(self)
@@ -335,6 +347,7 @@ class User:
         output = {
             'name'  : self.name,
             'email' : self.email,
+            'optIn' : self.optIn
         }
 
         return output
