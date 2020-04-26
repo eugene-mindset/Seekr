@@ -287,10 +287,66 @@ class Item:
 
         return output
 
+class UserDao(DatabaseObject):
+
+    def __init__(self, collection):
+        super().__init__(collection)
+
+        # Register the location attribute for documents in mongo to be used as a
+        # geospatial index for querying
+        self.collection.create_index([('location', '2dsphere' )])
+
+    def findById(self, Id):
+        # Get the item from our mongodb collection
+        UserDoc = self.collection.find_one({"_id": ObjectId(Id)})
+
+        # Serialize it into an Item object
+        newUser = User.fromDict(UserDoc)
+
+        return newUser
+
+    def findAll(self):
+        # Mongo query to get the items that have the specified tags from our
+        # mongodb collection
+        filteredUsers = self.collection.find()
+
+        # Serialize documents into Item objects and return them in a list
+        return [User.fromDict(userDoc) for userDoc in filteredUsers]
+
+    def insert(self, user):
+        data = user.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # Remove the id field
+
+        # Insert the item into our mongodb collection,
+        # get the ID it was assigned, give the item that id
+        user_id = self.collection.insert_one(data).inserted_id
+        new_user = self.collection.find_one({'_id': user_id})
+        user.Id = str(new_user['_id'])
+
+        return user # TODO: The returned item is never used, remove this line at some point
+
+    def update(self, user):
+        Id = user.Id
+        data = user.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # remove the id, shouldn't be updating it
+
+        # find the item in our mongodb collection by its id,
+        # update it with the new data
+        self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
+            "$set": data
+        }, upsert=False)
+
+        return user # TODO: The returned item is never used, remove this line at some point
+
+    def remove(self, Id):
+        # Delete the item frmo our mongodb collection by its id
+        returned = self.collection.delete_one({'_id': ObjectId(Id)})
+        return returned.deleted_count
+
 
 class User:
 
-    def __init__(self, name=None, email=None):
+    def __init__(self, name=None, email=None, optIn=None):
         self.name = name    # Should be a string
         self.email = email  # Should be a string
         self.optIn = optIn  # Should be a boolean
@@ -338,7 +394,7 @@ class User:
         return True
 
     def __str__(self):
-        return self.name + ': ' + self.email + '; ' + self.optIn
+        return self.name + ': ' + self.email + ', ' + self.optIn
 
     def __repr__(self):
         return str(self)
