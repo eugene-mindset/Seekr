@@ -16,7 +16,6 @@ import "./App.css";
 import { AuthContext, AuthContextProvider } from "./components/helper/AuthContext";
 
 const App = () => {
-  
   return (
     <AuthContextProvider>
       <Router>

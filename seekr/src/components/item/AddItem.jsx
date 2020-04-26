@@ -17,8 +17,6 @@ export class AddItem extends Component {
     location: [39.3299, -76.6205],
     img: [],
     radius: 0,
-    username: "",
-    email: ""
   }
   
   toggleCheckbox = val => {
@@ -58,7 +56,7 @@ export class AddItem extends Component {
     }
 
     this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.selectedCheckboxes,
-      this.state.img, this.state.radius, this.state.username, this.state.email);
+      this.state.img, this.state.radius);
 
     this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: ""});
     document.getElementById("imagesUpload").value = "";
@@ -146,22 +144,6 @@ export class AddItem extends Component {
             style={{ flex: '10', padding: '5px' }}
             placeholder="Add Item Radius..."
             value={this.state.radius}
-            onChange={this.onChange}
-          />
-          <input
-            type="text"
-            name="username"
-            style={{ flex: '10', padding: '5px' }}
-            placeholder="name..."
-            value={this.state.username}
-            onChange={this.onChange}
-          />
-          <input
-            type="text"
-            name="email"
-            style={{ flex: '10', padding: '5px' }}
-            placeholder="email..."
-            value={this.state.email}
             onChange={this.onChange}
           />
           <input
