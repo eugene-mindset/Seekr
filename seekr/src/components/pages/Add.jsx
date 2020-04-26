@@ -7,27 +7,47 @@ export default class Add extends Component {
   state = {
     similarItems: [],
     showModal: false,
-    submit: false,
+    submitted: false,
     name: '',
     found: false,
     desc: '',
     location: [39.3299, -76.6205],
     img: [],
     radius: 0,
+    tags: 0,
     username: "",
     email: "",
     phone: "",
   };
 
+  resetState = () => {
+    this.setState({
+      similarItems: [],
+      showModal: false,
+      submitted: false,
+      name: '',
+      found: false,
+      desc: '',
+      location: [39.3299, -76.6205],
+      img: [],
+      radius: 0,
+      tags: 0,
+      username: "",
+      email: "",
+      phone: "",
+    });
+  }
+
   submitForm = (name, found, desc, location, tags, img, radius, username, email, phone) => {
     this.setState(
       {
         name: name,
-        found: found,
         desc: desc,
+        found: found,
         location: location,
-        img: img,
         radius: radius,
+        tags: tags,
+        img: img,
         username: username,
         email: email,
         phone: phone
@@ -80,7 +100,9 @@ export default class Add extends Component {
       url: '/items',
       data: data,
       headers: {'Content-Type': 'multipart/form-data' }
-      });
+    });
+
+    this.resetState();
   }
 
   closeModal = (doSubmit) => {
@@ -97,7 +119,7 @@ export default class Add extends Component {
     return (
       <React.Fragment>
         <h1>Add Item</h1><br/>
-        <AddItem addItem={this.submitForm} submitted={this.state.submit} />
+        <AddItem submitForm={this.submitForm}/>
         <SubmissionModal showModal={this.state.showModal} handleClose={this.closeModal} simItems={this.state.similarItems}/>
       </React.Fragment>
     );

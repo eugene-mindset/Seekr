@@ -45,7 +45,17 @@ export class AddItem extends Component {
   }
 
   clearForm = () => {
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
+    this.setState({
+      name: '',
+      found: false,
+      desc: '',
+      location: [39.3299, -76.6205],
+      img: [],
+      radius: 0,
+      username: "",
+      email: "",
+      phone: ""
+    });
     document.getElementById("imagesUpload").value = "";
 
     var boxes = document.getElementsByClassName('box');
@@ -68,7 +78,7 @@ export class AddItem extends Component {
       return false;
     }
 
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
+    this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
 
     this.clearForm();
@@ -274,8 +284,7 @@ export class AddItem extends Component {
 }
 
 AddItem.propTypes = {
-  addItem: PropTypes.func.isRequired,
-  submitted: PropTypes.bool.isRequired
+  submitForm: PropTypes.func.isRequired
 }
 
 export default AddItem;
