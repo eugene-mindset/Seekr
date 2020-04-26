@@ -111,6 +111,15 @@ def get_all_items_sorted(query):
 
     return jsonify(output), 200
 
+@items_router.route('/items/user=<query>', methods=['GET'])
+def get_all_items_by_user(query):
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+
+    listOfItems = mongo_item_dao.findByMostRecent(tags)
+
+    output = [item.toDict() for item in listOfItems if item.user.email == query]
+    return jsonify(output), 200
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
