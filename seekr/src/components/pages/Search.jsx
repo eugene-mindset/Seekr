@@ -77,7 +77,7 @@ export default class Search extends Component {
         </div>
 
         <br />
-        <div className="results">
+        <div className="results" style={{marginLeft: "500px"}}>
           <CardColumns style={columnStyle}>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>

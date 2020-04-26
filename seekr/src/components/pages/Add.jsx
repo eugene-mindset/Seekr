@@ -50,7 +50,6 @@ const Add = () => {
     tags,
     img,
     radius,
-    phone
   ) => {
     var data = new FormData();
     data.append("name", itemName);
