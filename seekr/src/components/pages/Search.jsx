@@ -92,16 +92,16 @@ export default class Search extends Component {
         </div>
 
         <br />
-        <div className="results">
+        <div className="results" onClick={() => this.openModalHandler()}>
           <CardColumns style={columnStyle} >
-            <Items items={this.state.items} deleteItem={this.deleteItem} />
+            <Items items={this.state.items} deleteItem={this.deleteItem}/>
           </CardColumns>
         </div>
 
         <div>
             { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
 
-            <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
+            
 
             <Modal
                 className="modal"
