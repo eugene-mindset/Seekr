@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import Items from "../item/Items";
+import Modal from "../item/Modal";
 import axios from "axios";
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
@@ -18,7 +19,20 @@ const columnStyle = {
 export default class Search extends Component {
   state = {
     items: [],
+    isShowing: false
   };
+
+  openModalHandler = () => {
+    this.setState({
+        isShowing: true
+    });
+  }
+
+  closeModalHandler = () => {
+    this.setState({
+        isShowing: false
+    });
+  }
 
   searchItem = (name, tags, filter, location) => {
     this.setState({ items: [] });
@@ -82,6 +96,19 @@ export default class Search extends Component {
           <CardColumns style={columnStyle} >
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
+        </div>
+
+        <div>
+            { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
+
+            <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
+
+            <Modal
+                className="modal"
+                show={this.state.isShowing}
+                close={this.closeModalHandler}>
+                    Maybe aircrafts fly very high because they don't want to be seen in plane sight?
+            </Modal>
         </div>
       </React.Fragment>
     );
