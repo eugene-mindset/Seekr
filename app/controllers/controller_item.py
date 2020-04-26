@@ -141,7 +141,7 @@ def add_item():
         images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
 
     timestamp = currTime()
-    user = User(request.form['username'], request.form['email'])
+    user = User(request.form['username'], request.form['email'], request.form['optIn'])
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
@@ -176,7 +176,7 @@ def update_item(Id):
                              float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    user = User(request.form['username'], request.form['email'])
+    user = User(request.form['username'], request.form['email'], request.form['optIn'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)

@@ -25,6 +25,7 @@ const Add = () => {
     data.append("tags", tags);
     data.append("username", name);
     data.append("email", email);
+    data.append("optIn", false); // make this automatically false
     img.forEach((i) => {
       // Append multiple files to request form
       data.append("image", i);
