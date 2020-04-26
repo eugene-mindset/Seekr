@@ -32,7 +32,8 @@ export default class Add extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1>Add Item</h1>
+        <h1>Add an Item</h1>
+        <br/>
         <AddItem addItem={this.addItem} />
       </React.Fragment>
     );
