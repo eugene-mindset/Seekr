@@ -25,7 +25,7 @@ const App = () => {
           <div className="site-container">
             <ProtectedRoute path="/add" user={false} component={Add} />
             <Route path="/about" component={About} />
-            <Route path="/unauthorized" component={Errorpage}/>}
+            <Route path="/unauthorized" component={Errorpage}/>
             {/* Temporarily using Login component instead of Facebook Component */}
             <Route path="/login" component={Facebook}/>  
             
