@@ -96,7 +96,7 @@ export default class Add extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1>Add Item</h1>
+        <h1>Add Item</h1><br/>
         <AddItem addItem={this.submitForm} submitted={this.state.submit} />
         <SubmissionModal showModal={this.state.showModal} handleClose={this.closeModal} simItems={this.state.similarItems}/>
       </React.Fragment>
