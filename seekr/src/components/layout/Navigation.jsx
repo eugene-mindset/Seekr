@@ -6,7 +6,16 @@ import UserInfo from '../pages/UserInfo';
 
 
 const Navigation = () => {
-  const { auth, authBody } = useContext(AuthContext)
+  const {
+		name,
+		setName,
+		email,
+		setEmail,
+		userID,
+		setUserID,
+		profilePic,
+		setProfilePic
+	} = useContext(AuthContext)
   return (
 
     <div>
@@ -18,8 +27,8 @@ const Navigation = () => {
             <Nav.Link href="/add">Add</Nav.Link>
             <Nav.Link href="/">Search</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
-            {auth!='null' && auth!='undefined' ?  <Nav.Link href="/userinfo">User Info</Nav.Link> : null}
-            {auth!='null' && auth!='undefined' ? <Nav.Link href="/logout">Log Out</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
+            {userID!='null' && userID!='undefined' ?  <Nav.Link href="/userinfo">User Info</Nav.Link> : null}
+            {userID!='null' && userID!='undefined' ? <Nav.Link href="/logout">Log Out</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -35,16 +35,15 @@ export const AuthContextProvider = ({children}) => {
 	const [userID, setUserID] = useState(prevUserID);
 	const [profilePic, setProfilePic] = useState(prevProfilePic);
 
-	// whenever auth or authBody is changed, execute useEffect
 	useEffect(
 		// this anonymous function will automatically update the cookies
 		() => {
-			document.cookie = "name=" + auth + "; path=/";
-			document.cookie = "email=" + authBody + "; path=/";
+			document.cookie = "name=" + name + "; path=/";
+			document.cookie = "email=" + email + "; path=/";
 			document.cookie = "userID=" + userID + "; path=/";
 			document.cookie = "profilePic=" + profilePic +"; path=/";
 		},
-		[auth, authBody]
+		[name, email, userID, profilePic]
 	)
 	
 	const defaultContext = {
@@ -52,7 +51,7 @@ export const AuthContextProvider = ({children}) => {
 		setName,
 		email,
 		setEmail,
-		userId,
+		userID,
 		setUserID,
 		profilePic,
 		setProfilePic

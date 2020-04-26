@@ -3,18 +3,29 @@ import { AuthContext } from '../helper/AuthContext';
 import { Redirect } from 'react-router';
 
 const Logout = () => {
-  const { auth, setAuth, authBody, setAuthBody } = useContext(AuthContext)
+  const {
+		name,
+		setName,
+		email,
+		setEmail,
+		userID,
+		setUserID,
+		profilePic,
+		setProfilePic
+	} = useContext(AuthContext)
 
 	const onClick = () => {
 		console.log("logging out!");
 		
 		// log out
-		setAuth(null);
-		setAuthBody(null);
+		setName(null);
+		setEmail(null);
+		setUserID(null);
+		setProfilePic(null);
 		return <Redirect to="/" />
 	}
 	
-	if (auth != 'null' && auth != 'undefined') {
+	if (userID != 'null' && userID != 'undefined') {
 		return (
 			<div style={{marginTop: "100px"}}>			
 				<button onClick={onClick} >
