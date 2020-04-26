@@ -14,14 +14,20 @@ const columnStyle = {
 
 function UserSearchedItems() {
   const [items, setItems] = useState([]);
-	const {email} = useContext(AuthContext);
+  const { email } = useContext(AuthContext);
 
   const searchItem = () => {
     setItems([]);
     axios.get("/items/user=" + email).then((res) =>
       res.data.map((item) => {
-        setItems(items => [...items, item]);
+        setItems((items) => [...items, item]);
       })
+    );
+	};
+
+	const deleteItem = (id) => {
+		axios.delete(`/items/${id}`).then((res) =>
+			setItems((items) => [...items.filter((item) => item.id !== id)])
     );
   };
 
@@ -33,9 +39,9 @@ function UserSearchedItems() {
     <div className="user-results">
       <button onClick={onClick}>Click me</button>
       <div>
-				Items that you posted:
+        Items that you posted:
         <CardColumns style={columnStyle}>
-          <Items items={items} />
+          <Items items={items} deleteItem={deleteItem} />
         </CardColumns>
       </div>
     </div>
