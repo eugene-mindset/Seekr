@@ -69,6 +69,9 @@ export default class Add extends Component {
           return this.setState({ similarItems: [...this.state.similarItems, item] });
         });
 
+        // Only top three matches only
+        this.setState({similarItems: this.state.similarItems.slice(0,3)});
+
         if (this.state.similarItems.length > 0) {
           this.setState({showModal: true});
         } else {

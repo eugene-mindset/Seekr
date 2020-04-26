@@ -56,7 +56,13 @@ export class AddItem extends Component {
       email: "",
       phone: ""
     });
+
     document.getElementById("imagesUpload").value = "";
+
+    let radios = document.getElementsByName('lostfoundradio');
+    for (let i = 0; i < radios.length; i++) {
+      radios[i].checked = false;
+    }
 
     var boxes = document.getElementsByClassName('box');
     for (let box of boxes) {
