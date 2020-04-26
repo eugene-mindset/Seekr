@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import CardColumns from "react-bootstrap/CardColumns";
 import Items from "../item/Items";
 import axios from "axios";
@@ -23,13 +23,24 @@ function UserSearchedItems() {
         setItems((items) => [...items, item]);
       })
     );
-	};
-
-	const deleteItem = (id) => {
-		axios.delete(`/items/${id}`).then((res) =>
-			setItems((items) => [...items.filter((item) => item.id !== id)])
-    );
   };
+
+  const deleteItem = (id) => {
+    axios
+      .delete(`/items/${id}`)
+      .then((res) =>
+        setItems((items) => [...items.filter((item) => item.id !== id)])
+      );
+  };
+
+  // useEffect(() => {
+  //   setItems([]);
+  //   axios.get("/items/user=" + email).then((res) =>
+  //     res.data.map((item) => {
+  //       setItems((items) => [...items, item]);
+  //     })
+  //   );
+  // });
 
   let onClick = () => {
     searchItem();
