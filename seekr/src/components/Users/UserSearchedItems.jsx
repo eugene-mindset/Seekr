@@ -7,23 +7,21 @@ import { AuthContext } from "../helper/AuthContext";
 const columnStyle = {
   display: "flex",
   flexWrap: "wrap",
-  justifyContent: "center",
-  marginTop: "70px",
-  marginLeft: "10px",
+  justifyContent: "left",
 };
 
 function UserSearchedItems() {
   const [items, setItems] = useState([]);
   const { email } = useContext(AuthContext);
 
-  const searchItem = () => {
-    setItems([]);
-    axios.get("/items/user=" + email).then((res) =>
-      res.data.map((item) => {
-        setItems((items) => [...items, item]);
-      })
-    );
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("/items/user=" + email);
+      setItems(result.data);
+    };
+    fetchData();
+    console.log("done");
+  }, []);
 
   const deleteItem = (id) => {
     axios
@@ -33,22 +31,9 @@ function UserSearchedItems() {
       );
   };
 
-  // useEffect(() => {
-  //   setItems([]);
-  //   axios.get("/items/user=" + email).then((res) =>
-  //     res.data.map((item) => {
-  //       setItems((items) => [...items, item]);
-  //     })
-  //   );
-  // });
-
-  let onClick = () => {
-    searchItem();
-  };
 
   return (
     <div className="user-results">
-      <button onClick={onClick}>Click me</button>
       <div>
         Items that you posted:
         <CardColumns style={columnStyle}>
