@@ -4,6 +4,9 @@ import Checkbox from "./Checkbox";
 import GoogleMap from "../pages/GoogleMap";
 import ItemTags from "../helper/ItemTags";
 import "../../../public/css/Search.css";
+import { Form, Button, FormControl, InputGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export class SearchItem extends Component {
   componentDidMount = () => {
@@ -83,28 +86,24 @@ export class SearchItem extends Component {
           marginLeft: "15px"
         }}
       >
-        <h1 align="left">Search for an item</h1>
-
-        <div className="row">
-          <div className="col" style={{ paddingLeft: "5px" }}>
-            <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
-              <input
+      <h1 align="left">Let's find your item!</h1>
+      <Form onSubmit={this.onSubmit}>
+          <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <FontAwesomeIcon icon={faSearch} />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
                 type="text"
+                onChange={this.onChange} 
+                value={this.state.name} 
                 name="name"
-                style={{ flex: "7", padding: "5px" }}
-                placeholder="Search Item..."
-                value={this.state.name}
-                onChange={this.onChange}
+                aria-describedby="inputGroupPrepend"
+                required
               />
-              <input
-                type="submit"
-                value="Search"
-                className="btn"
-                style={{ flex: "1", fontWeight: "bold" }}
-              />
-            </form>
-          </div>
-        </div>
+          </InputGroup>
+        </Form>
         <div className="row">
           <div style={{ display: "flex", paddingLeft: "5px" }}>
             {this.createCheckboxes()}
