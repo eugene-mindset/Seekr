@@ -22,8 +22,9 @@ const App = () => {
           <Navigation />
           <Route exact path="/" component={Search} />
           <div className="site-container">
-
+            {/* az-Protected route is not working, so using old way */}
             {/* <ProtectedRoute path="/add" user={false} component={Add} /> */}
+            <Route path="/add" component={Add} />
             <Route path="/unauthorized" component={Errorpage}/>
             {/* Temporarily using Login component instead of Facebook Component */}
             <Route path="/login" component={Facebook}/>  
@@ -31,7 +32,6 @@ const App = () => {
             {/* userinfo and logout should redirect if not logged in */}
             <Route path="/userinfo" component={UserInfo}/>  
             <Route path="/logout" component={Logout}/>  
-            <Route path="/add" component={Add} />
           </div>
         </div>
       </Router>
