@@ -14,6 +14,11 @@ const columnStyle = {
   marginLeft: "10px",
 };
 
+function getCookieValue(a) {
+	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : null;
+}
+
 export default class Search extends Component {
   componentDidMount() {
     name="temp";
@@ -26,6 +31,7 @@ export default class Search extends Component {
 
   state = {
     items: [],
+    user_email: ""
   };
 
   searchItem = (name, tags, filter, location) => {
@@ -62,7 +68,7 @@ export default class Search extends Component {
   };
 
   deleteItem = (id) => {
-    axios.delete(`/items/${id}`).then((res) =>
+    axios.delete(`/items/${id}` + "?email=" + getCookieValue("email")).then((res) =>
       this.setState({
         items: [...this.state.items.filter((item) => item.id !== id)],
       })
