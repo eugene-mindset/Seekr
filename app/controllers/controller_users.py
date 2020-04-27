@@ -17,6 +17,12 @@ def add_user():
     optIn = request.form['optIn']
     
     # Get the list of uploaded images and convert them to ItemImage objects
+    matchingUser = mongo_user_dao.findAllMatchingEmail(email)
+    
+    if matchingUser:
+        print("user already created")
+        user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
+        return jsonify(user.toDict()), 200
     
     user = User(name=name, email=email, optIn=optIn)
 
