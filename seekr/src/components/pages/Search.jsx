@@ -6,14 +6,7 @@ import ItemModal from "../item/ItemModal"
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
-
-const columnStyle = {
-  float: "right",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  marginLeft: "1000px"
-
-};
+import { trackPromise } from "react-promise-tracker";
 
 export default class Search extends Component {
   state = {
@@ -23,18 +16,21 @@ export default class Search extends Component {
   searchItem = (name, tags, filter, location) => {
     this.setState({ items: [] });
     if (filter === "Best") {
+      trackPromise(
       axios.get("/items/search=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
-      );
+      ));
     } else if (filter === "Recent") {
+      trackPromise(
       axios.get("/items/timesearch=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
-      );
+      ));
     } else {
+      trackPromise(
       axios
         .get(
           "/items/proximitysearch=" +
@@ -50,7 +46,7 @@ export default class Search extends Component {
           res.data.map((item) => {
             return this.setState({ items: [...this.state.items, item] });
           })
-        );
+        ));
     }
   };
 
