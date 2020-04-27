@@ -120,7 +120,7 @@ def get_all_items_by_user(query):
 
     listOfItems = mongo_item_dao.findByMostRecent(tags)
 
-    output = [item.toDict() for item in listOfItems if item.user.email == query]
+    output = [item.toDict() for item in listOfItems if item.email == query]
     return jsonify(output), 200
 
     
