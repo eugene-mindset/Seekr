@@ -8,8 +8,21 @@ import Add from './components/pages/Add';
 import './App.css';
 
 class App extends Component {
+  state = {
+    loading: true
+  };
+
+  componentDidMount() {
+    demoAsyncCall().then(() => this.setState({ loading: false }));
+  }
 
   render() {
+    const { loading } = this.state;
+
+    if(loading) {
+      return null;
+    }
+
     return (
       <Router>
         <div className="App">
@@ -22,6 +35,10 @@ class App extends Component {
       </Router>
     );
   }
+}
+
+function demoAsyncCall() {
+  return new Promise((resolve) => setTimeout(() => resolve(), 2500));
 }
 
 export default App;
