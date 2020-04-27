@@ -21,18 +21,18 @@ export class Item extends Component {
 
   
   render() {
-    const { id, name, found, desc, location, images, timestamp, tags, user, username, email} = this.props.item;
+    const { id, name, found, desc, location, images, timestamp, tags, username, email} = this.props.item;
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
-    
+    // const username = "TEMP";
     return (
       <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
         <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
         <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
         <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
         <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
-        {user.email == this.props.email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
+        {email == this.props.cur_email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
         { images.length !== 0 ? this.getImage(images) : <span></span>}
         <Card.Subtitle>
           <small className="text-muted">{"Contact: " + username + " " + email}</small>

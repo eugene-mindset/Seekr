@@ -15,6 +15,15 @@ const columnStyle = {
 };
 
 export default class Search extends Component {
+  componentDidMount() {
+    name="temp";
+    axios.get("/items/timesearch=" + name).then((res) =>
+      res.data.map((item) => {
+        return this.setState({ items: [...this.state.items, item] });
+      })
+    );
+  }
+
   state = {
     items: [],
   };
@@ -55,7 +64,8 @@ export default class Search extends Component {
 
   // call this function if the search bar is empty
   clearSearch = () => {
-    this.setState({ items: [] });
+    // az - set this to do nothing since when loading search page, already show
+    // this.setState({ items: [] });
   };
 
   deleteItem = (id) => {
@@ -77,7 +87,7 @@ export default class Search extends Component {
         </div>
 
         <br />
-        <div className="results" style={{marginLeft: "500px"}}>
+        <div className="results" style={{ marginLeft: "500px" }}>
           <CardColumns style={columnStyle}>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>

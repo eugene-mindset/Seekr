@@ -23,6 +23,7 @@ const Add = () => {
     data.append("longitude", location[1]);
     data.append("radius", radius);
     data.append("tags", tags);
+    data.append("username", name);
     data.append("email", email);
     img.forEach((i) => {
       // Append multiple files to request form
