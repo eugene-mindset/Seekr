@@ -8,9 +8,19 @@ const LoadingIndicator = props => {
   const { promiseInProgress } = usePromiseTracker();
   return (
     promiseInProgress &&
-    <Spinner animation="border" role="status">
-      <span className="sr-only">Loading...</span>
-    </Spinner>
+    <div 
+    style={{
+             width: "100%",
+             height: "100",
+             display: "flex",
+             justifyContent: "center",
+             alignItems: "center"
+           }}
+    >
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    </div>
   );  
 }
 
