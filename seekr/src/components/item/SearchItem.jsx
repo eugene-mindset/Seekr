@@ -77,61 +77,54 @@ export class SearchItem extends Component {
 
   render() {
     return (
-      <div
-        className="container"
-        style={{
-          maxWidth: "450px",
-          alignItems: "start",
-          marginTop: "70px",
-          marginLeft: "15px"
-        }}
-      >
-      <h1 align="left">Let's find your item!</h1>
-      <Form onSubmit={this.onSubmit}>
-          <InputGroup>
-              <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <Form.Control
-                type="text"
-                onChange={this.onChange} 
-                value={this.state.name} 
-                name="name"
-                aria-describedby="inputGroupPrepend"
-                required
-              />
-          </InputGroup>
-        </Form>
-        <div className="row">
-          <div style={{ display: "flex", paddingLeft: "5px" }}>
+      <div className="search-sidebar">
+        <div className="search-sidebar-searchbar">
+          <h1 className="search-sidebar-name">Search and Filter</h1>
+          <Form onSubmit={this.onSubmit}>
+              <InputGroup>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>
+                      <FontAwesomeIcon icon={faSearch} />
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <Form.Control
+                    type="text"
+                    onChange={this.onChange} 
+                    value={this.state.name} 
+                    name="name"
+                    aria-describedby="inputGroupPrepend"
+                    required
+                  />
+              </InputGroup>
+            </Form>
+          </div>
+          <div style={{  }}>
+            <h4>Add Filters</h4>
             {this.createCheckboxes()}
           </div>
-        </div>
-        <div
-          className="row"
-          style={{
-            display: "flex",
-            paddingLeft: "5px",
-            alignItems: "baseline",
-          }}
-        >
-          <label htmlFor="filters" style={{ paddingRight: "5px" }}>
-            Sort by:{" "}
-          </label>
-          <select id="filters" onChange={this.changeFilter}>
-            <option value="Best">Best Match</option>
-            <option value="Recent">Most Recent</option>
-            <option value="Proximity">Closest Distance</option>
-          </select>
-        </div>
-        <div className="row" style={{ paddingLeft: "5px" }}>
-          Supply a location to find nearby items.
-        </div>
-        <div className="row" style={{ paddingLeft: "5px" }}>
-          <GoogleMap parentCallback={this.callbackFunction} />
-        </div>
+          {/* <div
+            className="row"
+            style={{
+              display: "flex",
+              paddingLeft: "5px",
+              alignItems: "baseline",
+            }}
+          >
+            <label htmlFor="filters" style={{ paddingRight: "5px" }}>
+              Sort by:{" "}
+            </label>
+            <select id="filters" onChange={this.changeFilter}>
+              <option value="Best">Best Match</option>
+              <option value="Recent">Most Recent</option>
+              <option value="Proximity">Closest Distance</option>
+            </select>
+          </div> */}
+          {/* <div className="row" style={{ paddingLeft: "5px" }}>
+            Supply a location to find nearby items.
+          </div>
+          <div className="row" style={{ paddingLeft: "5px" }}>
+            <GoogleMap parentCallback={this.callbackFunction} />
+          </div> */}
       </div>
     );
   }

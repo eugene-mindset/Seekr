@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import "../../../public/css/Checkbox.css";
 
 class Checkbox extends Component {
   state = {
@@ -22,8 +23,10 @@ class Checkbox extends Component {
     const { isChecked } = this.state;
 
     return (
-      <div className="checkbox" style={{ marginRight: "10px" }}>
-        <label>
+      <div className="checkbox">
+        <label className="checkbox-label">
+          {label}
+        </label>
           <input className="box"
             type="checkbox"
             value={label}
@@ -31,8 +34,6 @@ class Checkbox extends Component {
             onChange={this.toggleCheckboxChange}
           />
 
-          {label}
-        </label>
       </div>
     );
   }

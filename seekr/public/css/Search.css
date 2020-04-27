@@ -19,17 +19,32 @@
   border-radius: 8px;
 }
 
-.search-container {
-  max-width: 300px;
+.searchComponent {
+  
 }
 
 .search-sidebar {
-  height: 100%; 
-  position: fixed; 
-  z-index: 1; 
+  /* height: 100%; 
+  position: fixed;
   background-color: lightblue; 
-  overflow-y: hidden; 
+  overflow-y: hidden;  */
+  position: fixed;
+  height: 100%;
+  width: 30%;
+  float: left;
+  background-color: lightblue; 
 
+}
+
+.search-sidebar-name{
+  font-weight:bold;
+  color:#4169e1;
+  text-decoration: underline;
+}
+
+.search-sidebar-searchbar {
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 .results {
