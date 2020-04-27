@@ -2,6 +2,8 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
+import GoogleMap from "../pages/GoogleMap";
+import Card from 'react-bootstrap/Card'
 import Items from './Items'
 import CardColumns from "react-bootstrap/CardColumns";
 
@@ -14,17 +16,23 @@ const columnStyle = {
 
 };
 
+
+
 export const ItemModal = (props) => {
+      
   return (
-    <div>
-      <Modal size="xl" show={props.showModal} close={() => props.handleClose()}>
+    <div onClick={e => e.stopPropagation()}>
+      <Modal className="modal-container" size="xl" show={props.showModal}
+          onHide={() => props.handleClose(false)}>
         <Modal.Header>
-          <Modal.Title>Item Data</Modal.Title>
+        <Modal.Title>{props.itemData.name} </Modal.Title>
         </Modal.Header>
-        <Modal.Body>More details about this item...
+        <Modal.Body>
+            <div>{props.itemData.desc}</div>
+            <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}><GoogleMap/></div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => props.handleClose()}>
+          <Button variant="secondary" onClick={() => props.handleClose(false)}>
             Close
           </Button>
         </Modal.Footer>
@@ -35,7 +43,8 @@ export const ItemModal = (props) => {
 
 ItemModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  itemData: PropTypes.object.isRequired
 }
 
 export default ItemModal;

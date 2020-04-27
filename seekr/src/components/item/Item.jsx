@@ -24,15 +24,9 @@ export class Item extends Component {
     return date.toLocaleString();
   }
 
-  openModalHandler = () => {
+  modalHandler = (show) => {
     this.setState({
-        isShowing: true
-    });
-  }
-
-  closeModalHandler = () => {
-    this.setState({
-        isShowing: false
+        isShowing: show
     });
   }
 
@@ -43,7 +37,7 @@ export class Item extends Component {
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
-      <div onClick={() => this.openModalHandler()}>
+      <div onClick={() => this.modalHandler(true)}>
         <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
@@ -59,12 +53,7 @@ export class Item extends Component {
             <small className="text-muted">{ this.getTime(timestamp) }</small>
           </Card.Footer>
         </Card>
-        { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
-        <ItemModal
-          
-            showModal={this.state.isShowing} handleClose={this.closeModalHandler}>
-            Maybe aircrafts fly very high because they don't want to be seen in plane sight?
-        </ItemModal>
+        <ItemModal showModal={this.state.isShowing} handleClose={this.modalHandler} itemData={this.props.item}/>
       </div>
     )
   }
