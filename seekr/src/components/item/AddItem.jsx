@@ -45,8 +45,24 @@ export class AddItem extends Component {
   }
 
   clearForm = () => {
-    this.setState({ name: '', found: false, desc: '', location: [39.3299, -76.6205], img: [], radius: 0, username: "", email: "", phone: ""});
+    this.setState({
+      name: '',
+      found: false,
+      desc: '',
+      location: [39.3299, -76.6205],
+      img: [],
+      radius: 0,
+      username: "",
+      email: "",
+      phone: ""
+    });
+
     document.getElementById("imagesUpload").value = "";
+
+    let radios = document.getElementsByName('lostfoundradio');
+    for (let i = 0; i < radios.length; i++) {
+      radios[i].checked = false;
+    }
 
     var boxes = document.getElementsByClassName('box');
     for (let box of boxes) {
@@ -62,13 +78,7 @@ export class AddItem extends Component {
 
   onSubmit = (e) => {
 
-    e.preventDefault();
-    if (this.state.name === '') {
-      alert("Item must have a name!");
-      return false;
-    }
-
-    this.props.addItem(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
+    this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
 
     this.clearForm();
@@ -148,6 +158,7 @@ export class AddItem extends Component {
               name='lostfoundradio'
               value='false'
               onClick={this.lostFoundClick}
+              required
             />
             <Form.Check
               type='radio'
@@ -166,6 +177,7 @@ export class AddItem extends Component {
               placeholder='Enter item name...'
               value={this.state.name}
               onChange={this.onChange}
+              required
             />
             <Form.Text className='text-muted'>
               Enter the name of the item.
@@ -274,8 +286,7 @@ export class AddItem extends Component {
 }
 
 AddItem.propTypes = {
-  addItem: PropTypes.func.isRequired,
-  submitted: PropTypes.bool.isRequired
+  submitForm: PropTypes.func.isRequired
 }
 
 export default AddItem;

@@ -47,6 +47,7 @@ else:
     simModel = gens_api.load(simModelName)
     simModel.save(str(modelLocation))
 
+
 @items_router.route("/")
 def hello():
     return "This is the API for the Seekr App!"
@@ -121,7 +122,6 @@ def find_similar_items():
         A list of item listing dictionaries (which are JSON compatible) and
         a code representing the success of the request.
     """
-    print('please help omfg')
 
     # get all the information needed to make Item instance
     name = request.args.get('name')
