@@ -28,10 +28,11 @@
 
 .search-sidebar {
   position: fixed;
-  height: 100%;
   width: 450px;
   float: left;
   background-color: lightblue;
+  margin-bottom: -5000px; /* any large number will do */
+  padding-bottom: 5000px;
 
 }
 
@@ -50,4 +51,8 @@
 
 .results {
   padding: 0px 10px;
+}
+
+.searchComponent{
+  width: 100vh;
 }
