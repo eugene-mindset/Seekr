@@ -7,11 +7,11 @@ import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
 
 const columnStyle = {
-  display: "flex",
+  float: "right",
   flexWrap: "wrap",
   justifyContent: "center",
-  marginTop: "70px",
-  marginLeft: "10px",
+  marginLeft: "1000px"
+
 };
 
 function getCookieValue(a) {
@@ -77,21 +77,17 @@ export default class Search extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <div className="search-sidebar">
-          <SearchItem
-            searchItem={this.searchItem}
-            clearSearch={this.clearSearch}
-          />
-        </div>
-
-        <br />
-        <div className="results" style={{ marginLeft: "500px" }}>
-          <CardColumns style={columnStyle}>
+      <div className="searchComponent">
+        <SearchItem
+          searchItem={this.searchItem}
+          clearSearch={this.clearSearch}
+        />
+        <div style={{marginLeft: "450px", float:"left"}}>
+          <CardColumns>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

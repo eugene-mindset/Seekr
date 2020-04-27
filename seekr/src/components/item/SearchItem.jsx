@@ -4,6 +4,9 @@ import Checkbox from "./Checkbox";
 import GoogleMap from "../pages/GoogleMap";
 import ItemTags from "../helper/ItemTags";
 import "../../../public/css/Search.css";
+import { Form, Button, FormControl, InputGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export class SearchItem extends Component {
   componentDidMount = () => {
@@ -75,65 +78,49 @@ export class SearchItem extends Component {
 
   render() {
     return (
-      <div
-        className="container"
-        style={{
-          maxWidth: "450px",
-          alignItems: "start",
-          marginTop: "70px",
-          marginLeft: "15px"
-        }}
-      >
-        <h1 align="left">Search for an item</h1>
-
-        <div className="row">
-          <div className="col" style={{ paddingLeft: "5px" }}>
-            <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
-              <input
-                type="text"
-                name="name"
-                style={{ flex: "7", padding: "5px" }}
-                placeholder="Search Item..."
-                value={this.state.name}
-                onChange={this.onChange}
-              />
-              <input
-                type="submit"
-                value="Search"
-                className="btn"
-                style={{ flex: "1", fontWeight: "bold" }}
-              />
-            </form>
+      <div className="search-sidebar">
+        <div className="search-sidebar-searchbar">
+          <Form onSubmit={this.onSubmit}>
+              <InputGroup>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>
+                      <FontAwesomeIcon icon={faSearch} />
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <Form.Control
+                    type="text"
+                    onChange={this.onChange} 
+                    value={this.state.name}
+                    placeholder="Search for an item..." 
+                    name="name"
+                    aria-describedby="inputGroupPrepend"
+                    required
+                  />
+              </InputGroup>
+            </Form>
           </div>
-        </div>
-        <div className="row">
-          <div style={{ display: "flex", paddingLeft: "5px" }}>
-            {this.createCheckboxes()}
+          <div className="filter-search">
+            <div className="checkbox-search">
+              <h4>Add Filters</h4>
+              {this.createCheckboxes()}
+              <div>
+              <b>Give a location to search</b>
+              </div>
+              <div className="googleMap-search">
+                <GoogleMap parentCallback={this.callbackFunction} />
+              </div>
+            </div>
+            <div className="row" style={{ float:"center"}}>
+              <label htmlFor="filters" style={{ paddingRight: "5px" }}>
+                <h4>Sort by:{" "}</h4>
+              </label>
+              <select id="filters" onChange={this.changeFilter}>
+                <option value="Best">Best Match</option>
+                <option value="Recent">Most Recent</option>
+                <option value="Proximity">Closest Distance</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div
-          className="row"
-          style={{
-            display: "flex",
-            paddingLeft: "5px",
-            alignItems: "baseline",
-          }}
-        >
-          <label htmlFor="filters" style={{ paddingRight: "5px" }}>
-            Sort by:{" "}
-          </label>
-          <select id="filters" onChange={this.changeFilter}>
-            <option value="Best">Best Match</option>
-            <option value="Recent">Most Recent</option>
-            <option value="Proximity">Closest Distance</option>
-          </select>
-        </div>
-        <div className="row" style={{ paddingLeft: "5px" }}>
-          Supply a location to find nearby items.
-        </div>
-        <div className="row" style={{ paddingLeft: "5px" }}>
-          <GoogleMap parentCallback={this.callbackFunction} />
-        </div>
       </div>
     );
   }

@@ -22,8 +22,8 @@ class Checkbox extends Component {
     const { isChecked } = this.state;
 
     return (
-      <div className="checkbox" style={{ marginRight: "10px" }}>
-        <label>
+      <div className="checkbox">
+        <label className="checkbox-label">
           <input className="box"
             type="checkbox"
             value={label}
