@@ -36,6 +36,9 @@ class ItemDao(DatabaseObject):
         # Register the location attribute for documents in mongo to be used as a
         # geospatial index for querying
         self.collection.create_index([('location', '2dsphere' )])
+        # Register the name and description attributes for documents in mongo to
+        # be used as a text index for searching
+        self.collection.create_index([('name', 'text'), ('desc', 'text')])
 
     def findById(self, Id):
         # Get the item from our mongodb collection
@@ -79,14 +82,31 @@ class ItemDao(DatabaseObject):
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
-    def findByMostRecent(self, tags):
+    def findByMostRecent(self, tags, query):
         # Mongo query to retrieve the items sorted by their timestamp in
         # descending order and also have the speicifed tags
-        filteredItems = self.collection.find({
-            'tags': {
-                '$bitsAllSet': int(tags)
-            }
-        }).sort([('timestamp', -1)])
+        if (query.isspace()):
+             filteredItems = self.collection.find({
+                'tags': {
+                    '$bitsAllSet': int(tags)
+                }
+            }).sort([('timestamp', -1)])
+        else:
+            filteredItems = self.collection.find({
+                '$and': [
+                    {
+                        "$text": {
+                            '$search': query,
+                            '$language': 'english'
+                        }
+                    },
+                    {
+                        'tags': {
+                            '$bitsAllSet': int(tags)
+                        }
+                    }
+                ]
+            }).sort([('timestamp', -1)])
 
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]

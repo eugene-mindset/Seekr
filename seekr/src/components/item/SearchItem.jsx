@@ -25,8 +25,10 @@ export class SearchItem extends Component {
     this.setState({ location: coordinates });
   };
 
-  changeFilter = () =>
-    this.setState({ filter: document.getElementById("filters").value });
+  changeFilter = () => {
+    let newFilter = document.getElementById("filters").value
+    this.setState({ filter: newFilter });
+  }
 
   toggleCheckbox = (val) => {
     if ((this.selectedCheckboxes & val) === val) {
@@ -57,8 +59,8 @@ export class SearchItem extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.state.name === "") {
-      alert("Item must have a name!");
+    if (this.state.name === "" && this.state.filter === 'Best') {
+      alert("You must enter a search query when sorting by Best Match.");
       return false;
     }
     this.props.searchItem(
@@ -94,7 +96,6 @@ export class SearchItem extends Component {
                     placeholder="Search for an item..." 
                     name="name"
                     aria-describedby="inputGroupPrepend"
-                    required
                   />
               </InputGroup>
             </Form>
