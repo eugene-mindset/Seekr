@@ -5,7 +5,10 @@ import axios from "axios";
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
+<<<<<<< HEAD
 import { trackPromise } from "react-promise-tracker";
+=======
+>>>>>>> ui fix
 
 function getCookieValue(a) {
 	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
