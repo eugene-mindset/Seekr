@@ -30,7 +30,7 @@
 
 ### Search
 
-* [ ] Move the search bar to side (Andrew)
+* [X] Move the search bar to side (Andrew)
 * [ ] Displaying search boxes (clicking search box should display bigger box and generating mini map) (Jacob)
 * [ ] Make mini-map for item listing cards be attached to the respective cards (Jacob)
 * [ ] Prevent the client from sending multiple search requests to the backend until it gets the information from the first request (Jacob)
@@ -39,10 +39,10 @@
 
 ### User Accounts
 
-* [ ] Add user authentication (Shaurya, Andrew)
+* [X] Add user authentication (Shaurya, Andrew)
 * [ ] Provide the option to opt out of email notifications for users (Shaurya, Andrew)
-* [ ] Users can only delete a post (Shaurya, Andrew)
-* [ ] Add the button for authentication (Shaurya, Andrew)
+* [X] Users can only delete their own post (Shaurya, Andrew)
+* [X] Add the button for authentication (Shaurya, Andrew)
 
 ### General
 
