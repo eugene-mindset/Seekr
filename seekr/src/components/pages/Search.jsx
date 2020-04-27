@@ -47,14 +47,10 @@ export default class Search extends Component {
       trackPromise(
       axios
         .get(
-          "/items/proximitysearch=" +
-            name +
-            "?tags=" +
-            tags +
-            "&lat=" +
-            location[0] +
-            "&lon=" +
-            location[1]
+          "/items/proximitysearch" +
+            "?tags=" + tags +
+            "&lat=" + location[0] +
+            "&lon=" + location[1]
         )
         .then((res) =>
           res.data.map((item) => {
