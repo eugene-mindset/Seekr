@@ -43,13 +43,16 @@ export default class Search extends Component {
         })
       );
     } else if (filter === "Recent") {
-      axios.get("/items/timesearch=" + name + "?tags=" + tags).then((res) =>
+      // if sort is by recent but query is blank, just search a space, of which
+      // the backend will handle by returning all items
+      let nameQuery = name.length === 0 ? ' ' : name;
+      axios.get("/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
       );
     } else {
-      axios.get("/items/proximitysearch=" + name +
+      axios.get("/items/proximitysearch" +
         "?tags=" + tags +
         "&lat=" + location[0] +
         "&lon=" + location[1]
