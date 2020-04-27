@@ -23,9 +23,7 @@ const Add = () => {
     data.append("longitude", location[1]);
     data.append("radius", radius);
     data.append("tags", tags);
-    data.append("username", name);
     data.append("email", email);
-    data.append("optIn", 'false'); // make this automatically false
     img.forEach((i) => {
       // Append multiple files to request form
       data.append("image", i);

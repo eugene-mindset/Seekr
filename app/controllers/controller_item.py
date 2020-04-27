@@ -143,11 +143,11 @@ def add_item():
         images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
 
     timestamp = currTime()
-    user = User(request.form['username'], request.form['email'], request.form['optIn'])
+    email = request.form['email']
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=timestamp, user=user)
+                timestamp=timestamp, email=email)
 
     mongo_item_dao.insert(item)
 
@@ -161,8 +161,7 @@ def add_item():
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
 
-    if item.user.optIn:
-        notify(item, simMatch)
+    notify(item, simMatch)
 
     return jsonify(item.toDict()), 200
 

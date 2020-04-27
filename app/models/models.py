@@ -135,7 +135,7 @@ class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
                  radius=None, tags=None, images=[], timestamp=None,
-                 user=None):
+                 email=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -145,7 +145,7 @@ class Item:
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
-        self.user = user            # Should be a User object
+        self.email = email            # Should be a User object
 
     @classmethod
     def fromDict(cls, doc):
@@ -159,7 +159,7 @@ class Item:
         item.tags = ItemTags(doc['tags'])
         item.images = [ItemImage.fromDict(img) for img in doc['images']]
         item.timestamp = doc['timestamp']
-        item.user = User.fromDict(doc['user'])
+        item.email = doc['email']
 
         return item
 
@@ -236,11 +236,11 @@ class Item:
         self.__timestamp = timestamp
 
     @property
-    def user(self):
-        return self.__user
+    def email(self):
+        return self.__email
     @user.setter
     def user(self, user):
-        self.__user = user
+        self.__email = email
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -261,7 +261,7 @@ class Item:
             return False
         if self.timestamp != otherItem.timestamp:
             return False
-        if self.user != otherItem.user:
+        if self.email != otherItem.email:
             return False
         return True
 
@@ -282,7 +282,7 @@ class Item:
             'tags'      : ItemTags.toInt(self.tags),
             'images'    : [i.toDict() for i in self.images],
             'timestamp' : self.timestamp,
-            'user'      : self.user.toDict() if self.user is not None else 'None'
+            'email'      : self.email if self.email is not None else 'None'
         }
 
         return output
