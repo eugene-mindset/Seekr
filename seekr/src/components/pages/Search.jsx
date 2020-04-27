@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 import Items from "../item/Items";
-import Modal from "../item/Modal";
 import axios from "axios";
+import ItemModal from "../item/ItemModal"
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
@@ -49,11 +49,18 @@ export default class Search extends Component {
         })
       );
     } else {
-      axios.get("/items/proximitysearch=" + name +
-        "?tags=" + tags +
-        "&lat=" + location[0] +
-        "&lon=" + location[1]
-      ).then((res) =>
+      axios
+        .get(
+          "/items/proximitysearch=" +
+            name +
+            "?tags=" +
+            tags +
+            "&lat=" +
+            location[0] +
+            "&lon=" +
+            location[1]
+        )
+        .then((res) =>
           res.data.map((item) => {
             return this.setState({ items: [...this.state.items, item] });
           })
@@ -85,24 +92,22 @@ export default class Search extends Component {
         </div>
 
         <br />
-        <div className="results" onClick={() => this.openModalHandler()}>
+        <div className="results">
           <CardColumns style={columnStyle} >
-            <Items items={this.state.items} deleteItem={this.deleteItem}/>
+            <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
         </div>
 
         <div>
-            { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
+                { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
 
-            
+                <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
 
-            <Modal
-                className="modal"
-                show={this.state.isShowing}
-                close={this.closeModalHandler}>
-                    Maybe aircrafts fly very high because they don't want to be seen in plane sight?
-            </Modal>
-        </div>
+                <ItemModal
+                    showModal={this.state.isShowing} handleClose={this.closeModalHandler}>
+                        Maybe aircrafts fly very high because they don't want to be seen in plane sight?
+                </ItemModal>
+            </div>
       </React.Fragment>
     );
   }
