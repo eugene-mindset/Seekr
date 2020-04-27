@@ -22,18 +22,6 @@ export default class Search extends Component {
     isShowing: false
   };
 
-  openModalHandler = () => {
-    this.setState({
-        isShowing: true
-    });
-  }
-
-  closeModalHandler = () => {
-    this.setState({
-        isShowing: false
-    });
-  }
-
   searchItem = (name, tags, filter, location) => {
     this.setState({ items: [] });
     if (filter === "Best") {
@@ -97,17 +85,6 @@ export default class Search extends Component {
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
         </div>
-
-        <div>
-                { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
-
-                <button className="open-modal-btn" onClick={this.openModalHandler}>Open Modal</button>
-
-                <ItemModal
-                    showModal={this.state.isShowing} handleClose={this.closeModalHandler}>
-                        Maybe aircrafts fly very high because they don't want to be seen in plane sight?
-                </ItemModal>
-            </div>
       </React.Fragment>
     );
   }

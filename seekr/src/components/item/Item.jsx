@@ -4,8 +4,13 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Tags from './Tags'
 import ItemTags from '../helper/ItemTags'
+import ItemModal from "../item/ItemModal"
 
 export class Item extends Component {
+
+  state = {
+    isShowing: false
+  };
 
   getImage = images => {
     // Only returns the first image for now
@@ -19,6 +24,18 @@ export class Item extends Component {
     return date.toLocaleString();
   }
 
+  openModalHandler = () => {
+    this.setState({
+        isShowing: true
+    });
+  }
+
+  closeModalHandler = () => {
+    this.setState({
+        isShowing: false
+    });
+  }
+
   
   render() {
     const { id, name, found, desc, location, images, timestamp, tags, user} = this.props.item;
@@ -26,21 +43,29 @@ export class Item extends Component {
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
-      <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
-        <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
-        <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
-        <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
-        <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
-        <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
-        { images.length !== 0 ? this.getImage(images) : <span></span>}
-        <Card.Subtitle>
-          <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
-        </Card.Subtitle>
-        <Card.Footer>
-          <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
-          <small className="text-muted">{ this.getTime(timestamp) }</small>
-        </Card.Footer>
-      </Card>
+      <div onClick={() => this.openModalHandler()}>
+        <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
+          <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
+          <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
+          <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
+          <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
+          <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
+          { images.length !== 0 ? this.getImage(images) : <span></span>}
+          <Card.Subtitle>
+            <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
+          </Card.Subtitle>
+          <Card.Footer>
+            <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
+            <small className="text-muted">{ this.getTime(timestamp) }</small>
+          </Card.Footer>
+        </Card>
+        { this.state.isShowing ? <div onClick={this.closeModalHandler} className="back-drop"></div> : null }
+        <ItemModal
+          
+            showModal={this.state.isShowing} handleClose={this.closeModalHandler}>
+            Maybe aircrafts fly very high because they don't want to be seen in plane sight?
+        </ItemModal>
+      </div>
     )
   }
 }

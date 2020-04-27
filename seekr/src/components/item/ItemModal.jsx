@@ -24,11 +24,8 @@ export const ItemModal = (props) => {
         <Modal.Body>More details about this item...
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => props.handleClose(false)}>
+          <Button variant="secondary" onClick={() => props.handleClose()}>
             Close
-          </Button>
-          <Button variant="primary" onClick={() => props.handleClose(true)}>
-            Continue Submitting
           </Button>
         </Modal.Footer>
       </Modal>
