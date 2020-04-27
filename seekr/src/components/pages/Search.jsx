@@ -6,13 +6,13 @@ import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
 
-// const columnStyle = {
-//   display: "flex",
-//   flexWrap: "wrap",
-//   justifyContent: "center",
-//   marginLeft: "10px"
+const columnStyle = {
+  float: "right",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  marginLeft: "1000px"
 
-// };
+};
 
 export default class Search extends Component {
   state = {
@@ -66,9 +66,11 @@ export default class Search extends Component {
           searchItem={this.searchItem}
           clearSearch={this.clearSearch}
         />
-        <CardColumns>
-          <Items items={this.state.items} deleteItem={this.deleteItem} />
-        </CardColumns>
+        <div style={{marginLeft: "450px", float:"right"}}>
+          <CardColumns>
+            <Items items={this.state.items} deleteItem={this.deleteItem} />
+          </CardColumns>
+        </div>
       </div>
     );
   }

@@ -79,7 +79,6 @@ export class SearchItem extends Component {
     return (
       <div className="search-sidebar">
         <div className="search-sidebar-searchbar">
-          <h1 className="search-sidebar-name">Search and Filter</h1>
           <Form onSubmit={this.onSubmit}>
               <InputGroup>
                   <InputGroup.Prepend>
@@ -90,7 +89,8 @@ export class SearchItem extends Component {
                   <Form.Control
                     type="text"
                     onChange={this.onChange} 
-                    value={this.state.name} 
+                    value={this.state.name}
+                    placeholder="Search for an item..." 
                     name="name"
                     aria-describedby="inputGroupPrepend"
                     required
@@ -98,33 +98,28 @@ export class SearchItem extends Component {
               </InputGroup>
             </Form>
           </div>
-          <div style={{  }}>
-            <h4>Add Filters</h4>
-            {this.createCheckboxes()}
+          <div className="filter-search">
+            <div className="checkbox-search">
+              <h4>Add Filters</h4>
+              {this.createCheckboxes()}
+              <div>
+              <b>Give a location to search</b>
+              </div>
+              <div className="googleMap-search">
+                <GoogleMap parentCallback={this.callbackFunction} />
+              </div>
+            </div>
+            <div className="row" style={{ float:"center"}}>
+              <label htmlFor="filters" style={{ paddingRight: "5px" }}>
+                <h4>Sort by:{" "}</h4>
+              </label>
+              <select id="filters" onChange={this.changeFilter}>
+                <option value="Best">Best Match</option>
+                <option value="Recent">Most Recent</option>
+                <option value="Proximity">Closest Distance</option>
+              </select>
+            </div>
           </div>
-          {/* <div
-            className="row"
-            style={{
-              display: "flex",
-              paddingLeft: "5px",
-              alignItems: "baseline",
-            }}
-          >
-            <label htmlFor="filters" style={{ paddingRight: "5px" }}>
-              Sort by:{" "}
-            </label>
-            <select id="filters" onChange={this.changeFilter}>
-              <option value="Best">Best Match</option>
-              <option value="Recent">Most Recent</option>
-              <option value="Proximity">Closest Distance</option>
-            </select>
-          </div> */}
-          {/* <div className="row" style={{ paddingLeft: "5px" }}>
-            Supply a location to find nearby items.
-          </div>
-          <div className="row" style={{ paddingLeft: "5px" }}>
-            <GoogleMap parentCallback={this.callbackFunction} />
-          </div> */}
       </div>
     );
   }
