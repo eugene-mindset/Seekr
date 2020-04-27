@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+import PropTypes from 'prop-types';
 
 export class GoogleMap extends Component {
   constructor(props) {
@@ -20,25 +21,28 @@ export class GoogleMap extends Component {
   }
 
   onClick(t, map, coord) {
-    const { latLng } = coord;
-    const lat = latLng.lat();
-    const lng = latLng.lng();
-    this.state.markers.pop();
-    this.props.updateParent;
-    this.setState({location: [ lat, lng ]});
-    this.sendData();
-    this.setState(previousState => {
-      return {
-        markers: [
-          ...previousState.markers,
-          {
-            title: "",
-            name: "",
-            position: { lat, lng }
-          }
-        ]
-      };
-    });
+    if(this.props.clickable) {
+      const { latLng } = coord;
+      const lat = latLng.lat();
+      const lng = latLng.lng();
+      this.state.markers.pop();
+      this.props.updateParent;
+      this.setState({location: [ lat, lng ]});
+      this.sendData();
+      this.setState(previousState => {
+        return {
+          markers: [
+            ...previousState.markers,
+            {
+              title: "",
+              name: "",
+              position: { lat, lng }
+            }
+          ]
+        };
+      });
+    }
+    
   }
 
   render() {
@@ -63,6 +67,10 @@ export class GoogleMap extends Component {
       </div>
     );
   }
+}
+
+GoogleMap.propTypes = {
+  clickable: PropTypes.bool.isRequired
 }
 
 export default GoogleApiWrapper({
