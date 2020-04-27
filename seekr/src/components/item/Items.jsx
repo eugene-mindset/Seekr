@@ -8,7 +8,7 @@ const Items = ({items, deleteItem}) => {
   const { name, email } = useContext(AuthContext);
 
   return items.map((item) => (
-    <Item key={item.id} item={item} deleteItem={deleteItem} email={email} name={name} />
+    <Item key={item.id} item={item} deleteItem={deleteItem} email={email} user_name={name} />
   ));
 };
 
