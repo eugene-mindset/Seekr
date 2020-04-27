@@ -13,7 +13,6 @@ const Navigation = () => {
           <Nav className="ml-auto">
             <Nav.Link href="/add">Add</Nav.Link>
             <Nav.Link href="/">Search</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
             {userID != "null" && userID != "undefined" ? (
               <Nav.Link href="/userinfo">User Info</Nav.Link>
             ) : null}

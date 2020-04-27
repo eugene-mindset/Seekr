@@ -43,18 +43,11 @@ export default class Search extends Component {
         })
       );
     } else {
-      axios
-        .get(
-          "/items/proximitysearch=" +
-            name +
-            "?tags=" +
-            tags +
-            "&lat=" +
-            location[0] +
-            "&lon=" +
-            location[1]
-        )
-        .then((res) =>
+      axios.get("/items/proximitysearch=" + name +
+        "?tags=" + tags +
+        "&lat=" + location[0] +
+        "&lon=" + location[1]
+      ).then((res) =>
           res.data.map((item) => {
             return this.setState({ items: [...this.state.items, item] });
           })

@@ -1,33 +1,35 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import GoogleMap from "../pages/GoogleMap";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import GoogleMap from '../pages/GoogleMap';
 import Checkbox from "./Checkbox";
 import ItemTags from "../helper/ItemTags";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button'
 
 export class AddItem extends Component {
-  componentDidMount = () => {
-    // create a set of checked boxes when component is created
-    this.selectedCheckboxes = 0;
-  };
 
   state = {
-    name: "",
+    name: '',
+    desc: '',
     found: false,
-    desc: "",
     location: [39.3299, -76.6205],
+    radius: 25,
+    tags: 0,
     img: [],
-    radius: 0
-  };
-
-  toggleCheckbox = (val) => {
-    if ((this.selectedCheckboxes & val) === val) {
-      this.selectedCheckboxes = this.selectedCheckboxes & ~val;
+    username: "",
+    email: "",
+    phone: ""
+  }
+  
+  toggleCheckbox = val => {
+    if ((this.state.tags & val) === val) {
+      this.setState(prevstate => ({ tags: prevstate.tags & ~(val)}))
     } else {
-      this.selectedCheckboxes = this.selectedCheckboxes | val;
+      this.setState(prevstate => ({ tags: prevstate.tags | val}))
     }
   };
 
-  createCheckbox = (tag) => (
+  createCheckbox = tag => (
     <Checkbox
       label={tag.label}
       flagValue={tag.value}
@@ -39,48 +41,50 @@ export class AddItem extends Component {
   createCheckboxes = () => ItemTags.getMapping().map(this.createCheckbox);
 
   callbackFunction = (coordinates) => {
-    this.setState({ location: coordinates });
-  };
+    this.setState({location: coordinates})
+  }
 
-  onClick = (e) => {
-    this.setState({ found: true });
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    if (this.state.name === "") {
-      alert("Item must have a name!");
-      return false;
-    }
-
-    this.props.addItem(
-      this.state.name,
-      this.state.found,
-      this.state.desc,
-      this.state.location,
-      this.selectedCheckboxes,
-      this.state.img,
-      this.state.radius
-    );
-
+  clearForm = () => {
     this.setState({
-      name: "",
+      name: '',
       found: false,
-      desc: "",
+      desc: '',
       location: [39.3299, -76.6205],
       img: [],
-      radius: 0
+      radius: 0,
+      username: "",
+      email: "",
+      phone: ""
     });
+
     document.getElementById("imagesUpload").value = "";
 
-    var boxes = document.getElementsByClassName("box");
-    console.log(boxes);
+    let radios = document.getElementsByName('lostfoundradio');
+    for (let i = 0; i < radios.length; i++) {
+      radios[i].checked = false;
+    }
+
+    var boxes = document.getElementsByClassName('box');
     for (let box of boxes) {
       if (box.checked) {
         box.click();
       }
     }
-  };
+  }
+
+  onClick = (e) => {
+    this.setState({found: true});
+  }
+
+  onSubmit = (e) => {
+
+    e.preventDefault();
+
+    this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
+      this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
+
+    this.clearForm();
+  }
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
@@ -88,31 +92,31 @@ export class AddItem extends Component {
     // Check to make sure images are below 12 Mib, and that they are only png or jpg
     let totalSize = 0;
 
-    uploadedFiles.forEach((imgFile) => {
-      if (imgFile.type !== "image/png" && imgFile.type !== "image/jpeg") {
-        alert("png and jpeg only");
+    uploadedFiles.forEach(imgFile => {
+      if (imgFile.type !== 'image/png' && imgFile.type !== 'image/jpeg') {
+        alert('png and jpeg only');
         return false;
       }
-      totalSize += imgFile.size;
+      totalSize += imgFile.size
     });
 
-    totalSize = totalSize / 1024 / 1024; // Convert from bytes to MiB
-    totalSize *= 4 / 3; // convert to size of base64 encoded string
+    totalSize = (totalSize / 1024) / 1024 // Convert from bytes to MiB
+    totalSize *= (4/3) // convert to size of base64 encoded string
     if (totalSize >= 12) {
-      alert("file sizes too large");
+      alert('file sizes too large');
       return false;
     }
     return true;
-  };
+  }
 
   fileSelectedHandler = (e) => {
     this.setState({
-      img: [],
+      img: []
     });
 
-    var uploadedFiles = [];
+    var uploadedFiles = []
     for (let i = 0; i < e.target.files.length; i++) {
-      uploadedFiles.push(e.target.files[i]);
+      uploadedFiles.push(e.target.files[i])
     }
 
     let filesOK = this.validateFiles(uploadedFiles);
@@ -123,72 +127,168 @@ export class AddItem extends Component {
     }
 
     this.setState({
-      img: uploadedFiles,
+      img: uploadedFiles
     });
-  };
+  }
+
+  lostFoundClick = (e) => {
+    this.setState({ found: e.target.value === 'true' })
+    // If item is a found item, user shouldn't have to select a radius
+    if (e.target.value === 'true') {
+      document.getElementById('formRadiusGroup').style.display = 'none';
+    } else {
+      document.getElementById('formRadiusGroup').style.display = 'block';
+    }
+  }
+
+  radiusOnChange = (e) => {
+    let selected = e.target.value;
+    let distance = selected.substring(0, selected.length - 5);
+    this.setState({ radius: parseInt(distance, 10)});
+  }
 
   render() {
     return (
       // flexbox
-      <div>
-        <form onSubmit={this.onSubmit} style={{ display: "flex" }}>
-          <input
-            type="text"
-            name="name"
-            style={{ flex: "10", padding: "5px" }}
-            placeholder="Add Item Name..."
-            value={this.state.name}
-            onChange={this.onChange}
-          />
-          <input
-            type="text"
-            name="desc"
-            style={{ flex: "10", padding: "5px" }}
-            placeholder="Add Item Description..."
-            value={this.state.desc}
-            onChange={this.onChange}
-          />
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            name="radius"
-            style={{ flex: "10", padding: "5px" }}
-            placeholder="Add Item Radius..."
-            value={this.state.radius}
-            onChange={this.onChange}
-          />
-          <input
-            type="file"
-            id="imagesUpload"
-            multiple
-            accept="image/png, image/jpeg"
-            onChange={this.fileSelectedHandler}
-          />
-          <input
-            type="submit"
-            value="List as Missing"
-            className="btn"
-            style={{ flex: "1" }}
-          />
-          <input
-            type="submit"
-            value="List as Found"
-            className="btn"
-            style={{ flex: "1" }}
-            onClick={this.onClick}
-          />
-        </form>
-        <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
-        <h1 className="text-center">Drop a marker on location of lost item.</h1>
-        <GoogleMap parentCallback={this.callbackFunction} />
+      <div style={{border: '3px solid', borderRadius: '10px', margin: 'auto', width: '70%', minWidth: '600px', padding: '20px'}}>
+        <Form onSubmit={this.onSubmit} style={{ textAlign : 'left'}}>
+          <Form.Group >
+            <Form.Label>Did you lose or find this item?</Form.Label>
+            <Form.Check
+              type='radio'
+              label='I lost it'
+              name='lostfoundradio'
+              value='false'
+              onClick={this.lostFoundClick}
+              required
+            />
+            <Form.Check
+              type='radio'
+              label='I found it'
+              name='lostfoundradio'
+              value='true'
+              onClick={this.lostFoundClick}
+            />
+          </Form.Group>
+
+          <Form.Group controlId='formItemName'>
+            <Form.Label>Item name</Form.Label>
+            <Form.Control
+              type='text'
+              name='name'
+              placeholder='Enter item name...'
+              value={this.state.name}
+              onChange={this.onChange}
+              required
+            />
+            <Form.Text className='text-muted'>
+              Enter the name of the item.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId='formDescArea'>
+            <Form.Label>Item description</Form.Label>
+            <Form.Control
+              name='desc'
+              as='textarea'
+              rows='3'
+              placeholder='Enter item description...'
+              value={this.state.desc}
+              onChange={this.onChange}
+            />
+            <Form.Text className='text-muted'>
+              Enter a description of the item.
+            </Form.Text>
+            <Form.Text className='text-muted'>
+              Note: You may not want to put all the details of an item. If someone contacts you
+              regarding the item, ask them to describe some of the details of it first before giving
+              it to them.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>What kind of item is it?</Form.Label>
+            <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Where did you lose/find the item?</Form.Label>
+            <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}>
+              <GoogleMap parentCallback={this.callbackFunction}/>
+            </div>
+            <Form.Text className='text-muted'>
+              Click on the map to place a marker.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group id='formRadiusGroup' controlId='formRadius'>
+            <Form.Label>
+              Within what distance do you think you lost the item from this location?
+            </Form.Label>
+            <Form.Control as='select' onChange={this.radiusOnChange}>
+              <option>25 feet</option>
+              <option>50 feet</option>
+              <option>75 feet</option>
+              <option>100 feet</option>
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId='formImages'>
+            <Form.Label>Upload any images of the item that you may have.</Form.Label>
+            <input
+              type="file"
+              id="imagesUpload"
+              multiple
+              accept="image/png, image/jpeg"
+              onChange={this.fileSelectedHandler}
+              style={{ display: 'block'}}
+            />
+          </Form.Group>
+
+          <Form.Group controlId='formName'>
+            <Form.Label>
+              Enter your contact information so people can contact you about the item.
+            </Form.Label>
+            <Form.Control
+              type="text"
+              name="username"
+              placeholder="Enter your name..."
+              value={this.state.username}
+              onChange={this.onChange}
+            />
+          </Form.Group>
+
+          <Form.Group controlId='formEmail'>
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="Enter your email..."
+              value={this.state.email}
+              onChange={this.onChange}
+            />
+          </Form.Group>
+
+          <Form.Group controlId='formPhone'>
+            <Form.Control
+              type="tel"
+              name="phone"
+              placeholder="Enter your phone number..."
+              value={this.state.phone}
+              onChange={this.onChange}
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
       </div>
-    );
+    )
   }
 }
 
 AddItem.propTypes = {
-  addItem: PropTypes.func.isRequired,
-};
+  submitForm: PropTypes.func.isRequired
+}
 
 export default AddItem;

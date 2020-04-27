@@ -13,7 +13,8 @@ from app.models.models import User, UserDao
 users = mongo.db.users # our items collection in mongodb
 mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
-def send_mail(user_item, similar_item, found):
+
+def sendMail(user_item, similar_items, found):
     sender_email = "seekr.oose@gmail.com"
     password = "Seekroose!"
 
@@ -22,18 +23,18 @@ def send_mail(user_item, similar_item, found):
     message = MIMEMultipart("alternative")
     message["Subject"] = f"Seekr Team: a Similar Item was Added!"
     message["From"] = sender_email
-    message["To"] = similar_item.user.email
+    message["To"] = similar_item.email
 
     # Create the plain-text and HTML version of your message
     text = """\
-    Hi,
-    How are you?
-    Real Python has many great tutorials:
-    www.realpython.com"""
+    Hi {similar_item.username}!
+    You recently added: {similar_item.name}.
+    An item was added that was similar to what you're looking for! {found}: {user_item}
+    """
     html = f"""\
     <html>
     <body>
-        <p>Hi {similar_item.user.name}!<br>
+        <p>Hi {similar_item.username}!<br>
         You recently added: {similar_item.name}.
         <br>An item was added that was similar to what you're looking for! {found}: {user_item}
         </p>
@@ -76,7 +77,7 @@ def distance(item1, item2):
     return dist
 
 
-def radius_cutoff(items, queriedItem):
+def radiusCutOff(items, queriedItem):
     results = []
 
     for item in items:
@@ -85,17 +86,16 @@ def radius_cutoff(items, queriedItem):
     return results
 
 
-def notify(queriedItem, simMatch):
+def getSimItems(queriedItem, simMatch):
     # get right string to return
     found = 'found' if queriedItem.found == True else 'missing'
 
     # if no items, return
     if len(simMatch.itemScores) == 0:
         print("NO ITEMS")
-        return
+        return [], ''
 
-    print(simMatch.getSortedItems())
-    listOfItems = radius_cutoff(simMatch.getSortedItems(), queriedItem)
+    listOfItems = radiusCutOff(simMatch.getSortedItems(), queriedItem)
     simMatch.clearItems()
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
@@ -112,9 +112,9 @@ def notify(queriedItem, simMatch):
         if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
             similar_items.remove(item)
 
-    for item in similar_items:
-        matches = mongo_user_dao.findAllMatchingEmail(item.email)
-        if matches[0].optIn == 'true':
-            send_mail(queriedItem, item, found)
-    #if len(similar_items) != 0:
-    #    send_mail(queriedItem, similar_items, found)
+    # for item in similar_items:
+    #     matches = mongo_user_dao.findAllMatchingEmail(item.email)
+    #     if matches[0].optIn == 'true':
+    #         sendMail(queriedItem, item, found)
+
+    return similar_items, found
