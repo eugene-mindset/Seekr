@@ -16,7 +16,7 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
 
 from app import mongo
-from app.controllers.notifications import notify
+from app.controllers.notifications import getSimItems, sendMail
 from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User
 from app.models.similarity import ItemSimilarity
 
@@ -111,10 +111,57 @@ def get_all_items_sorted(query):
 
     return jsonify(output), 200
 
+@items_router.route('/sim_items', methods=['GET'])
+def find_similar_items():
+    """
+        Route returns all item listings that are similar to the item listing
+        created from the information recieved.
+
+        Returns
+        -------
+        A list of item listing dictionaries (which are JSON compatible) and
+        a code representing the success of the request.
+    """
+
+    # get all the information needed to make Item instance
+    name = request.args.get('name')
+    desc = request.args.get('desc')
+    found = request.args.get('found') == 'true'
+    location = ItemLocation([float(request.args.get('lat')), float(request.args.get('long'))])
+    radius = float(request.args.get('radius'))
+    tags = ItemTags.get(request.args.get('tags'))
+
+    # Get the list of uploaded images and convert them to ItemImage objects
+    uploadedImages = request.files.getlist('image')
+    images = []
+    for img in uploadedImages:
+        encoded = standard_b64encode(img.read())
+        encodedAsStr = encoded.decode()
+        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
+
+    item = Item(name=name, desc=desc, found=found, location=location,
+                radius=radius, tags=tags, images=images,
+                timestamp=None, user=None)
+
+    # want to check whenever an item is added if their are similar items to send notifications to
+    listOfItems = mongo_item_dao.findAll(tags)
+    if item.found is True:
+        listOfItems = [item for item in listOfItems if item.found is False]
+    else:
+        listOfItems = [item for item in listOfItems if item.found is True]
+
+    simMatch = ItemSimilarity(simModel)
+    simMatch.addItems(listOfItems)
+
+    simItems, foundStatus = getSimItems(item, simMatch)
+
+    if len(simItems) > 3:
+        simItems = simItems[0:3]
+
+    return jsonify([x.toDict() for x in simItems]), 200
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
-
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
@@ -122,7 +169,7 @@ def add_item():
                              float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    
+
     # Get the list of uploaded images and convert them to ItemImage objects
     uploadedImages = request.files.getlist('image')
     images = []
@@ -151,7 +198,10 @@ def add_item():
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
 
-    notify(item, simMatch)
+    simItems, foundStatus = getSimItems(item, simMatch)
+
+    if len(simItems) != 0:
+        sendMail(item, simItems, foundStatus)
 
     return jsonify(item.toDict()), 200
 
@@ -179,7 +229,7 @@ def update_item(Id):
 
 
 @items_router.route('/items/<Id>', methods=['DELETE'])
-def delete_item(Id):    
+def delete_item(Id):
     numDeleted = mongo_item_dao.remove(Id)
 
     if numDeleted == 1:
