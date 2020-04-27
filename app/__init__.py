@@ -37,4 +37,6 @@ def register_blueprints(application):
     """
 
     from app.controllers import items_router
+    from app.controllers import users_router
     application.register_blueprint(items_router)
+    application.register_blueprint(users_router)

@@ -32,10 +32,11 @@ export class Item extends Component {
 
   
   render() {
-    const { id, name, found, desc, location, images, timestamp, tags, user} = this.props.item;
+    const { id, name, found, desc, location, images, timestamp, tags, username, email} = this.props.item;
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
+    // const username = "TEMP";
     return (
       <div onClick={() => this.modalHandler(true)}>
         //, color: found ? blue : red
@@ -43,10 +44,10 @@ export class Item extends Component {
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
           <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
-          <Button variant="danger" style={{ margin: '1em 0.5em 1em 1em'}} onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
+          {email == this.props.cur_email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
           { images.length !== 0 ? this.getImage(images) : <span></span>}
           <Card.Subtitle>
-            <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
+            <small className="text-muted">{"Contact: " + username + " " + email}</small>
           </Card.Subtitle>
           <Card.Footer>
             <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
@@ -59,10 +60,11 @@ export class Item extends Component {
   }
 }
 
+// 
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
-  deleteItem: PropTypes.func.isRequired
+  // deleteItem: PropTypes.func.isRequired
 }
 
 export default Item
