@@ -50,12 +50,12 @@ else:
     simModel.save(str(modelLocation))
 
 
-@items_router.route("/")
+@items_router.route("/api/")
 def hello():
     return "This is the API for the Seekr App!"
 
 
-@items_router.route('/items', methods=['GET'])
+@items_router.route('/api/items', methods=['GET'])
 def get_all_items():
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
@@ -67,7 +67,7 @@ def get_all_items():
     return jsonify(output), 200
 
 
-@items_router.route('/items/timesearch=<query>', methods=['GET'])
+@items_router.route('/api/items/timesearch=<query>', methods=['GET'])
 def get_all_items_timesorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
@@ -78,7 +78,7 @@ def get_all_items_timesorted(query):
     return jsonify(output), 200
 
 
-@items_router.route('/items/proximitysearch=<query>', methods=['GET'])
+@items_router.route('/api/items/proximitysearch=<query>', methods=['GET'])
 def get_all_items_proximitysorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
@@ -91,7 +91,7 @@ def get_all_items_proximitysorted(query):
     return jsonify(output), 200
 
 
-@items_router.route('/items/search=<query>', methods=['GET'])
+@items_router.route('/api/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
     # Get the tags if exists
     tags = ItemTags.get(request.args.get('tags'))
@@ -113,7 +113,7 @@ def get_all_items_sorted(query):
 
     return jsonify(output), 200
 
-@items_router.route('/items/user=<query>', methods=['GET'])
+@items_router.route('/api/items/user=<query>', methods=['GET'])
 def get_all_items_by_user(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
@@ -124,7 +124,7 @@ def get_all_items_by_user(query):
     return jsonify(output), 200
 
     
-@items_router.route('/sim_items', methods=['GET'])
+@items_router.route('/api/sim_items', methods=['GET'])
 def find_similar_items():
     """
         Route returns all item listings that are similar to the item listing
@@ -173,7 +173,7 @@ def find_similar_items():
 
     return jsonify([x.toDict() for x in simItems]), 200
 
-@items_router.route('/items', methods=['POST'])
+@items_router.route('/api/items', methods=['POST'])
 def add_item():
     name = request.form['name']
     desc = request.form['desc']
@@ -219,7 +219,7 @@ def add_item():
     return jsonify(item.toDict()), 200
 
 
-@items_router.route('/items/<Id>', methods=['PUT'])
+@items_router.route('/api/items/<Id>', methods=['PUT'])
 def update_item(Id):
     # TODO: Update this to match the new architecture of objects
     # Actually let the user update items on the frontend
@@ -240,7 +240,7 @@ def update_item(Id):
     return jsonify(item.toDict()), 200
 
 
-@items_router.route('/items/<Id>', methods=['DELETE'])
+@items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
     numDeleted = mongo_item_dao.remove(Id, request.args.get('email'))
 
