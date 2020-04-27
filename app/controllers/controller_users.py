@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file
-#from flask_pymongo import PyMongo
 from app import mongo
 from app.models.models import User, UserDao
 
@@ -12,7 +11,7 @@ mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
 @users_router.route('/userinfo', methods=['POST'])
 def add_user():
-
+    print("hello")
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
@@ -44,6 +43,7 @@ def update_user():
 
 @users_router.route('/userinfo', methods=['GET'])
 def get_all_users():
+    print("getting all users")
     # get list of all items using DAO and specifying the tags
     listOfUsers = mongo_user_dao.findAll()
 

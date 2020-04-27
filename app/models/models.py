@@ -134,7 +134,7 @@ class ItemDao(DatabaseObject):
 class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
-                 radius=None, tags=None, images=[], timestamp=None,
+                 radius=None, tags=None, images=[], timestamp=None, username=None,
                  email=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
@@ -145,7 +145,8 @@ class Item:
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
-        self.email = email            # Should be a User object
+        self.username = username    # Should be a User object
+        self.email = email          # Should be a User object
 
     @classmethod
     def fromDict(cls, doc):
@@ -159,6 +160,7 @@ class Item:
         item.tags = ItemTags(doc['tags'])
         item.images = [ItemImage.fromDict(img) for img in doc['images']]
         item.timestamp = doc['timestamp']
+        item.username = doc['username']
         item.email = doc['email']
 
         return item
@@ -236,10 +238,19 @@ class Item:
         self.__timestamp = timestamp
 
     @property
+    def username(self):
+        return self.__username
+    
+    @username.setter
+    def username(self, username):
+        self.__username = username
+        
+    @property
     def email(self):
         return self.__email
-    @user.setter
-    def user(self, user):
+    
+    @email.setter
+    def email(self, email):
         self.__email = email
 
     def __eq__(self, otherItem):
@@ -260,6 +271,8 @@ class Item:
         if self.images != otherItem.images:
             return False
         if self.timestamp != otherItem.timestamp:
+            return False
+        if self.username != otherItem.username:
             return False
         if self.email != otherItem.email:
             return False
@@ -282,7 +295,8 @@ class Item:
             'tags'      : ItemTags.toInt(self.tags),
             'images'    : [i.toDict() for i in self.images],
             'timestamp' : self.timestamp,
-            'email'      : self.email if self.email is not None else 'None'
+            'username'  : self.username,
+            'email'     : self.email if self.email is not None else 'None'
         }
 
         return output

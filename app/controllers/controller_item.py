@@ -125,7 +125,7 @@ def get_all_items_by_user(query):
 
 @items_router.route('/items', methods=['POST'])
 def add_item():
-
+    
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
@@ -144,10 +144,11 @@ def add_item():
 
     timestamp = currTime()
     email = request.form['email']
-
+    username = request.form['username']
+    
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=timestamp, email=email)
+                timestamp=timestamp, username=username, email=email)
 
     mongo_item_dao.insert(item)
 
