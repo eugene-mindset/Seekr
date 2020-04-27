@@ -20,7 +20,6 @@ def add_user():
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
     
     if matchingUser:
-        print("user already created")
         user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
         return jsonify(user.toDict()), 200
     
@@ -36,7 +35,7 @@ def update_user():
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
-
+    print(optIn)
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
 
     user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
@@ -46,10 +45,8 @@ def update_user():
 
 @users_router.route('/userinfo', methods=['GET'])
 def get_all_users():
-    print("getting all users")
     # get list of all items using DAO and specifying the tags
     listOfUsers = mongo_user_dao.findAll()
 
     output = [user.toDict() for user in listOfUsers]
-    print(output)
     return jsonify(output), 200

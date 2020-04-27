@@ -242,7 +242,7 @@ def update_item(Id):
 
 @items_router.route('/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    numDeleted = mongo_item_dao.remove(Id)
+    numDeleted = mongo_item_dao.remove(Id, request.args.get('email'))
 
     if numDeleted == 1:
         output = {'message': 'deleted'}

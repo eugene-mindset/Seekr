@@ -125,10 +125,12 @@ class ItemDao(DatabaseObject):
 
         return item # TODO: The returned item is never used, remove this line at some point
 
-    def remove(self, Id):
-        # Delete the item frmo our mongodb collection by its id
-        returned = self.collection.delete_one({'_id': ObjectId(Id)})
-        return returned.deleted_count
+    def remove(self, Id, email):
+        # Delete the item from our mongodb collection by its id if it matches the sender's email
+        if (email == self.findById(Id).email):
+            returned = self.collection.delete_one({'_id': ObjectId(Id)})
+            return returned.deleted_count
+        return 0
 
 
 class Item:
