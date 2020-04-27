@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 import Items from "../item/Items";
 import axios from "axios";
-import ItemModal from "../item/ItemModal"
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";

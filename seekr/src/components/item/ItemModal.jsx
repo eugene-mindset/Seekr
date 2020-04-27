@@ -6,18 +6,6 @@ import GoogleMap from "../pages/GoogleMap";
 import Card from 'react-bootstrap/Card'
 import Tags from './Tags'
 import ItemTags from '../helper/ItemTags'
-import Items from './Items'
-import CardColumns from "react-bootstrap/CardColumns";
-
-const columnStyle = {
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  marginTop: "70px",
-  marginLeft: "10px"
-
-};
-
 
 export const ItemModal = (props) => {
       
