@@ -155,8 +155,8 @@ def find_similar_items():
 
     simItems, foundStatus = getSimItems(item, simMatch)
 
-    if len(simItems) != 0:
-        sendMail(item, simItems, foundStatus)
+    if len(simItems) > 3:
+        simItems = simItems[0:3]
 
     return jsonify([x.toDict() for x in simItems]), 200
 
