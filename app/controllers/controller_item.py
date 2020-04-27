@@ -106,8 +106,10 @@ def get_all_items_sorted(query):
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
+    items = simMatch.getSortedItems(getScores=True)
+    
 
-    output = [item.toDict() for item in simMatch.getSortedItems()]
+    output = []
 
     return jsonify(output), 200
 
