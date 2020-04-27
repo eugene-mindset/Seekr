@@ -17,7 +17,7 @@ const columnStyle = {
 export const ItemModal = (props) => {
   return (
     <div>
-      <Modal size="xl" show={props.showModal}>
+      <Modal size="xl" show={props.showModal} close={() => props.handleClose()}>
         <Modal.Header>
           <Modal.Title>Item Data</Modal.Title>
         </Modal.Header>

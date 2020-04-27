@@ -18,8 +18,7 @@ const columnStyle = {
 
 export default class Search extends Component {
   state = {
-    items: [],
-    isShowing: false
+    items: []
   };
 
   searchItem = (name, tags, filter, location) => {
