@@ -39,7 +39,6 @@ class Checkbox extends Component {
 
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
-  flagValue: PropTypes.number.isRequired,
   toggleCheckbox: PropTypes.func.isRequired
 };
 

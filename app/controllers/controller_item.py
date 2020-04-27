@@ -16,13 +16,15 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
 
 from app import mongo
+from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User, UserDao
 from app.controllers.notifications import getSimItems, sendMail
-from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User
 from app.models.similarity import ItemSimilarity
 
 
 items_router = Blueprint("items", __name__)
 
+users = mongo.db.users
+mongo_user_dao = UserDao(users)
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
@@ -111,6 +113,17 @@ def get_all_items_sorted(query):
 
     return jsonify(output), 200
 
+@items_router.route('/api/items/user=<query>', methods=['GET'])
+def get_all_items_by_user(query):
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+
+    listOfItems = mongo_item_dao.findByMostRecent(tags)
+
+    output = [item.toDict() for item in listOfItems if item.email == query]
+    return jsonify(output), 200
+
+    
 @items_router.route('/api/sim_items', methods=['GET'])
 def find_similar_items():
     """
@@ -130,7 +143,7 @@ def find_similar_items():
     location = ItemLocation([float(request.args.get('lat')), float(request.args.get('long'))])
     radius = float(request.args.get('radius'))
     tags = ItemTags.get(request.args.get('tags'))
-
+    
     # Get the list of uploaded images and convert them to ItemImage objects
     uploadedImages = request.files.getlist('image')
     images = []
@@ -141,7 +154,7 @@ def find_similar_items():
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=None, user=None)
+                timestamp=None, username=None, email=None)
 
     # want to check whenever an item is added if their are similar items to send notifications to
     listOfItems = mongo_item_dao.findAll(tags)
@@ -179,12 +192,12 @@ def add_item():
         images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
 
     timestamp = currTime()
-    user = User(request.form['username'], request.form['email'],
-                request.form['phone'])
-
+    email = request.form['email']
+    username = request.form['username']
+    
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=timestamp, user=user)
+                timestamp=timestamp, username=username, email=email)
 
     mongo_item_dao.insert(item)
 
@@ -218,8 +231,7 @@ def update_item(Id):
                              float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    user = User(request.form['username'], request.form['email'],
-                request.form['phone'])
+    user = User(request.form['username'], request.form['email'], request.form['optIn'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)
@@ -230,7 +242,7 @@ def update_item(Id):
 
 @items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    numDeleted = mongo_item_dao.remove(Id)
+    numDeleted = mongo_item_dao.remove(Id, request.args.get('email'))
 
     if numDeleted == 1:
         output = {'message': 'deleted'}
