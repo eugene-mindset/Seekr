@@ -29,7 +29,7 @@ export const ItemModal = (props) => {
         </Modal.Header>
         <Modal.Body>
             <div>{props.itemData.desc}</div>
-            <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}><GoogleMap clickable={false}/></div>
+            <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}><GoogleMap clickable={false} loc={props.itemData.location}/></div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => props.handleClose(false)}>
