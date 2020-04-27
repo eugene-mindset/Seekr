@@ -30,7 +30,6 @@ class Checkbox extends Component {
             checked={isChecked}
             onChange={this.toggleCheckboxChange}
           />
-
           {label}
         </label>
       </div>
@@ -40,7 +39,6 @@ class Checkbox extends Component {
 
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
-  flagValue: PropTypes.number.isRequired,
   toggleCheckbox: PropTypes.func.isRequired
 };
 

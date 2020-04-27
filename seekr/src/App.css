@@ -22,7 +22,8 @@ a, .navbar-nav, .nav-link {
 .profile {
   display: flex;
   margin-top: 50px;
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
+  align-items: stretch;
 }
 
 .profile-pic {
@@ -30,20 +31,30 @@ a, .navbar-nav, .nav-link {
   width: 150px;
 }
 
-.contact-info {
-  font-weight: bold;
-  margin-left: 10px;
-  
+.profile-info {
+  /* background-color: green; */
+  width: 100%;
+}
+
+.contact-name {
+  font-size: xx-large;
+  text-align: center;
+  padding: 10px;
+}
+
+.contact-email {
+  font-size: large;
+  text-align: center;
+  padding: 5px;
 }
 
 .user-results {
-  background-color: bisque;
-  /* margin-left: -500px; */
+  /* background-color: bisque; */
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  background-color: yellow;
+  /* background-color: yellow; */
   align-items: stretch;
 }
