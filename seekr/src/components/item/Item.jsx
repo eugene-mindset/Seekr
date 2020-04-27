@@ -38,6 +38,7 @@ export class Item extends Component {
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
       <div onClick={() => this.modalHandler(true)}>
+        //, color: found ? blue : red
         <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 

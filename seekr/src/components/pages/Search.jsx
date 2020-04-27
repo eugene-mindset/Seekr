@@ -69,7 +69,7 @@ export default class Search extends Component {
           searchItem={this.searchItem}
           clearSearch={this.clearSearch}
         />
-        <div style={{marginLeft: "450px", float:"right"}}>
+        <div style={{marginLeft: "450px", float:"left"}}>
           <CardColumns>
             <Items items={this.state.items} deleteItem={this.deleteItem} />
           </CardColumns>
