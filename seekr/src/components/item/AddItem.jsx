@@ -78,6 +78,8 @@ export class AddItem extends Component {
 
   onSubmit = (e) => {
 
+    e.preventDefault();
+
     this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
       this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
 
