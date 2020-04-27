@@ -42,8 +42,7 @@ export class Item extends Component {
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
           <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
-          <Button variant="success" href={ url } target='_blank' style={{ margin: '1em 0.5em 1em 1em'}}>Location</Button>{' '}
-          <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
+          <Button variant="danger" style={{ margin: '1em 0.5em 1em 1em'}} onClick={this.props.deleteItem.bind(this, id)}>Delete</Button>
           { images.length !== 0 ? this.getImage(images) : <span></span>}
           <Card.Subtitle>
             <small className="text-muted">{"Contact: " + user.name + " " + user.email + " " + user.phone}</small>
