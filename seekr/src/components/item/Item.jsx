@@ -42,7 +42,7 @@ export class Item extends Component {
         <Card border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
-          {email === this.props.cur_email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
+          {email === this.props.cur_email ?  <Button style={{ margin: '1em 0.5em 1em 1em'}} variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
           { images.length !== 0 ? this.getImage(images) : <span></span>}
           <Card.Footer>
             <small className="text-muted">{ found ? "Found item, " : "Lost item, " }</small>
