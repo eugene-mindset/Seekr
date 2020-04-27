@@ -108,7 +108,7 @@ export class SearchItem extends Component {
               <b>Give a location to search</b>
               </div>
               <div className="googleMap-search">
-                <GoogleMap parentCallback={this.callbackFunction} />
+                <GoogleMap parentCallback={this.callbackFunction} clickable={true}/>
               </div>
             </div>
             <div className="row" style={{ float:"center"}}>

@@ -118,7 +118,7 @@ def get_all_items_by_user(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-    listOfItems = mongo_item_dao.findByMostRecent(tags)
+    listOfItems = mongo_item_dao.findByMostRecent(tags, ' ')
 
     output = [item.toDict() for item in listOfItems if item.email == query]
     return jsonify(output), 200

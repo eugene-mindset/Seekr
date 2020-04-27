@@ -5,14 +5,7 @@ import axios from "axios";
 import SearchItem from "../item/SearchItem";
 import CardColumns from "react-bootstrap/CardColumns";
 import "../../../public/css/Search.css";
-
-const columnStyle = {
-  float: "right",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  marginLeft: "1000px"
-
-};
+import { trackPromise } from "react-promise-tracker";
 
 function getCookieValue(a) {
 	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
@@ -37,30 +30,36 @@ export default class Search extends Component {
   searchItem = (name, tags, filter, location) => {
     this.setState({ items: [] });
     if (filter === "Best") {
+      trackPromise(
       axios.get("/items/search=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
-      );
+      ));
     } else if (filter === "Recent") {
       // if sort is by recent but query is blank, just search a space, of which
       // the backend will handle by returning all items
       let nameQuery = name.length === 0 ? ' ' : name;
+      trackPromise(
       axios.get("/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
-      );
+      ));
     } else {
-      axios.get("/items/proximitysearch" +
-        "?tags=" + tags +
-        "&lat=" + location[0] +
-        "&lon=" + location[1]
-      ).then((res) =>
+      trackPromise(
+      axios
+        .get(
+          "/items/proximitysearch" +
+            "?tags=" + tags +
+            "&lat=" + location[0] +
+            "&lon=" + location[1]
+        )
+        .then((res) =>
           res.data.map((item) => {
             return this.setState({ items: [...this.state.items, item] });
           })
-        );
+        ));
     }
   };
 
