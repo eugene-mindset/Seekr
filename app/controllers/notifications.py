@@ -10,11 +10,12 @@ from app import mongo
 from app.helpers import *
 from app.models.models import User, UserDao
 
-users = mongo.db.users # our items collection in mongodb
-mongo_user_dao = UserDao(users) # initialize a DAO with the collection
+users = mongo.db.users  # our items collection in mongodb
+mongo_user_dao = UserDao(users)  # initialize a DAO with the collection
 
 
 def sendMail(user_item, similar_items, found):
+    
     for similar_item in similar_items:
         sender_email = "seekr.oose@gmail.com"
         password = "Seekroose!"
@@ -58,7 +59,8 @@ def sendMail(user_item, similar_items, found):
         smtp_serv.ehlo()
         smtp_serv.login(sender_email, password)
         try:
-            smtp_serv.sendmail(sender_email, user_item.user.email, message.as_string())
+            smtp_serv.sendmail(
+                sender_email, user_item.user.email, message.as_string())
             print("email sent")
         except Exception as e:
             print(e)
@@ -73,7 +75,7 @@ def distance(item1, item2):
     elon = math.radians(item2.location.coordinates[1])
 
     dist = 3958.8 * math.acos(math.sin(slat)*math.sin(elat)
-        + math.cos(slat)*math.cos(elat)*math.cos(slon - elon))
+                              + math.cos(slat)*math.cos(elat)*math.cos(slon - elon))
     # dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
 
@@ -82,7 +84,7 @@ def radiusCutOff(items, queriedItem):
     results = []
 
     for item in items:
-        if distance(queriedItem, item) <= queriedItem.radius: #miles
+        if distance(queriedItem, item) <= queriedItem.radius:  # miles
             results.append(item)
     return results
 
@@ -110,7 +112,7 @@ def getSimItems(queriedItem, simMatch):
             similar_items.append(item)
 
     for item in similar_items:
-        if imageMatch(queriedItem, item) < 35: #Under 35 key point matches
+        if imageMatch(queriedItem, item) < 35:  # Under 35 key point matches
             similar_items.remove(item)
 
     # for item in similar_items:

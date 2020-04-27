@@ -11,13 +11,13 @@ mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
 @users_router.route('/userinfo', methods=['POST'])
 def add_user():
-    print("hello")
+    
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
     
     # Get the list of uploaded images and convert them to ItemImage objects
-
+    
     user = User(name=name, email=email, optIn=optIn)
 
     mongo_user_dao.insert(user)
@@ -27,9 +27,6 @@ def add_user():
 
 @users_router.route('/userinfo', methods=['PUT'])
 def update_user():
-    # TODO: Update this to match the new architecture of objects
-    # Actually let the user update items on the frontend
-
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
@@ -48,4 +45,5 @@ def get_all_users():
     listOfUsers = mongo_user_dao.findAll()
 
     output = [user.toDict() for user in listOfUsers]
+    print(output)
     return jsonify(output), 200
