@@ -20,12 +20,15 @@ export class SearchItem extends Component {
     location: [39.3299, -76.6205],
   };
 
+
   callbackFunction = (coordinates) => {
     this.setState({ location: coordinates });
   };
 
-  changeFilter = () =>
-    this.setState({ filter: document.getElementById("filters").value });
+  changeFilter = () => {
+    let newFilter = document.getElementById("filters").value
+    this.setState({ filter: newFilter });
+  }
 
   toggleCheckbox = (val) => {
     if ((this.selectedCheckboxes & val) === val) {
@@ -56,8 +59,8 @@ export class SearchItem extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.state.name === "") {
-      alert("Item must have a name!");
+    if (this.state.name === "" && this.state.filter === 'Best') {
+      alert("You must enter a search query when sorting by Best Match.");
       return false;
     }
     this.props.searchItem(
@@ -93,7 +96,6 @@ export class SearchItem extends Component {
                     placeholder="Search for an item..." 
                     name="name"
                     aria-describedby="inputGroupPrepend"
-                    required
                   />
               </InputGroup>
             </Form>
@@ -106,7 +108,7 @@ export class SearchItem extends Component {
               <b>Give a location to search</b>
               </div>
               <div className="googleMap-search">
-                <GoogleMap parentCallback={this.callbackFunction} />
+                <GoogleMap parentCallback={this.callbackFunction} clickable={true}/>
               </div>
             </div>
             <div className="row" style={{ float:"center"}}>

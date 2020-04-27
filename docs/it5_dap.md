@@ -21,16 +21,16 @@
 ### Add
 
 * [X] Set boundary for radius (no negative) should be front end (Anderson)
-* [ ] Clean up add item page (Anderson)
+* [X] Clean up add item page (Anderson)
   * [X] Make map look smaller? (Andrew)
-  * [ ] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
+  * [X] Make it easy to tell what inputs of the form are (radius, images) (Anderson)
 * [X] Limit so people can only upload a 12 mb picture (Anderson)
 * [X] Change the database so that items save images as binaries rather than images locally (Anderson)
 * [X] Allow the user to add multiple images when creating a listing (Anderson)
 
 ### Search
 
-* [ ] Move the search bar to side (Andrew)
+* [X] Move the search bar to side (Andrew)
 * [ ] Displaying search boxes (clicking search box should display bigger box and generating mini map) (Jacob)
 * [ ] Make mini-map for item listing cards be attached to the respective cards (Jacob)
 * [ ] Prevent the client from sending multiple search requests to the backend until it gets the information from the first request (Jacob)
@@ -39,10 +39,10 @@
 
 ### User Accounts
 
-* [ ] Add user authentication (Shaurya, Andrew)
+* [X] Add user authentication (Shaurya, Andrew)
 * [ ] Provide the option to opt out of email notifications for users (Shaurya, Andrew)
-* [ ] Users can only delete a post (Shaurya, Andrew)
-* [ ] Add the button for authentication (Shaurya, Andrew)
+* [X] Users can only delete their own post (Shaurya, Andrew)
+* [X] Add the button for authentication (Shaurya, Andrew)
 
 ### General
 

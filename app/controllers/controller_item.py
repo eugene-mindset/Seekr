@@ -16,13 +16,15 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
 
 from app import mongo
+from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User, UserDao
 from app.controllers.notifications import getSimItems, sendMail
-from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User
 from app.models.similarity import ItemSimilarity
 
 
 items_router = Blueprint("items", __name__)
 
+users = mongo.db.users
+mongo_user_dao = UserDao(users)
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
@@ -48,12 +50,12 @@ else:
     simModel.save(str(modelLocation))
 
 
-@items_router.route("/")
+@items_router.route("/api/")
 def hello():
     return "This is the API for the Seekr App!"
 
 
-@items_router.route('/items', methods=['GET'])
+@items_router.route('/api/items', methods=['GET'])
 def get_all_items():
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
@@ -65,19 +67,19 @@ def get_all_items():
     return jsonify(output), 200
 
 
-@items_router.route('/items/timesearch=<query>', methods=['GET'])
+@items_router.route('/api/items/timesearch=<query>', methods=['GET'])
 def get_all_items_timesorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-    listOfItems = mongo_item_dao.findByMostRecent(tags)
+    listOfItems = mongo_item_dao.findByMostRecent(tags, query)
 
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
 
-@items_router.route('/items/proximitysearch=<query>', methods=['GET'])
-def get_all_items_proximitysorted(query):
+@items_router.route('/api/items/proximitysearch', methods=['GET'])
+def get_all_items_proximitysorted():
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
     lat = request.args.get('lat')
@@ -89,7 +91,7 @@ def get_all_items_proximitysorted(query):
     return jsonify(output), 200
 
 
-@items_router.route('/items/search=<query>', methods=['GET'])
+@items_router.route('/api/items/search=<query>', methods=['GET'])
 def get_all_items_sorted(query):
     # Get the tags if exists
     tags = ItemTags.get(request.args.get('tags'))
@@ -107,13 +109,31 @@ def get_all_items_sorted(query):
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
     items = simMatch.getSortedItems(getScores=True)
-    
 
-    output = []
+    index = 0
+
+    for i, (_, score) in enumerate(items):
+        if score <= 0:
+            index = i
+            break
+
+    items = items[0:index]
+    output = [item.toDict() for item, _ in listOfItems]
 
     return jsonify(output), 200
 
-@items_router.route('/sim_items', methods=['GET'])
+@items_router.route('/api/items/user=<query>', methods=['GET'])
+def get_all_items_by_user(query):
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+
+    listOfItems = mongo_item_dao.findByMostRecent(tags, ' ')
+
+    output = [item.toDict() for item in listOfItems if item.email == query]
+    return jsonify(output), 200
+
+    
+@items_router.route('/api/sim_items', methods=['GET'])
 def find_similar_items():
     """
         Route returns all item listings that are similar to the item listing
@@ -132,7 +152,7 @@ def find_similar_items():
     location = ItemLocation([float(request.args.get('lat')), float(request.args.get('long'))])
     radius = float(request.args.get('radius'))
     tags = ItemTags.get(request.args.get('tags'))
-
+    
     # Get the list of uploaded images and convert them to ItemImage objects
     uploadedImages = request.files.getlist('image')
     images = []
@@ -143,7 +163,7 @@ def find_similar_items():
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=None, user=None)
+                timestamp=None, username=None, email=None)
 
     # want to check whenever an item is added if their are similar items to send notifications to
     listOfItems = mongo_item_dao.findAll(tags)
@@ -162,7 +182,7 @@ def find_similar_items():
 
     return jsonify([x.toDict() for x in simItems]), 200
 
-@items_router.route('/items', methods=['POST'])
+@items_router.route('/api/items', methods=['POST'])
 def add_item():
     name = request.form['name']
     desc = request.form['desc']
@@ -181,12 +201,12 @@ def add_item():
         images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
 
     timestamp = currTime()
-    user = User(request.form['username'], request.form['email'],
-                request.form['phone'])
-
+    email = request.form['email']
+    username = request.form['username']
+    
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
-                timestamp=timestamp, user=user)
+                timestamp=timestamp, username=username, email=email)
 
     mongo_item_dao.insert(item)
 
@@ -208,7 +228,7 @@ def add_item():
     return jsonify(item.toDict()), 200
 
 
-@items_router.route('/items/<Id>', methods=['PUT'])
+@items_router.route('/api/items/<Id>', methods=['PUT'])
 def update_item(Id):
     # TODO: Update this to match the new architecture of objects
     # Actually let the user update items on the frontend
@@ -220,8 +240,7 @@ def update_item(Id):
                              float(request.form['longitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
-    user = User(request.form['username'], request.form['email'],
-                request.form['phone'])
+    user = User(request.form['username'], request.form['email'], request.form['optIn'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, user=user)
@@ -230,9 +249,9 @@ def update_item(Id):
     return jsonify(item.toDict()), 200
 
 
-@items_router.route('/items/<Id>', methods=['DELETE'])
+@items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    numDeleted = mongo_item_dao.remove(Id)
+    numDeleted = mongo_item_dao.remove(Id, request.args.get('email'))
 
     if numDeleted == 1:
         output = {'message': 'deleted'}

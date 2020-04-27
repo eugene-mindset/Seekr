@@ -214,7 +214,7 @@ export class AddItem extends Component {
           <Form.Group>
             <Form.Label>Where did you lose/find the item?</Form.Label>
             <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}>
-              <GoogleMap parentCallback={this.callbackFunction}/>
+              <GoogleMap parentCallback={this.callbackFunction} clickable={true}/>
             </div>
             <Form.Text className='text-muted'>
               Click on the map to place a marker.

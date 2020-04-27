@@ -36,6 +36,9 @@ class ItemDao(DatabaseObject):
         # Register the location attribute for documents in mongo to be used as a
         # geospatial index for querying
         self.collection.create_index([('location', '2dsphere' )])
+        # Register the name and description attributes for documents in mongo to
+        # be used as a text index for searching
+        self.collection.create_index([('name', 'text'), ('desc', 'text')])
 
     def findById(self, Id):
         # Get the item from our mongodb collection
@@ -79,14 +82,31 @@ class ItemDao(DatabaseObject):
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
-    def findByMostRecent(self, tags):
+    def findByMostRecent(self, tags, query):
         # Mongo query to retrieve the items sorted by their timestamp in
         # descending order and also have the speicifed tags
-        filteredItems = self.collection.find({
-            'tags': {
-                '$bitsAllSet': int(tags)
-            }
-        }).sort([('timestamp', -1)])
+        if (query.isspace()):
+             filteredItems = self.collection.find({
+                'tags': {
+                    '$bitsAllSet': int(tags)
+                }
+            }).sort([('timestamp', -1)])
+        else:
+            filteredItems = self.collection.find({
+                '$and': [
+                    {
+                        "$text": {
+                            '$search': query,
+                            '$language': 'english'
+                        }
+                    },
+                    {
+                        'tags': {
+                            '$bitsAllSet': int(tags)
+                        }
+                    }
+                ]
+            }).sort([('timestamp', -1)])
 
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
@@ -125,17 +145,19 @@ class ItemDao(DatabaseObject):
 
         return item # TODO: The returned item is never used, remove this line at some point
 
-    def remove(self, Id):
-        # Delete the item frmo our mongodb collection by its id
-        returned = self.collection.delete_one({'_id': ObjectId(Id)})
-        return returned.deleted_count
+    def remove(self, Id, email):
+        # Delete the item from our mongodb collection by its id if it matches the sender's email
+        if (email == self.findById(Id).email):
+            returned = self.collection.delete_one({'_id': ObjectId(Id)})
+            return returned.deleted_count
+        return 0
 
 
 class Item:
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
-                 radius=None, tags=None, images=[], timestamp=None,
-                 user=None):
+                 radius=None, tags=None, images=[], timestamp=None, username=None,
+                 email=None):
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -145,7 +167,8 @@ class Item:
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
-        self.user = user            # Should be a User object
+        self.username = username    # Should be a User object
+        self.email = email          # Should be a User object
 
     @classmethod
     def fromDict(cls, doc):
@@ -159,7 +182,8 @@ class Item:
         item.tags = ItemTags(doc['tags'])
         item.images = [ItemImage.fromDict(img) for img in doc['images']]
         item.timestamp = doc['timestamp']
-        item.user = User.fromDict(doc['user'])
+        item.username = doc['username']
+        item.email = doc['email']
 
         return item
 
@@ -236,11 +260,20 @@ class Item:
         self.__timestamp = timestamp
 
     @property
-    def user(self):
-        return self.__user
-    @user.setter
-    def user(self, user):
-        self.__user = user
+    def username(self):
+        return self.__username
+    
+    @username.setter
+    def username(self, username):
+        self.__username = username
+        
+    @property
+    def email(self):
+        return self.__email
+    
+    @email.setter
+    def email(self, email):
+        self.__email = email
 
     def __eq__(self, otherItem):
         if self.Id != otherItem.Id:
@@ -261,7 +294,9 @@ class Item:
             return False
         if self.timestamp != otherItem.timestamp:
             return False
-        if self.user != otherItem.user:
+        if self.username != otherItem.username:
+            return False
+        if self.email != otherItem.email:
             return False
         return True
 
@@ -282,27 +317,101 @@ class Item:
             'tags'      : ItemTags.toInt(self.tags),
             'images'    : [i.toDict() for i in self.images],
             'timestamp' : self.timestamp,
-            'user'      : self.user.toDict() if self.user is not None else 'None'
+            'username'  : self.username,
+            'email'     : self.email if self.email is not None else 'None'
         }
 
         return output
 
+class UserDao(DatabaseObject):
+
+    def __init__(self, collection):
+        super().__init__(collection)
+
+        # Register the location attribute for documents in mongo to be used as a
+        # geospatial index for querying
+        self.collection.create_index([('location', '2dsphere' )])
+
+    def findById(self, Id):
+        # Get the item from our mongodb collection
+        UserDoc = self.collection.find_one({"_id": ObjectId(Id)})
+
+        # Serialize it into an Item object
+        newUser = User.fromDict(UserDoc)
+
+        return newUser
+
+    def findAllMatchingEmail(self, email):
+        filteredUsers = self.collection.find({
+            'email' : email
+        })
+        
+        return [User.fromDict(userDoc) for userDoc in filteredUsers]
+
+    def findAll(self):
+        # Mongo query to get the items that have the specified tags from our
+        # mongodb collection
+        filteredUsers = self.collection.find()
+
+        # Serialize documents into Item objects and return them in a list
+        return [User.fromDict(userDoc) for userDoc in filteredUsers]
+
+    def insert(self, user):
+        data = user.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # Remove the id field
+
+        # Insert the item into our mongodb collection,
+        # get the ID it was assigned, give the item that id
+        user_id = self.collection.insert_one(data).inserted_id
+        new_user = self.collection.find_one({'_id': user_id})
+        user.Id = str(new_user['_id'])
+
+        return user # TODO: The returned item is never used, remove this line at some point
+
+    def update(self, user):
+        Id = user.Id
+        data = user.toDict() # Get item info formatted in a JSON friendly manner
+        data.pop('id') # remove the id, shouldn't be updating it
+
+        # find the item in our mongodb collection by its id,
+        # update it with the new data
+        self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
+            "$set": data
+        }, upsert=False)
+
+        return user # TODO: The returned item is never used, remove this line at some point
+
+    def remove(self, Id):
+        # Delete the item frmo our mongodb collection by its id
+        returned = self.collection.delete_one({'_id': ObjectId(Id)})
+        return returned.deleted_count
+
 
 class User:
 
-    def __init__(self, name=None, email=None, phone=None):
+    def __init__(self, Id=None, name=None, email=None, optIn=None):
+        self.Id = Id
         self.name = name    # Should be a string
         self.email = email  # Should be a string
-        self.phone = phone  # Should be a string
+        self.optIn = optIn  # Should be a boolean
 
     @classmethod
     def fromDict(cls, doc):
         user = cls()
+        user.Id = str(doc['_id'])
         user.name = doc['name']
         user.email = doc['email']
-        user.phone = doc['phone']
+        user.optIn = doc['optIn']
 
         return user
+
+    @property
+    def Id(self):
+        return self.__Id
+    
+    @Id.setter
+    def Id(self, Id):
+        self.__Id = Id
 
     @property
     def name(self):
@@ -321,33 +430,36 @@ class User:
         self.__email = email
 
     @property
-    def phone(self):
-        return self.__phone
-
-    @phone.setter
-    def phone(self, phone):
-        self.__phone = phone
+    def optIn(self):
+        return self.__optIn
+    
+    @optIn.setter
+    def optIn(self, optIn):
+        self.__optIn = optIn
 
     def __eq__(self, otherUser):
+        if self.Id != otherUser.Id:
+            return False
         if self.name != otherUser.name:
             return False
         if self.email != otherUser.email:
             return False
-        if self.phone != otherUser.phone:
+        if self.optIn != otherUser.optIn:
             return False
         return True
 
     def __str__(self):
-        return self.name + ': ' + self.email + ', ' + self.phone
+        return self.name + ': ' + self.email + ', ' + self.optIn
 
     def __repr__(self):
         return str(self)
 
     def toDict(self):
         output = {
+            'id'    : self.Id,
             'name'  : self.name,
             'email' : self.email,
-            'phone' : self.phone
+            'optIn' : self.optIn
         }
 
         return output

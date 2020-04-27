@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Item from './Item';
-import PropTypes from 'prop-types';
+import { AuthContext } from "../helper/AuthContext";
 
-class Items extends React.Component {
-  render() {
-    return this.props.items.map((item) => (
-      <Item key={item.id} item={item} deleteItem={this.props.deleteItem}/>
-    ));
-  }
-}
+const Items = ({items, deleteItem}) => {
+  const { email } = useContext(AuthContext);
 
-//PropTypes for expected props
-Items.propTypes = {
-  items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func.isRequired
-}
+  return items.map((item) => (
+    <Item key={item.id} item={item} deleteItem={deleteItem} cur_email={email} />
+  ));
+};
 
 export default Items;
