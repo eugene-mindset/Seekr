@@ -150,7 +150,7 @@ export class AddItem extends Component {
   render() {
     return (
       // flexbox
-      <div style={{border: '3px solid', borderRadius: '10px', margin: 'auto', width: '70%', minWidth: '600px', padding: '20px'}}>
+      <div style={{border: '3px solid', borderRadius: '10px', margin: 'auto', width: '70%', minWidth: '600px', padding: '20px', backgroundColor: 'white'}}>
         <Form onSubmit={this.onSubmit} style={{ textAlign : 'left'}}>
           <Form.Group >
             <Form.Label>Did you lose or find this item?</Form.Label>
@@ -213,7 +213,7 @@ export class AddItem extends Component {
 
           <Form.Group>
             <Form.Label>Where did you lose/find the item?</Form.Label>
-            <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}>
+            <div style={{marginBottom: '260px', position: 'relative', zIndex: '0'}}>
               <GoogleMap parentCallback={this.callbackFunction} clickable={true}/>
             </div>
             <Form.Text className='text-muted'>
