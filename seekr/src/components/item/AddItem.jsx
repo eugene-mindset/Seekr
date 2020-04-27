@@ -208,7 +208,7 @@ export class AddItem extends Component {
 
           <Form.Group>
             <Form.Label>What kind of item is it?</Form.Label>
-            <div style={{ display: "flex" }}>{this.createCheckboxes()}</div>
+            <div style={{ display: "flex", width:"50%", justifyContent: 'space-between' }}>{this.createCheckboxes()}</div>
           </Form.Group>
 
           <Form.Group>
