@@ -153,8 +153,10 @@ def find_similar_items():
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
 
-    print(listOfItems)
     simItems, foundStatus = getSimItems(item, simMatch)
+
+    if len(simItems) != 0:
+        sendMail(item, simItems, foundStatus)
 
     return jsonify([x.toDict() for x in simItems]), 200
 

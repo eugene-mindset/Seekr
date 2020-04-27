@@ -17,8 +17,8 @@ const columnStyle = {
 export const SubmissionModal = (props) => {
   return (
     <div>
-      <Modal size="xl" show={props.showModal} onHide={() => props.handleClose(false)}>
-        <Modal.Header closeButton>
+      <Modal size="xl" show={props.showModal}>
+        <Modal.Header>
           <Modal.Title>Before you submit...</Modal.Title>
         </Modal.Header>
         <Modal.Body>There are item listings that are similar to what you are looking for...
