@@ -13,6 +13,7 @@
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
     "react-facebook-login": "^4.1.1",
+    "react-promise-tracker": "^2.1.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "0.9.5",
     "sockjs": "^0.3.20",

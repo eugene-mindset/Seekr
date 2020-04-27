@@ -38,13 +38,12 @@ export class Item extends Component {
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     // const username = "TEMP";
     return (
-      <div onClick={() => this.modalHandler(true)}>
-        //, color: found ? blue : red
-        <Card style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
+      <div onClick={() => this.modalHandler(true)} style={{}}>
+        <Card border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em'}}>
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
           <Card.Text style={{ margin: '1em 1em 0.5em'}}>{ desc }</Card.Text>
-          {email == this.props.cur_email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
+          {email === this.props.cur_email ?  <Button variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}
           { images.length !== 0 ? this.getImage(images) : <span></span>}
           <Card.Subtitle>
             <small className="text-muted">{"Contact: " + username + " " + email}</small>
