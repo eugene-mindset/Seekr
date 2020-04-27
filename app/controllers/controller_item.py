@@ -17,12 +17,14 @@ import gensim.downloader as gens_api
 
 from app import mongo
 from app.controllers.notifications import notify
-from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User
+from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User, UserDao
 from app.models.similarity import ItemSimilarity
 
 
 items_router = Blueprint("items", __name__)
 
+users = mongo.db.users
+mongo_user_dao = UserDao(users)
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
 
