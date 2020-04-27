@@ -23,10 +23,11 @@ def add_user():
 
     mongo_user_dao.insert(user)
 
+    #return 'okay'
     return jsonify(user.toDict()), 200
 
-@users_router.route('/userinfo/<Id>', methods=['PUT'])
-def update_user(Id):
+@users_router.route('/userinfo', methods=['PUT'])
+def update_user():
     # TODO: Update this to match the new architecture of objects
     # Actually let the user update items on the frontend
 
@@ -34,9 +35,11 @@ def update_user(Id):
     email = request.form['email']
     optIn = request.form['optIn']
 
-    user = User(name=name, email=email, optIn=optIn)
+    matchingUser = mongo_user_dao.findAllMatchingEmail(email)
 
-    mongo_item_dao.update(user)
+    user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
+
+    mongo_user_dao.update(user)
     return jsonify(user.toDict()), 200
 
 @users_router.route('/userinfo', methods=['GET'])

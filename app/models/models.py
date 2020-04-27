@@ -305,6 +305,13 @@ class UserDao(DatabaseObject):
 
         return newUser
 
+    def findAllMatchingEmail(self, email):
+        filteredUsers = self.collection.find({
+            'email' : email
+        })
+        
+        return [User.fromDict(userDoc) for userDoc in filteredUsers]
+
     def findAll(self):
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection

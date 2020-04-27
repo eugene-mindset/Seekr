@@ -6,10 +6,12 @@ import math
 from smtplib import SMTP
 
 from flask import Blueprint, jsonify, request, send_from_directory, send_file, Flask
-
+from app import mongo
 from app.helpers import *
+from app.models.models import User, UserDao
 
-
+users = mongo.db.users # our items collection in mongodb
+mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
 def send_mail(user_item, similar_item, found):
     sender_email = "seekr.oose@gmail.com"
@@ -111,6 +113,8 @@ def notify(queriedItem, simMatch):
             similar_items.remove(item)
 
     for item in similar_items:
-        send_mail(queriedItem, item, found)
+        matches = mongo_user_dao.findAllMatchingEmail(item.email)
+        if matches[0].optIn == 'true':
+            send_mail(queriedItem, item, found)
     #if len(similar_items) != 0:
     #    send_mail(queriedItem, similar_items, found)

@@ -29,14 +29,13 @@ const Facebook = () => {
     setUserID(response.userID);
     setEmail(response.email);
     setName(response.name);
-    setProfilePic(response.profilePic);
+    setProfilePic(response.picture.data.url);
     console.log(response.email);
     
-    var optin = false;
     var data = new FormData();
     data.append("username", response.name);
     data.append("email", response.email);
-    data.append("optIn", optin);
+    data.append("optIn", 'false');
 
     axios({
         method: "post",
