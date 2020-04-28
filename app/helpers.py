@@ -1,9 +1,11 @@
-from base64 import standard_b64decode
 import cv2
 import numpy as np
 
 
 threshold = 0.85
+
+# Location of where images for items are stored
+IMAGE_FOLDER = './uploadedImages/'
 
 # TODO: the doc comment needs to be updated
 def imageMatch(item1, item2):
@@ -29,14 +31,12 @@ def imageMatch(item1, item2):
     max_matches = 0
 
     for img1 in item1.images:
-        # Convert from base64 string to an actual image
-        img1_bytes = standard_b64decode(img1.imageData)
-        img1_data = cv2.imdecode(np.frombuffer(img1_bytes, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+        # Get the image
+        img1_data = cv2.imread(IMAGE_FOLDER + img1.imageData, cv2.IMREAD_GRAYSCALE)
 
         for img2 in item2.images:
-            # Convert from base64 string to an actual image
-            img2_bytes = standard_b64decode(img2.imageData)
-            img2_data = cv2.imdecode(np.frombuffer(img2_bytes, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+            # Get the image
+            img2_data = cv2.imread(IMAGE_FOLDER + img2.imageData, cv2.IMREAD_GRAYSCALE)
 
             # Currently using SIFT, but can change
             imageDetector = cv2.xfeatures2d.SIFT_create()

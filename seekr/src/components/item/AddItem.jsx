@@ -99,16 +99,16 @@ export class AddItem extends Component {
 
     uploadedFiles.forEach(imgFile => {
       if (imgFile.type !== 'image/png' && imgFile.type !== 'image/jpeg') {
-        alert('png and jpeg only');
+        alert('Only .png and .jpeg files are allowed.');
         return false;
       }
       totalSize += imgFile.size
     });
 
     totalSize = (totalSize / 1024) / 1024 // Convert from bytes to MiB
-    totalSize *= (4/3) // convert to size of base64 encoded string
     if (totalSize >= 12) {
-      alert('file sizes too large');
+      let alertString = `Total image upload limit is 12 MB. You have uploaded ${totalSize} MB of images.`
+      alert(alertString);
       return false;
     }
     return true;

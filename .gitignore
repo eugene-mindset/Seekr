@@ -332,3 +332,7 @@ Temporary Items
 sim_model_encoding
 sim_model_encoding.vectors.npy
 
+# Ignore the uploadedImages folder except for the one file so that the whole folder
+# doesn't get deleted by git
+uploadedImages/*
+!uploadedImages/need_some_file_prevent_git_from_deleting_this_folder.png

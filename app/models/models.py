@@ -1,9 +1,14 @@
 from abc import abstractmethod
 from enum import IntFlag
+from pathlib import Path
 
 from bson.objectid import ObjectId
 
 from app.mongo_inst import mongo
+
+
+# Location of where images for items are stored
+IMAGE_FOLDER = Path('./uploadedImages/')
 
 
 class DatabaseObject:
@@ -147,7 +152,12 @@ class ItemDao(DatabaseObject):
 
     def remove(self, Id, email):
         # Delete the item from our mongodb collection by its id if it matches the sender's email
-        if (email == self.findById(Id).email):
+        toDelete = self.findById(Id)
+        if (email == toDelete.email):
+            # delete associated images
+            for img in toDelete.images:
+                pathToFile = IMAGE_FOLDER / img.imageData
+                pathToFile.unlink()
             returned = self.collection.delete_one({'_id': ObjectId(Id)})
             return returned.deleted_count
         return 0
@@ -519,7 +529,7 @@ class ItemImage:
     def __init__(self, imageName=None, imageType=None, imageData=None):
         self.imageName = imageName  # Should be a string
         self.imageType = imageType  # Should be a string (image/png or image/jpeg)
-        self.imageData = imageData  # Should be a string (standard base64)
+        self.imageData = imageData  # Should be a string (path to file)
 
     @classmethod
     def fromDict(cls, doc):
