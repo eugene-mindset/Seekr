@@ -35,7 +35,7 @@ function UserSearchedItems() {
   return (
     <div className="user-results">
       <div>
-        Items that you posted:
+        <i>Items that you posted:</i>
         <CardColumns style={columnStyle}>
           <Items items={items} deleteItem={deleteItem} />
         </CardColumns>

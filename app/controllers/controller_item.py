@@ -72,7 +72,7 @@ def get_all_items_timesorted(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-    listOfItems = mongo_item_dao.findByMostRecent(tags)
+    listOfItems = mongo_item_dao.findByMostRecent(tags, query)
 
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
@@ -87,8 +87,8 @@ def get_all_items_recent():
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
-@items_router.route('/api/items/proximitysearch=<query>', methods=['GET'])
-def get_all_items_proximitysorted(query):
+@items_router.route('/api/items/proximitysearch', methods=['GET'])
+def get_all_items_proximitysorted():
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
     lat = request.args.get('lat')
@@ -127,7 +127,7 @@ def get_all_items_by_user(query):
     # Get the tags if provided
     tags = ItemTags.get(request.args.get('tags'))
 
-    listOfItems = mongo_item_dao.findByMostRecent(tags)
+    listOfItems = mongo_item_dao.findByMostRecent(tags, ' ')
 
     output = [item.toDict() for item in listOfItems if item.email == query]
     return jsonify(output), 200

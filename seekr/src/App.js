@@ -20,10 +20,10 @@ const App = () => {
       <Router>
         <div className="App">
           <Navigation />
-          <Route exact path="/" component={Search} />
           <div className="site-container">
             {/* az-Protected route is not working, so using old way */}
             {/* <ProtectedRoute path="/add" user={false} component={Add} /> */}
+            <Route exact path="/" component={Search} />
             <Route path="/add" component={Add} />
             <Route path="/unauthorized" component={Errorpage}/>
             {/* Temporarily using Login component instead of Facebook Component */}
