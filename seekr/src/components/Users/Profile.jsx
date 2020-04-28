@@ -31,7 +31,6 @@ export default function Profile() {
 
   return (
     <div className="profile">
-      {/* TODO: img is a temporary picture */}
       <Jumbotron>
         <Image src={profilePic} roundedCircle style={{  height: '100x', width: '100px'}} />
         <h1>Hi, {name}!</h1>
@@ -51,7 +50,7 @@ export default function Profile() {
           </div>
         </ul>
         <p>
-          <Button variant="primary">Learn more</Button>
+          {/* <Button variant="primary">Learn more</Button> */}
         </p>
       </Jumbotron>
     </div>
