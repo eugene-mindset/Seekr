@@ -81,12 +81,6 @@ export default class Search extends Component {
     var mainCardView;
     if(this.state.items.length == 0){
       mainCardView = 
-      // <Toast style={{marginLeft: '350px', position: 'absolute', top: 56, right: 0}}>
-      //   <Toast.Header style={{ backgroundColor: '#87ceeb'}}>
-      //     <strong className="mr-auto">Seekr Notification</strong>
-      //   </Toast.Header>
-      //   <Toast.Body>No items found for you. Try searching again!</Toast.Body>
-      // </Toast>
       <Jumbotron fluid style={{marginLeft: '350px', border: '5px', borderColor: 'red', borderStyle: 'solid'}}>
         <Container>
           <h1>No Results Found.</h1>
