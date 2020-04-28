@@ -32,23 +32,39 @@ export default function Profile() {
       }
     }
 
-  })
+  }, []);
 
   const toggleCheckbox = () => {
     // toggleCheckbox is called whenever there is a change in the state of the Checkbox
     // this is where u would call the API to turn on/off opt in
+    // var data = new FormData();
+    // data.append("username", name);
+    // data.append("email", email);
+    // data.append("optIn", isOptIn);
+
+    // axios({
+    //   method: "put",
+    //   url: "/api/userinfo",
+    //   data: data,
+    //   headers: { "Content-Type": "multipart/form-data" },
+    // });
+  };
+
+  const onSubmit = () => {
     var data = new FormData();
     data.append("username", name);
     data.append("email", email);
-    data.append("optIn", isOptIn);
+    data.append("optIn", !isOptIn);
 
+    console.log(!isOptIn)
     axios({
       method: "put",
       url: "/api/userinfo",
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
-  };
+  }
+
 
   return (
     <div className="profile">
@@ -70,6 +86,9 @@ export default function Profile() {
               getState={getState}
               className="notifyBox"
             />
+            <Button onClick={onSubmit}>
+              Submit
+            </Button>
           </div>
         </ul>
         <p>
