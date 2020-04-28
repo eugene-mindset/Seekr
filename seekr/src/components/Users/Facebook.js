@@ -44,11 +44,10 @@ const Facebook = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
     
-      return <Redirect to="/userinfo" />;
+      return <Redirect to="/" />;
   };
   let faceContent;
 
-  console.log(userID);
   if (userID == "null" || userID == "undefined") {
     faceContent = (
       <FacebookLogin
@@ -60,8 +59,13 @@ const Facebook = () => {
         callback={responseFacebook}
       />
     );
+    return <div>{faceContent}</div>;
   }
-  return <div>{faceContent}</div>;
+  else {
+    return (
+      <Redirect to="/userinfo" />
+    )
+  }
 };
 
 export default Facebook;

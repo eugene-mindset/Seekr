@@ -77,6 +77,15 @@ def get_all_items_timesorted(query):
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
+@items_router.route('/api/items/all', methods=['GET'])
+def get_all_items_recent():
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+
+    listOfItems = mongo_item_dao.findByMostRecent(tags)
+
+    output = [item.toDict() for item in listOfItems]
+    return jsonify(output), 200
 
 @items_router.route('/api/items/proximitysearch', methods=['GET'])
 def get_all_items_proximitysorted():
