@@ -50,7 +50,7 @@ export default class Search extends Component {
       trackPromise(
       axios
         .get(
-          "/items/proximitysearch" +
+          "/api/items/proximitysearch" +
             "?tags=" + tags +
             "&lat=" + location[0] +
             "&lon=" + location[1]
