@@ -10,11 +10,13 @@ const LoadingIndicator = props => {
     promiseInProgress &&
     <div 
     style={{
-             width: "100%",
-             height: "100",
-             display: "flex",
-             justifyContent: "center",
-             alignItems: "center"
+            marginTop: "100px",
+            marginLeft: "50px",
+            width: "100%",
+            height: "100",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
            }}
     >
       <Spinner animation="border" role="status">
