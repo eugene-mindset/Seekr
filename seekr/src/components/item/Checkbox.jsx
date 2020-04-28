@@ -14,7 +14,7 @@ class Checkbox extends Component {
     }));
 
     toggleCheckbox(flagValue);
-    getState(this.state.isChecked);
+    getState(this.state.isChecked); // set getState to the value of isChecked
   };
 
 

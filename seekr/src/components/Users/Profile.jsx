@@ -14,9 +14,7 @@ export default function Profile() {
   const [isOptIn, setOptIn] = useState(false);
 
   const getState = (isChecked) => {
-    // setOptIn(isChecked);
-    // console.log(!isChecked);
-    setOptIn(!isChecked);
+    setOptIn(isChecked);
     console.log(isOptIn);
   };
 
@@ -50,7 +48,7 @@ export default function Profile() {
           <div style={{marginLeft: "10px"}}>
             <Checkbox
               label={label}
-              // flagValue={label}
+              flagValue={"notify"}
               toggleCheckbox={toggleCheckbox}
               key={label}
               getState={getState}
