@@ -46,14 +46,14 @@
 
 ### General
 
-* [ ] Improve design of the website
+* [X] Improve design of the website
   * [ ] Improve navbar (Jason)
   * [ ] Get rid of ugly fonts and colors (Collaboration)
   * [ ] Logo for the project (Eugene)
-  * [ ] Footer for page, get rid of the about page (Jason)
+  * [X] Footer for page, get rid of the about page (Jason)
 * [ ] Document existing code (Everyone)
 * [X] Delete any unused code (Eugene)
-* [ ] Deploy in production mode (Jason)
+* [X] Deploy in production mode (Jason)
 * [X] Remove all python wildcard imports and replace them with exact imports (Eugene)
 * [ ] Add more test cases (Eugene, Anderson, Jacob, Shaurya)
-* [ ] Update dependencies (Jason)
+* [X] Update dependencies (Jason)
