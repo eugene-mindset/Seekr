@@ -1,10 +1,10 @@
 import React from "react";
-import img from "../../../../uploadedImages/temp.jpg";
 import "../../App.css";
 import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
 import Checkbox from "../item/Checkbox";
 import axios from "axios";
+import { Image, Jumbotron, Button} from "react-bootstrap";
 
 
 export default function Profile() {
@@ -32,11 +32,14 @@ export default function Profile() {
   return (
     <div className="profile">
       {/* TODO: img is a temporary picture */}
-      <img src={profilePic} className="profile-pic" />
-      <div>
+      <Jumbotron>
+        <Image src={profilePic} roundedCircle style={{  height: '100x', width: '100px'}} />
+        <h1>Hi, {name}!</h1>
         <ul className="profile-info" style={{ paddingLeft: "0pt" }}>
-          <div className="contact-name">{name}</div>
-          <div className="contact-email">{email}</div>
+          <br></br>
+          <p><b><i>Information About You</i></b></p>
+          <p><b>Name:</b> {name}</p>
+          <p><b>Contact Email:</b> {email}</p>
           <br></br>
           <div style={{marginLeft: "10px"}}>
             <Checkbox
@@ -47,7 +50,10 @@ export default function Profile() {
             />
           </div>
         </ul>
-      </div>
+        <p>
+          <Button variant="primary">Learn more</Button>
+        </p>
+      </Jumbotron>
     </div>
   );
 }

@@ -14,7 +14,7 @@ function getCookieValue(a) {
 
 export default class Search extends Component {
   componentDidMount() {
-    name="temp";
+    name="%20";
     axios.get("/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item] });
@@ -84,11 +84,9 @@ export default class Search extends Component {
           searchItem={this.searchItem}
           clearSearch={this.clearSearch}
         />
-        <div style={{marginLeft: "450px", float:"left"}}>
-          <CardColumns>
-            <Items items={this.state.items} deleteItem={this.deleteItem} />
-          </CardColumns>
-        </div>
+        <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
+          <Items items={this.state.items} deleteItem={this.deleteItem} />
+        </CardColumns>
       </div>
     );
   }

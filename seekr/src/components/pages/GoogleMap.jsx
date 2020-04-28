@@ -62,7 +62,7 @@ export class GoogleMap extends Component {
       <div>
         <Map
           google={this.props.google}
-          style={{ width: "400px", height:"300px"}}
+          style={{ width: "250px", height:"250px"}}
           zoom={15}
           onClick={this.onClick}
           initialCenter={this.state.markers.length !== 0 ? this.state.markers[0].position : [ 39.3299, -76.6205 ]}
