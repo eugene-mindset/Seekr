@@ -348,6 +348,15 @@ class UserDao(DatabaseObject):
         
         return [User.fromDict(userDoc) for userDoc in filteredUsers]
 
+    def findAllOptIn(self, email):
+        filteredUsers = self.collection.find({
+            'email' : email,
+            'optIn' : "true"
+        })
+        
+        for userDoc in filteredUsers:
+            return User.fromDict(userDoc).email
+        # return User.fromDict(userDoc).email for userDoc in filteredUsers
     def findAll(self):
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection

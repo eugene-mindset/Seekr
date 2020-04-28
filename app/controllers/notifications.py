@@ -14,10 +14,14 @@ users = mongo.db.users  # our items collection in mongodb
 mongo_user_dao = UserDao(users)  # initialize a DAO with the collection
 
 
-def sendMail(user_item, similar_items, found):
+def sendMail(user_item, similar_items, found, matching):
     
     for similar_item in similar_items:
         
+        if similar_item.email not in matching:
+            print("will not send email")
+            continue
+        print("will send email")
         sender_email = "seekr.oose@gmail.com"
         password = "Seekroose!"
 
