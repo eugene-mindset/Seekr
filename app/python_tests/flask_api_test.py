@@ -25,20 +25,19 @@ class ApiTest(TestCase):
         found = False
         desc = "It is a pen"
         location = ItemLocation([0, 0])
-        user = User(name="Anderson", email="aadon1@jhu.edu", phone="555-555-5555")
-        item = Item(name=name, found=found, desc=desc, location=location, user=user)
+        item = Item(name=name, found=found, desc=desc, location=location, timestamp=1)
         mongo_item_dao.insert(item)
         name = "Card"
         found = True
         desc = "It is a card"
         location = ItemLocation([1, 2])
-        item = Item(name=name, found=found, desc=desc, location=location, user=user)
+        item = Item(name=name, found=found, desc=desc, location=location, timestamp=2)
         mongo_item_dao.insert(item)
         name = "Phone"
         found = True
         desc = "It is a phone"
         location = ItemLocation([39.3299, -76.6205])
-        item = Item(name=name, found=found, desc=desc, location=location, user=user)
+        item = Item(name=name, found=found, desc=desc, location=location, timestamp=3)
         mongo_item_dao.insert(item)
 
     def tearDown(self):
@@ -60,8 +59,8 @@ class ApiTest(TestCase):
         self.assertEqual(item['desc'], 'It is a card')
 
     def test_get_all_items_sorted(self):
-        response = self.app.get('/api/items/search=pen?tags=0')
+        response = self.app.get('/api/items/timesearch=%20?tags=0')
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 3)
-        self.assertEqual(response_dict[0]['name'], 'Pen')
+        self.assertEqual(response_dict[0]['name'], 'Phone')
