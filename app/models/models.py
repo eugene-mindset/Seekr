@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from enum import IntFlag
 
 from bson.objectid import ObjectId
@@ -6,26 +6,26 @@ from bson.objectid import ObjectId
 from app.mongo_inst import mongo
 
 
-class DatabaseObject:
+class DatabaseObject(ABC):
 
     def __init__(self, collection):
         self.collection = collection
 
     @abstractmethod
     def findById(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def insert(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def update(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def remove(self):
-        raise NotImplementedError
+        pass
 
 
 class ItemDao(DatabaseObject):
@@ -322,6 +322,9 @@ class Item:
         }
 
         return output
+# <<Interface>> Users 
+#      ^          ^
+# Basic User    Admin
 
 class UserDao(DatabaseObject):
 
@@ -337,7 +340,7 @@ class UserDao(DatabaseObject):
         UserDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
         # Serialize it into an Item object
-        newUser = User.fromDict(UserDoc)
+        newUser = AbstractUser.fromDict(UserDoc)
 
         return newUser
 
@@ -395,8 +398,24 @@ class UserDao(DatabaseObject):
         returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
 
+class AbstractUser(ABC):
+    def __init__(self, collection):
+        self.collection = collection
 
-class User:
+    # get name, email
+    def findById(self):
+        pass
+
+    def insert(self):
+        pass
+
+    def update(self):
+        pass
+
+    def remove(self):
+        pass
+    
+class BasicUser(AbstractUser):
 
     def __init__(self, Id=None, name=None, email=None, optIn=None):
         self.Id = Id
