@@ -248,39 +248,6 @@ export class AddItem extends Component {
             />
           </Form.Group>
 
-          {/* <Form.Group controlId='formName'>
-            <Form.Label>
-              Enter your contact information so people can contact you about the item.
-            </Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
-              placeholder={getCookieValue("name")}
-              value={this.state.username}
-              onChange={this.onChange}
-            />
-          </Form.Group>
-
-          <Form.Group controlId='formEmail'>
-            <Form.Control
-              type="email"
-              name="email"
-              placeholder={getCookieValue("email")}
-              value={this.state.email}
-              onChange={this.onChange}
-            />
-          </Form.Group> */}
-
-          {/* <Form.Group controlId='formPhone'>
-            <Form.Control
-              type="tel"
-              name="phone"
-              placeholder="Enter your phone number..."
-              value={this.state.phone}
-              onChange={this.onChange}
-            />
-          </Form.Group> */}
-
           <Button variant="primary" type="submit">
             Submit
           </Button>
