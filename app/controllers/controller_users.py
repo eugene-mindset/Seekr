@@ -55,7 +55,7 @@ def get_user_opt_in(email):
     # get list of all items using DAO and specifying the tags
     optInUsers = mongo_user_dao.findAllOptIn(email)
     if not optInUsers:
-        output = False
+        output = [False]
     else:
-        output = True
+        output = [True]
     return jsonify(output), 200

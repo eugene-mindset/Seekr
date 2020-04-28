@@ -17,21 +17,21 @@ export default function Profile() {
     // console.log(isOptIn);
   };
 
-  const check = (isOptIn) => {
-    let boxes = document.getElementsByClassName('notifyBox');
-    for (let box of boxes) {
-      if (box.unchecked) {
-        box.click();
-      }
-    }
-  }
 
   useEffect(() => {
-    check()
-    // axios.get("/api/optin/" + email).then((res) =>
-    //   console.log(res.data),
-      
-    // );
+    let boxes = document.getElementsByClassName('box');
+    for (let box of boxes) {
+      if (!box.checked) {
+        axios.get("/api/optin/" + email).then((res) =>
+          // console.log(res.data),
+          
+          res.data.map((item) => {
+            item ? box.click() : null
+          })
+        );
+      }
+    }
+
   })
 
   const toggleCheckbox = () => {
