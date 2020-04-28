@@ -36,7 +36,6 @@ export class Item extends Component {
     var lat = location.coordinates[0]
     var lng = location.coordinates[1]
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
-    // const username = "TEMP";
     return (
       <div onClick={() => this.modalHandler(true)} style={{}}>
         <Card border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em', borderWidth: '0.25em'}}>
