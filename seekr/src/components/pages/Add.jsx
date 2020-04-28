@@ -55,7 +55,7 @@ export default class Add extends Component {
     )
 
     axios.get(
-      "/sim_items" +
+      "/api/sim_items" +
         "?name=" + name +
         "&desc=" + desc +
         "&tags=" + tags +
@@ -97,7 +97,7 @@ export default class Add extends Component {
 
     axios({
       method: 'post',
-      url: '/items',
+      url: '/api/items',
       data: data,
       headers: {'Content-Type': 'multipart/form-data' }
     }).then(this.resetState());

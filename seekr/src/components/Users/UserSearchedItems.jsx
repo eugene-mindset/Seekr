@@ -16,7 +16,7 @@ function UserSearchedItems() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("/items/user=" + email);
+      const result = await axios.get("/api/items/user=" + email);
       setItems(result.data);
     };
     fetchData();
@@ -25,7 +25,7 @@ function UserSearchedItems() {
 
   const deleteItem = (id) => {
     axios
-      .delete(`/items/${id}`)
+      .delete(`/api/items/${id}`)
       .then((res) =>
         setItems((items) => [...items.filter((item) => item.id !== id)])
       );
