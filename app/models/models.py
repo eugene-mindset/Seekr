@@ -167,8 +167,8 @@ class Item:
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
-        self.username = username    # Should be a User object
-        self.email = email          # Should be a User object
+        self.username = username    # Should be a string
+        self.email = email          # Should be a string
 
     @classmethod
     def fromDict(cls, doc):

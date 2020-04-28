@@ -17,28 +17,45 @@ mongo_user_dao = UserDao(users)  # initialize a DAO with the collection
 def sendMail(user_item, similar_items, found):
     
     for similar_item in similar_items:
+        
         sender_email = "seekr.oose@gmail.com"
         password = "Seekroose!"
 
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
         message = MIMEMultipart("alternative")
-        message["Subject"] = f"Seekr Team: a Similar Item was Added!"
+        message["Subject"] = f"Seekr Team: a similar item was added!"
         message["From"] = sender_email
         message["To"] = similar_item.email
-
+        
+        
         # Create the plain-text and HTML version of your message
         text = """\
         Hi {similar_item.username}!
-        You recently added: {similar_item.name}.
-        An item was added that was similar to what you're looking for! {found}: {user_item}
+        You recently added: {similar_item.name} on {similar_item.timestamp}.
+        An item was added that was similar to what you're looking for! {found}: {user_item.name}
         """
+        status = ""
+        other = ""
+        if similar_item.found: 
+            status = "found" 
+            other = "lost"
+        else:
+            status = "lost"
+            other = "found"
         html = f"""\
         <html>
         <body>
             <p>Hi {similar_item.username}!<br>
-            You recently added: {similar_item.name}.
-            <br>An item was added that was similar to what you're looking for! {found}: {user_item}
+            You recently posted a {status} {similar_item.name}.
+            <br>Someone named {user_item.username} posted something you may be looking for!
+            <br>Here are the details:
+            <br>
+            <br>Item Name: {other} {user_item.name}
+            <br>Description: {user_item.desc}
+            <br>
+            <br>Note: You received this email because you selected to receive email updates if similar items to your postings are added. 
+            <br>You can change this setting in your User Info tab.
             </p>
         </body>
         </html>
@@ -60,12 +77,13 @@ def sendMail(user_item, similar_items, found):
         smtp_serv.login(sender_email, password)
         try:
             smtp_serv.sendmail(
-                sender_email, user_item.user.email, message.as_string())
-            print("email sent")
+                sender_email, similar_item.email, message.as_string())
+            # print("email sent")
         except Exception as e:
             print(e)
 
         smtp_serv.quit()
+        # print("Sent email to: " + similar_item.email)
 
 
 def distance(item1, item2):
