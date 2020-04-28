@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../App.css";
-import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
 import Checkbox from "../item/Checkbox";
 import axios from "axios";
@@ -14,27 +13,58 @@ export default function Profile() {
   const [isOptIn, setOptIn] = useState(false);
 
   const getState = (isChecked) => {
-    // setOptIn(isChecked);
-    // console.log(!isChecked);
-    setOptIn(!isChecked);
-    console.log(isOptIn);
+    setOptIn(isChecked);
+    // console.log(isOptIn);
   };
+
+
+  useEffect(() => {
+    let boxes = document.getElementsByClassName('box');
+    for (let box of boxes) {
+      if (!box.checked) {
+        axios.get("/api/optin/" + email).then((res) =>
+          // console.log(res.data),
+          
+          res.data.map((item) => {
+            item ? box.click() : null
+          })
+        );
+      }
+    }
+
+  }, []);
 
   const toggleCheckbox = () => {
     // toggleCheckbox is called whenever there is a change in the state of the Checkbox
     // this is where u would call the API to turn on/off opt in
+    // var data = new FormData();
+    // data.append("username", name);
+    // data.append("email", email);
+    // data.append("optIn", isOptIn);
+
+    // axios({
+    //   method: "put",
+    //   url: "/api/userinfo",
+    //   data: data,
+    //   headers: { "Content-Type": "multipart/form-data" },
+    // });
+  };
+
+  const onSubmit = () => {
     var data = new FormData();
     data.append("username", name);
     data.append("email", email);
-    data.append("optIn", isOptIn);
+    data.append("optIn", !isOptIn);
 
+    console.log(!isOptIn)
     axios({
       method: "put",
       url: "/api/userinfo",
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
-  };
+  }
+
 
   return (
     <div className="profile">
@@ -50,11 +80,15 @@ export default function Profile() {
           <div style={{marginLeft: "10px"}}>
             <Checkbox
               label={label}
-              // flagValue={label}
+              flagValue={"notify"}
               toggleCheckbox={toggleCheckbox}
               key={label}
               getState={getState}
+              className="notifyBox"
             />
+            <Button onClick={onSubmit}>
+              Submit
+            </Button>
           </div>
         </ul>
         <p>
