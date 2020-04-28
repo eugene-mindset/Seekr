@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Items from "../item/Items";
 import axios from "axios";
 import SearchItem from "../item/SearchItem";
-import { CardColumns, Jumbotron, Button, Alert, Toast } from "react-bootstrap";
+import { CardColumns, Jumbotron, Container } from "react-bootstrap";
 import "../../../public/css/Search.css";
 import { trackPromise } from "react-promise-tracker";
 
@@ -81,12 +81,20 @@ export default class Search extends Component {
     var mainCardView;
     if(this.state.items.length == 0){
       mainCardView = 
-      <Toast style={{marginLeft: '350px'}}>
-        <Toast.Header style={{ backgroundColor: '#87ceeb'}}>
-          <strong className="mr-auto">Seekr Notification</strong>
-        </Toast.Header>
-        <Toast.Body>No items found for you. Try searching again!</Toast.Body>
-      </Toast>
+      // <Toast style={{marginLeft: '350px', position: 'absolute', top: 56, right: 0}}>
+      //   <Toast.Header style={{ backgroundColor: '#87ceeb'}}>
+      //     <strong className="mr-auto">Seekr Notification</strong>
+      //   </Toast.Header>
+      //   <Toast.Body>No items found for you. Try searching again!</Toast.Body>
+      // </Toast>
+      <Jumbotron fluid style={{marginLeft: '350px', border: '5px', borderColor: 'red', borderStyle: 'solid'}}>
+        <Container>
+          <h1>No Results Found.</h1>
+          <p>
+            Try refining your search
+          </p>
+        </Container>
+      </Jumbotron>
     }
     else{
       mainCardView = <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
