@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../App.css";
 import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
@@ -11,14 +11,22 @@ export default function Profile() {
   const { name, email, profilePic } = useContext(AuthContext);
   const label = " Email me if someone posts an item that could be mine";
 
+  const [isOptIn, setOptIn] = useState(false);
+
+  const getState = (isChecked) => {
+    // setOptIn(isChecked);
+    // console.log(!isChecked);
+    setOptIn(!isChecked);
+    console.log(isOptIn);
+  };
+
   const toggleCheckbox = () => {
     // toggleCheckbox is called whenever there is a change in the state of the Checkbox
     // this is where u would call the API to turn on/off opt in
-
     var data = new FormData();
     data.append("username", name);
     data.append("email", email);
-    data.append("optIn", 'true');
+    data.append("optIn", isOptIn);
 
     axios({
       method: "put",
@@ -26,7 +34,6 @@ export default function Profile() {
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
-    return console.log("hello");
   };
 
   return (
@@ -46,6 +53,7 @@ export default function Profile() {
               // flagValue={label}
               toggleCheckbox={toggleCheckbox}
               key={label}
+              getState={getState}
             />
           </div>
         </ul>
