@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../../App.css";
-import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
 import Checkbox from "../item/Checkbox";
 import axios from "axios";
@@ -15,8 +14,25 @@ export default function Profile() {
 
   const getState = (isChecked) => {
     setOptIn(isChecked);
-    console.log(isOptIn);
+    // console.log(isOptIn);
   };
+
+  const check = (isOptIn) => {
+    let boxes = document.getElementsByClassName('notifyBox');
+    for (let box of boxes) {
+      if (box.unchecked) {
+        box.click();
+      }
+    }
+  }
+
+  useEffect(() => {
+    check()
+    // axios.get("/api/optin/" + email).then((res) =>
+    //   console.log(res.data),
+      
+    // );
+  })
 
   const toggleCheckbox = () => {
     // toggleCheckbox is called whenever there is a change in the state of the Checkbox
@@ -52,6 +68,7 @@ export default function Profile() {
               toggleCheckbox={toggleCheckbox}
               key={label}
               getState={getState}
+              className="notifyBox"
             />
           </div>
         </ul>
