@@ -38,12 +38,16 @@ export class SearchItem extends Component {
     }
   };
 
+  // // getState is a function that is needed for UserInfo's checkbox
+  // getState = 
+
   createCheckbox = (tag) => (
     <Checkbox
       label={tag.label}
       flagValue={tag.value}
       toggleCheckbox={this.toggleCheckbox}
       key={tag.label}
+      getState={() => {}}
     />
   );
 

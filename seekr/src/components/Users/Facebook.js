@@ -48,11 +48,11 @@ const Facebook = () => {
   };
   let faceContent;
 
-  if (userID == "null" || userID == "undefined") {
+  if (userID === "null" || userID === "undefined") {
     faceContent = (
       <FacebookLogin
         appId="2484603928503868" //prod mode app id
-        // appId="232984641269662" dev mode app id
+        // appId="232984641269662" //dev mode app id
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}
