@@ -28,7 +28,7 @@
 
 .search-sidebar {
   position: fixed;
-  width: 450px;
+  width: 310px;
   float: left;
   background-color: lightblue;
   margin-bottom: -5000px; /* any large number will do */
@@ -51,8 +51,4 @@
 
 .results {
   padding: 0px 10px;
-}
-
-.searchComponent{
-  width: 100vh;
 }
