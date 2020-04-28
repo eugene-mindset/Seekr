@@ -34,7 +34,7 @@ def update_user():
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
-    print(optIn)
+    # print(optIn)
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
 
     user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
@@ -48,4 +48,14 @@ def get_all_users():
     listOfUsers = mongo_user_dao.findAll()
 
     output = [user.toDict() for user in listOfUsers]
+    return jsonify(output), 200
+
+@users_router.route('/api/optin/<email>', methods=['GET'])
+def get_user_opt_in(email):
+    # get list of all items using DAO and specifying the tags
+    optInUsers = mongo_user_dao.findAllOptIn(email)
+    if not optInUsers:
+        output = [False]
+    else:
+        output = [True]
     return jsonify(output), 200

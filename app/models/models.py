@@ -167,8 +167,8 @@ class Item:
         self.tags = tags            # Should be an ItemTags enum
         self.images = images        # Should be a list of ItemImage objects
         self.timestamp = timestamp  # Should be a float
-        self.username = username    # Should be a User object
-        self.email = email          # Should be a User object
+        self.username = username    # Should be a string
+        self.email = email          # Should be a string
 
     @classmethod
     def fromDict(cls, doc):
@@ -348,6 +348,15 @@ class UserDao(DatabaseObject):
         
         return [User.fromDict(userDoc) for userDoc in filteredUsers]
 
+    def findAllOptIn(self, email):
+        filteredUsers = self.collection.find({
+            'email' : email,
+            'optIn' : "true"
+        })
+        
+        for userDoc in filteredUsers:
+            return User.fromDict(userDoc).email
+        # return User.fromDict(userDoc).email for userDoc in filteredUsers
     def findAll(self):
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection

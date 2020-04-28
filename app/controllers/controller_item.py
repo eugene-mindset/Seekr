@@ -20,7 +20,6 @@ from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, 
 from app.controllers.notifications import getSimItems, sendMail
 from app.models.similarity import ItemSimilarity
 
-
 items_router = Blueprint("items", __name__)
 
 users = mongo.db.users
@@ -232,8 +231,11 @@ def add_item():
 
     simItems, foundStatus = getSimItems(item, simMatch)
 
+    # send email to those who are notified
     if len(simItems) != 0:
-        sendMail(item, simItems, foundStatus)
+        matching = [mongo_user_dao.findAllOptIn(simItem.email) for simItem in simItems]
+        print("Users who have matching: " + str(matching))
+        sendMail(item, simItems, foundStatus, matching)
 
     return jsonify(item.toDict()), 200
 
