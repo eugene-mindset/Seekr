@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Items from "../item/Items";
 import axios from "axios";
 import SearchItem from "../item/SearchItem";
-import CardColumns from "react-bootstrap/CardColumns";
+import { CardColumns, Jumbotron, Button } from "react-bootstrap";
 import "../../../public/css/Search.css";
 import { trackPromise } from "react-promise-tracker";
 
@@ -78,15 +78,33 @@ export default class Search extends Component {
   };
 
   render() {
+    var mainCardView;
+    if(this.state.items.length == 0){
+      console.log("IT IS HERENOW");
+      mainCardView = 
+      <Jumbotron>
+        <h1>Hello, world!</h1>
+        <p>
+          This is a simple hero unit, a simple jumbotron-style component for calling
+          extra attention to featured content or information.
+        </p>
+        <p>
+          <Button variant="primary">Learn more</Button>
+        </p>
+      </Jumbotron>
+    }
+    else{
+      mainCardView = <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
+        <Items items={this.state.items} deleteItem={this.deleteItem} />
+      </CardColumns>;
+    }
     return (
       <div className="searchComponent">
         <SearchItem
           searchItem={this.searchItem}
           clearSearch={this.clearSearch}
         />
-        <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
-          <Items items={this.state.items} deleteItem={this.deleteItem} />
-        </CardColumns>
+        {mainCardView}
       </div>
     );
   }
