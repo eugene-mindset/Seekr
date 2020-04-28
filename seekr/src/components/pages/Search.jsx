@@ -80,7 +80,6 @@ export default class Search extends Component {
   render() {
     var mainCardView;
     if(this.state.items.length == 0){
-      console.log("IT IS HERENOW");
       mainCardView = 
       <Toast style={{marginLeft: '350px'}}>
         <Toast.Header style={{ backgroundColor: '#87ceeb'}}>
