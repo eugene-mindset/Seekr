@@ -14,12 +14,8 @@ function getCookieValue(a) {
 
 export default class Search extends Component {
   componentDidMount() {
-<<<<<<< HEAD
-    axios.get("/items/all").then((res) =>
-=======
     name="%20";
     axios.get("/items/timesearch=" + name).then((res) =>
->>>>>>> master
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item] });
       })
