@@ -33,7 +33,7 @@
 * [X] Move the search bar to side (Andrew)
 * [X] Displaying search boxes (clicking search box should display bigger box and generating mini map) (Jacob)
 * [X] Make mini-map for item listing cards be attached to the respective cards (Jacob)
-* [ ] Prevent the client from sending multiple search requests to the backend until it gets the information from the first request (Jacob)
+* [X] Prevent the client from sending multiple search requests to the backend until it gets the information from the first request (Jacob)
 * [X] Have a loading symbol appear on the search page when the user is searching for an item but has yet to get results back (Jacob)
 * [x] Have gensim download file if it is not on directory, otherwise use the one in there (Eugene)
 
