@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types';
 import GoogleMap from '../pages/GoogleMap';
 import Checkbox from "./Checkbox";
 import ItemTags from "../helper/ItemTags";
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
+import Toast from 'react-bootstrap/Toast';
 
 function getCookieValue(a) {
 	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
 	return b ? b.pop() : null;
 }
-
 export class AddItem extends Component {
 
   state = {
@@ -23,6 +23,7 @@ export class AddItem extends Component {
     img: [],
     username: "",
     email: "",
+    submitted: false
   }
   
   toggleCheckbox = val => {
@@ -85,7 +86,8 @@ export class AddItem extends Component {
 
     this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
       this.state.img, this.state.radius, getCookieValue("name"), getCookieValue("email"));
-
+    // this.showSubmitToast();
+    this.setState({ submitted: true});
     this.clearForm();
   }
 
@@ -150,10 +152,20 @@ export class AddItem extends Component {
     this.setState({ radius: parseInt(distance, 10)});
   }
 
+  toggleSubmitToast = () => {
+    this.setState({ submitted: false });
+  }
+
   render() {
     return (
       // flexbox
       <div style={{border: '3px solid', borderRadius: '10px', margin: 'auto', width: '70%', minWidth: '600px', padding: '20px', backgroundColor: 'white'}}>
+        <Toast show={this.state.submitted} onClose={this.toggleSubmitToast} delay={3000} autohide style={{ position: 'fixed',top: 80, right: 10}}>
+          <Toast.Header style={{backgroundColor:'#4CAF50'}}>
+            <strong className="mr-auto">Seekr Notification</strong>
+          </Toast.Header>
+          <Toast.Body>Your submission was successful!</Toast.Body>
+        </Toast>
         <Form onSubmit={this.onSubmit} style={{ textAlign : 'left'}}>
           <Form.Group >
             <Form.Label>Did you lose or find this item?</Form.Label>
