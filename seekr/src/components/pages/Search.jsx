@@ -18,23 +18,24 @@ export default class Search extends Component {
     axios.get("/api/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item] });
-      })
+      }).then(this.setState({loading: false}))
     );
   }
 
   state = {
     items: [],
-    user_email: ""
+    user_email: "",
+    loading: true
   };
 
   searchItem = (name, tags, filter, location) => {
-    this.setState({ items: [] });
+    this.setState({ items: [], loading: true });
     if (filter === "Best") {
       trackPromise(
       axios.get("/api/items/search=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
-        })
+        }).then(this.setState({loading: false}))
       ));
     } else if (filter === "Recent") {
       // if sort is by recent but query is blank, just search a space, of which
@@ -44,7 +45,7 @@ export default class Search extends Component {
       axios.get("/api/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
-        })
+        }).then(this.setState({loading: false}))
       ));
     } else {
       trackPromise(
@@ -57,7 +58,7 @@ export default class Search extends Component {
         )
         .then((res) =>
           res.data.map((item) => {
-            return this.setState({ items: [...this.state.items, item] });
+            return this.setState({ items: [...this.state.items, item], loading:false });
           })
         ));
     }
@@ -79,7 +80,7 @@ export default class Search extends Component {
 
   render() {
     var mainCardView;
-    if(this.state.items.length == 0){
+    if(this.state.items.length == 0 && this.state.loading == false){
       mainCardView = 
       <Jumbotron fluid style={{marginLeft: '350px', border: '5px', borderColor: 'red', borderStyle: 'solid'}}>
         <Container>
