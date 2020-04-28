@@ -6,6 +6,11 @@ import ItemTags from "../helper/ItemTags";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 
+function getCookieValue(a) {
+	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : null;
+}
+
 export class AddItem extends Component {
 
   state = {
@@ -18,7 +23,6 @@ export class AddItem extends Component {
     img: [],
     username: "",
     email: "",
-    phone: ""
   }
   
   toggleCheckbox = val => {
@@ -54,7 +58,6 @@ export class AddItem extends Component {
       radius: 0,
       username: "",
       email: "",
-      phone: ""
     });
 
     document.getElementById("imagesUpload").value = "";
@@ -81,7 +84,7 @@ export class AddItem extends Component {
     e.preventDefault();
 
     this.props.submitForm(this.state.name, this.state.found, this.state.desc, this.state.location, this.state.tags,
-      this.state.img, this.state.radius, this.state.username, this.state.email, this.state.phone);
+      this.state.img, this.state.radius, getCookieValue("name"), getCookieValue("email"));
 
     this.clearForm();
   }
@@ -245,14 +248,14 @@ export class AddItem extends Component {
             />
           </Form.Group>
 
-          <Form.Group controlId='formName'>
+          {/* <Form.Group controlId='formName'>
             <Form.Label>
               Enter your contact information so people can contact you about the item.
             </Form.Label>
             <Form.Control
               type="text"
               name="username"
-              placeholder="Enter your name..."
+              placeholder={getCookieValue("name")}
               value={this.state.username}
               onChange={this.onChange}
             />
@@ -262,13 +265,13 @@ export class AddItem extends Component {
             <Form.Control
               type="email"
               name="email"
-              placeholder="Enter your email..."
+              placeholder={getCookieValue("email")}
               value={this.state.email}
               onChange={this.onChange}
             />
-          </Form.Group>
+          </Form.Group> */}
 
-          <Form.Group controlId='formPhone'>
+          {/* <Form.Group controlId='formPhone'>
             <Form.Control
               type="tel"
               name="phone"
@@ -276,7 +279,7 @@ export class AddItem extends Component {
               value={this.state.phone}
               onChange={this.onChange}
             />
-          </Form.Group>
+          </Form.Group> */}
 
           <Button variant="primary" type="submit">
             Submit
