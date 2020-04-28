@@ -9,16 +9,16 @@ users_router = Blueprint("user", __name__)
 users = mongo.db.users # our items collection in mongodb
 mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
-@users_router.route('/userinfo', methods=['POST'])
+@users_router.route('/api/userinfo', methods=['POST'])
 def add_user():
-    
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
     
-    # Get the list of uploaded images and convert them to ItemImage objects
+    # Find a matching user
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
     
+    # If a user already exists upon login, then don't create a new user
     if matchingUser:
         user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
         return jsonify(user.toDict()), 200
@@ -27,10 +27,9 @@ def add_user():
 
     mongo_user_dao.insert(user)
 
-    #return 'okay'
     return jsonify(user.toDict()), 200
 
-@users_router.route('/userinfo', methods=['PUT'])
+@users_router.route('/api/userinfo', methods=['PUT'])
 def update_user():
     name = request.form['username']
     email = request.form['email']
@@ -43,7 +42,7 @@ def update_user():
     mongo_user_dao.update(user)
     return jsonify(user.toDict()), 200
 
-@users_router.route('/userinfo', methods=['GET'])
+@users_router.route('/api/userinfo', methods=['GET'])
 def get_all_users():
     # get list of all items using DAO and specifying the tags
     listOfUsers = mongo_user_dao.findAll()

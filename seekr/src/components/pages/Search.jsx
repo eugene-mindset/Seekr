@@ -15,7 +15,7 @@ function getCookieValue(a) {
 export default class Search extends Component {
   componentDidMount() {
     name="%20";
-    axios.get("/items/timesearch=" + name).then((res) =>
+    axios.get("/api/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item] });
       })
@@ -31,7 +31,7 @@ export default class Search extends Component {
     this.setState({ items: [] });
     if (filter === "Best") {
       trackPromise(
-      axios.get("/items/search=" + name + "?tags=" + tags).then((res) =>
+      axios.get("/api/items/search=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
@@ -41,7 +41,7 @@ export default class Search extends Component {
       // the backend will handle by returning all items
       let nameQuery = name.length === 0 ? ' ' : name;
       trackPromise(
-      axios.get("/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
+      axios.get("/api/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
         })
@@ -70,7 +70,7 @@ export default class Search extends Component {
   };
 
   deleteItem = (id) => {
-    axios.delete(`/items/${id}` + "?email=" + getCookieValue("email")).then((res) =>
+    axios.delete(`/api/items/${id}` + "?email=" + getCookieValue("email")).then((res) =>
       this.setState({
         items: [...this.state.items.filter((item) => item.id !== id)],
       })

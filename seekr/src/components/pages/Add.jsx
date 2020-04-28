@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import AddItem from '../item/AddItem';
 import SubmissionModal from '../item/SubmissionModal';
+import Errorpage from './Errorpage';
+
+function getCookieValue(a) {
+	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : null;
+}
 
 export default class Add extends Component {
   state = {
@@ -55,7 +61,7 @@ export default class Add extends Component {
     )
 
     axios.get(
-      "/sim_items" +
+      "/api/sim_items" +
         "?name=" + name +
         "&desc=" + desc +
         "&tags=" + tags +
@@ -97,7 +103,7 @@ export default class Add extends Component {
 
     axios({
       method: 'post',
-      url: '/items',
+      url: '/api/items',
       data: data,
       headers: {'Content-Type': 'multipart/form-data' }
     }).then(this.resetState());
@@ -116,6 +122,14 @@ export default class Add extends Component {
   }
 
   render() {
+    const userID = getCookieValue("userID");
+
+    if (userID === "null") {
+      return (
+        <Errorpage></Errorpage>
+      )
+    }
+    
     return (
       <React.Fragment>
         <h1>Add Item</h1><br/>

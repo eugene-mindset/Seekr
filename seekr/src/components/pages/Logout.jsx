@@ -19,7 +19,8 @@ const Logout = () => {
 		setEmail(null);
 		setUserID(null);
 		setProfilePic(null);
-		return <Redirect to="/" />
+		window.location.reload(false);
+
 	}
 	
 	if (userID != 'null' && userID != 'undefined') {
@@ -31,7 +32,6 @@ const Logout = () => {
 			</div>
 		);
 	} else {
-		// temporarily just redirect back to the search page
 		return ( 
 			<Redirect to="/" />
 		);

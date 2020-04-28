@@ -39,28 +39,33 @@ const Facebook = () => {
 
     axios({
         method: "post",
-        url: "/userinfo",
+        url: "/api/userinfo",
         data: data,
         headers: { "Content-Type": "multipart/form-data" },
       });
     
-      return <Redirect to="/userinfo" />;
+      return <Redirect to="/" />;
   };
   let faceContent;
 
-  console.log(userID);
   if (userID == "null" || userID == "undefined") {
     faceContent = (
       <FacebookLogin
-        appId="232984641269662"
+        appId="2484603928503868"
+        // appId="232984641269662"
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}
         callback={responseFacebook}
       />
     );
+    return <div>{faceContent}</div>;
   }
-  return <div>{faceContent}</div>;
+  else {
+    return (
+      <Redirect to="/userinfo" />
+    )
+  }
 };
 
 export default Facebook;

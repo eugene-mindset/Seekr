@@ -77,6 +77,15 @@ def get_all_items_timesorted(query):
     output = [item.toDict() for item in listOfItems]
     return jsonify(output), 200
 
+@items_router.route('/api/items/all', methods=['GET'])
+def get_all_items_recent():
+    # Get the tags if provided
+    tags = ItemTags.get(request.args.get('tags'))
+
+    listOfItems = mongo_item_dao.findByMostRecent(tags)
+
+    output = [item.toDict() for item in listOfItems]
+    return jsonify(output), 200
 
 @items_router.route('/api/items/proximitysearch', methods=['GET'])
 def get_all_items_proximitysorted():
@@ -108,8 +117,18 @@ def get_all_items_sorted(query):
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
+    items = simMatch.getSortedItems(getScores=True)
+    
+    index = len(items)
 
-    output = [item.toDict() for item in simMatch.getSortedItems()]
+    for i, (_, score) in enumerate(items):
+        if score <= 0:
+            index = i
+            break
+
+    items = items[0:index]
+    print(items)
+    output = [item[0].toDict() for item in items]
 
     return jsonify(output), 200
 
