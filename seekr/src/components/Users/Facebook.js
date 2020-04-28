@@ -39,7 +39,7 @@ const Facebook = () => {
 
     axios({
         method: "post",
-        url: "/userinfo",
+        url: "/api/userinfo",
         data: data,
         headers: { "Content-Type": "multipart/form-data" },
       });

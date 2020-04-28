@@ -22,7 +22,7 @@ export default function Profile() {
 
     axios({
       method: "put",
-      url: "/userinfo",
+      url: "/api/userinfo",
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
