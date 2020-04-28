@@ -39,6 +39,8 @@ export class AddItem extends Component {
       flagValue={tag.value}
       toggleCheckbox={this.toggleCheckbox}
       key={tag.label}
+      // getState is a function needed for Profile's Checkbox
+      getState={() => {}}
     />
   );
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Search from "./components/pages/Search";
@@ -6,13 +6,12 @@ import UserInfo from "./components/pages/UserInfo";
 import Logout from "./components/pages/Logout";
 import Facebook from './components/Users/Facebook';
 import Errorpage from './components/pages/Errorpage';
-import ProtectedRoute from './ProtectedRoute'
 import Navigation from './components/layout/Navigation';
 import Add from './components/pages/Add';
 
 
 import "./App.css";
-import { AuthContext, AuthContextProvider } from "./components/helper/AuthContext";
+import { AuthContextProvider } from "./components/helper/AuthContext";
 
 const App = () => {
   return (

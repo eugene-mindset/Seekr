@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Profile from "../Users/Profile";
 import UserSearchedItems from "../Users/UserSearchedItems";
 import "../../App.css";
