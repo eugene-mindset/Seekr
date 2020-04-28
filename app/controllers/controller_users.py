@@ -11,14 +11,14 @@ mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
 @users_router.route('/api/userinfo', methods=['POST'])
 def add_user():
-    
     name = request.form['username']
     email = request.form['email']
     optIn = request.form['optIn']
     
-    # Get the list of uploaded images and convert them to ItemImage objects
+    # Find a matching user
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
     
+    # If a user already exists upon login, then don't create a new user
     if matchingUser:
         user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
         return jsonify(user.toDict()), 200
@@ -27,7 +27,6 @@ def add_user():
 
     mongo_user_dao.insert(user)
 
-    #return 'okay'
     return jsonify(user.toDict()), 200
 
 @users_router.route('/api/userinfo', methods=['PUT'])

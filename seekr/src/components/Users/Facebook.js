@@ -52,7 +52,8 @@ const Facebook = () => {
   if (userID == "null" || userID == "undefined") {
     faceContent = (
       <FacebookLogin
-        appId="232984641269662"
+        appId="2484603928503868"
+        // appId="232984641269662"
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}
