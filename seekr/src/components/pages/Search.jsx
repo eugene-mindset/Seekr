@@ -17,8 +17,8 @@ export default class Search extends Component {
     name="%20";
     axios.get("/api/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
-        return this.setState({ items: [...this.state.items, item] });
-      }).then(this.setState({loading: false}))
+        return this.setState({ items: [...this.state.items, item], loading:false });
+      })
     );
   }
 
