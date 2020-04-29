@@ -18,6 +18,8 @@ from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, 
 from app.controllers.notifications import getSimItems, sendMail
 from app.models.similarity import ItemSimilarity
 
+from app.controllers.controller_users import get_user_by_email
+
 items_router = Blueprint("items", __name__)
 
 users = mongo.db.users
@@ -266,7 +268,9 @@ def update_item(Id):
 
 @items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    numDeleted = mongo_item_dao.remove(Id, request.args.get('email'))
+    userDoc = mongo_user_dao.findAllMatchingEmail(request.args.get('email'))
+    
+    numDeleted = mongo_item_dao.remove(Id, userDoc)
 
     if numDeleted == 1:
         output = {'message': 'deleted'}
