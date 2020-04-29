@@ -11,7 +11,7 @@ const Logout = () => {
 		setProfilePic
 	} = useContext(AuthContext)
 
-	const onClick = () => {
+	const Logout = () => {
 		console.log("logging out!");
 		
 		// log out
@@ -24,12 +24,9 @@ const Logout = () => {
 	}
 	
 	if (userID != 'null' && userID != 'undefined') {
+		Logout()
 		return (
-			<div style={{marginTop: "100px"}}>			
-				<button onClick={onClick} >
-					Click me to log out
-				</button>
-			</div>
+			<Redirect to="/" />
 		);
 	} else {
 		return ( 
