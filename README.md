@@ -14,6 +14,7 @@ http://ec2-54-83-146-52.compute-1.amazonaws.com/
 - Python version 3.7.5
 - Need to have npm, nodejs, python installed.
 - You can make a virtual environment in the repo so long as it is called venv or env. Git will ignore those files.
+- When doing dev, change FB app id in `Facebook.js` to the dev id.
 
 ## Front End (ReactJS)
 

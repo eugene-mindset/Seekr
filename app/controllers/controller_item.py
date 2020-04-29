@@ -1,5 +1,3 @@
-from base64 import standard_b64encode
-
 import math
 
 from email.mime.multipart import MIMEMultipart
@@ -26,6 +24,9 @@ users = mongo.db.users
 mongo_user_dao = UserDao(users)
 items = mongo.db.items # our items collection in mongodb
 mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
+
+# Location of where images for items are stored
+IMAGE_FOLDER = Path('./uploadedImages/')
 
 # the name of the model for item similarity to download
 # for more models: https://github.com/RaRe-Technologies/gensim-data
@@ -162,13 +163,14 @@ def find_similar_items():
     radius = float(request.args.get('radius'))
     tags = ItemTags.get(request.args.get('tags'))
     
+    # TODO: This isn't even used at all here. If it is, it's going to have to be updated
     # Get the list of uploaded images and convert them to ItemImage objects
     uploadedImages = request.files.getlist('image')
     images = []
-    for img in uploadedImages:
+    """ for img in uploadedImages:
         encoded = standard_b64encode(img.read())
         encodedAsStr = encoded.decode()
-        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
+        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr)) """
 
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
@@ -201,17 +203,18 @@ def add_item():
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
 
-    # Get the list of uploaded images and convert them to ItemImage objects
-    uploadedImages = request.files.getlist('image')
-    images = []
-    for img in uploadedImages:
-        encoded = standard_b64encode(img.read())
-        encodedAsStr = encoded.decode()
-        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr))
-
     timestamp = currTime()
     email = request.form['email']
     username = request.form['username']
+
+    # Get the list of uploaded images and convert them to ItemImage objects
+    uploadedImages = request.files.getlist('image')
+    images = []
+    for i, img in enumerate(uploadedImages):
+        # file will be saved as './uploadedImages/<numImage>_<timestamp>_<origFileName&Type>
+        filePath = str(i) + '_' + str(int(timestamp)) + '_' + img.filename
+        img.save(IMAGE_FOLDER / filePath)
+        images.append(ItemImage(img.filename, img.mimetype, filePath))
     
     item = Item(name=name, desc=desc, found=found, location=location,
                 radius=radius, tags=tags, images=images,
@@ -271,3 +274,9 @@ def delete_item(Id):
         output = {'message': 'not deleted'}
 
     return jsonify({'result': output}), 200
+
+
+@items_router.route("/api/fetch_image/<filePath>")
+def fetch_resource(filePath):
+    print("THIS IS THE FILENAME "+ filePath)
+    return send_from_directory(Path('../') / IMAGE_FOLDER, filePath)

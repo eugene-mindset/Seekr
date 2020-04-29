@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Items from "../item/Items";
 import axios from "axios";
 import SearchItem from "../item/SearchItem";
-import CardColumns from "react-bootstrap/CardColumns";
+import { CardColumns, Jumbotron, Container } from "react-bootstrap";
 import "../../../public/css/Search.css";
 import { trackPromise } from "react-promise-tracker";
 
@@ -18,23 +18,24 @@ export default class Search extends Component {
     axios.get("/api/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item] });
-      })
+      }).then(this.setState({loading: false}))
     );
   }
 
   state = {
     items: [],
-    user_email: ""
+    user_email: "",
+    loading: true
   };
 
   searchItem = (name, tags, filter, location) => {
-    this.setState({ items: [] });
+    this.setState({ items: [], loading: true });
     if (filter === "Best") {
       trackPromise(
       axios.get("/api/items/search=" + name + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
-        })
+        }).then(this.setState({loading: false}))
       ));
     } else if (filter === "Recent") {
       // if sort is by recent but query is blank, just search a space, of which
@@ -44,20 +45,20 @@ export default class Search extends Component {
       axios.get("/api/items/timesearch=" + nameQuery + "?tags=" + tags).then((res) =>
         res.data.map((item) => {
           return this.setState({ items: [...this.state.items, item] });
-        })
+        }).then(this.setState({loading: false}))
       ));
     } else {
       trackPromise(
       axios
         .get(
-          "/items/proximitysearch" +
+          "/api/items/proximitysearch" +
             "?tags=" + tags +
             "&lat=" + location[0] +
             "&lon=" + location[1]
         )
         .then((res) =>
           res.data.map((item) => {
-            return this.setState({ items: [...this.state.items, item] });
+            return this.setState({ items: [...this.state.items, item], loading:false });
           })
         ));
     }
@@ -78,15 +79,30 @@ export default class Search extends Component {
   };
 
   render() {
+    var mainCardView;
+    if(this.state.items.length == 0 && this.state.loading == false){
+      mainCardView = 
+      <Jumbotron fluid style={{marginLeft: '350px', border: '5px', borderColor: 'red', borderStyle: 'solid'}}>
+        <Container>
+          <h1>No Results Found.</h1>
+          <p>
+            Try refining your search
+          </p>
+        </Container>
+      </Jumbotron>
+    }
+    else{
+      mainCardView = <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
+        <Items items={this.state.items} deleteItem={this.deleteItem} />
+      </CardColumns>;
+    }
     return (
       <div className="searchComponent">
         <SearchItem
           searchItem={this.searchItem}
           clearSearch={this.clearSearch}
         />
-        <CardColumns style={{marginLeft: '350px', display: 'flex', flexWrap: 'wrap'}}>
-          <Items items={this.state.items} deleteItem={this.deleteItem} />
-        </CardColumns>
+        {mainCardView}
       </div>
     );
   }

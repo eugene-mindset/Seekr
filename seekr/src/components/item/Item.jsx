@@ -13,9 +13,8 @@ export class Item extends Component {
   };
 
   getImage = images => {
-    // Only returns the first image for now
-    let imageLink = 'data:' + images[0].imageType + ';base64,' + images[0].imageData;
-    return(<Card.Img variant="bottom" src={ imageLink } />)
+    // Only returns the first image for the card
+    return(<Card.Img variant="bottom" src={ `/fetch_image/${images[0].imageData}` } />)
   };
 
 
