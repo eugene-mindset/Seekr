@@ -28,7 +28,7 @@ def add_user():
     
     print("isAdmin? " + (isAdmin))
     # if is admin
-    if (isAdmin == True):
+    if (isAdmin == 'true'):
         print(isAdmin + " is admin")
         user = Admin(name=name, email=email, optIn=optIn)
         mongo_user_dao.insert(user)
