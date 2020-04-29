@@ -5,9 +5,11 @@ import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
 import axios from "axios";
 
+const adminEmails = ["yifanandrew@yahoo.com"];
+
 
 const Facebook = () => {
-  const { setName, setEmail, userID, setUserID, setProfilePic } = useContext(
+  const { setName, setEmail, userID, setUserID, setProfilePic, isAdmin, setAdmin } = useContext(
     AuthContext
   );
 
@@ -23,6 +25,7 @@ const Facebook = () => {
     console.log("CLICK!!!!");
   };
 
+
   const responseFacebook = (response) => {
     console.log(response);
 
@@ -30,14 +33,15 @@ const Facebook = () => {
     setEmail(response.email);
     setName(response.name);
     setProfilePic(response.picture.data.url);
-    console.log(response.email);
+    setAdmin(adminEmails.includes(response.email));
     
+
     var data = new FormData();
     data.append("username", response.name);
     data.append("email", response.email);
     data.append("optIn", 'false');
-    data.append("isAdmin", 'true');
-    
+    data.append("isAdmin", adminEmails.includes(response.email));
+
     axios({
         method: "post",
         url: "/api/userinfo",
