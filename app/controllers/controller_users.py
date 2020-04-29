@@ -26,15 +26,16 @@ def add_user():
         user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
         return jsonify(user.toDict()), 200
     
-    # if not admin
-    if not isAdmin:
-        print("not admin")
-        user = User(name=name, email=email, optIn=optIn)
+    print("isAdmin? " + (isAdmin))
+    # if is admin
+    if (isAdmin == True):
+        print(isAdmin + " is admin")
+        user = Admin(name=name, email=email, optIn=optIn)
         mongo_user_dao.insert(user)
         return jsonify(user.toDict()), 200
     else:
-        print("admin")
-        user = Admin(name=name, email=email, optIn=optIn)
+        print("not admin")
+        user = User(name=name, email=email, optIn=optIn)
         mongo_user_dao.insert(user)
         return jsonify(user.toDict()), 200
         
