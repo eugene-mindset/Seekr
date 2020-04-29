@@ -36,7 +36,8 @@ const Facebook = () => {
     data.append("username", response.name);
     data.append("email", response.email);
     data.append("optIn", 'false');
-
+    data.append("isAdmin", 'true');
+    
     axios({
         method: "post",
         url: "/api/userinfo",
@@ -51,8 +52,8 @@ const Facebook = () => {
   if (userID === "null" || userID === "undefined") {
     faceContent = (
       <FacebookLogin
-        appId="2484603928503868" //prod mode app id
-        // appId="232984641269662" //dev mode app id
+        // appId="2484603928503868" //prod mode app id
+        appId="232984641269662" //dev mode app id
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}
