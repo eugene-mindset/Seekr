@@ -15,7 +15,7 @@ export class Item extends Component {
 
   getImage = images => {
     // Only returns the first image for the card
-    return(<Card.Img variant="bottom" src={ `/fetch_image/${images[0].imageData}` } />)
+    return(<Card.Img variant="bottom" src={ `/api/fetch_image/${images[0].imageData}` } />)
   };
 
 
