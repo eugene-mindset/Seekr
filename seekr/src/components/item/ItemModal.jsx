@@ -14,10 +14,10 @@ export const ItemModal = (props) => {
         <div onClick={e => e.stopPropagation()}>
         <Modal className="modal-container" size="xl" show={props.showModal}
             onHide={() => props.handleClose(false)}>
-            <Modal.Header>
+            <Modal.Header style={{backgroundColor: props.itemData.found ? '#5cb85c' : '#ffc107'}}>
             <Modal.Title>
                 <div>
-                    <text style={{color: props.itemData.found ? '#5cb85c' : '#ffc107'}}>{ props.itemData.found ? "Found " : "Lost " }</text>
+                    
                     <text>{props.itemData.name}</text>
                 </div>
                 
