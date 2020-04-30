@@ -26,7 +26,7 @@ export const ItemModal = (props) => {
             
             <Modal.Body>
                 <div><b>{props.itemData.desc}</b></div>
-                <div>{props.itemData.images.length !== 0 ? <Card.Img variant="bottom" src={ `/fetch_image/${props.itemData.images[0].imageData}` } /> : <span></span>}</div>
+                <div>{props.itemData.images.length !== 0 ? <Card.Img variant="bottom" src={ `/api/fetch_image/${props.itemData.images[0].imageData}` } /> : <span></span>}</div>
                 <text style={{textAlign: 'right'}} className="text-muted">Location of this item</text>
                 <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}><GoogleMap clickable={false} loc={props.itemData.location}/></div>
             </Modal.Body>
