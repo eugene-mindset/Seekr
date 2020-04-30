@@ -18,7 +18,7 @@ export const ItemModal = (props) => {
             <Modal.Title>
                 <div>
                     <text>{props.itemData.name}</text>
-                    <text style={{textAlign: 'right'}} border={props.itemData.found ? 'success' : 'warning'} className="text-muted">{ props.itemData.found ? " Found" : " Lost" }</text>
+                    <text style={{textAlign: 'right', color: props.itemData.found ? '#5cb85c' : '#ffc107'}}>{ props.itemData.found ? " Found" : " Lost" }</text>
                 </div>
                 
                 <div><Tags tags={ItemTags.getStrings(props.itemData.tags).split(',')} ></Tags></div>
