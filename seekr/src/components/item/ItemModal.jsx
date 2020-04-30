@@ -17,8 +17,8 @@ export const ItemModal = (props) => {
             <Modal.Header>
             <Modal.Title>
                 <div>
+                    <text style={{color: props.itemData.found ? '#5cb85c' : '#ffc107'}}>{ props.itemData.found ? "Found " : "Lost " }</text>
                     <text>{props.itemData.name}</text>
-                    <text style={{textAlign: 'right', color: props.itemData.found ? '#5cb85c' : '#ffc107'}}>{ props.itemData.found ? " Found" : " Lost" }</text>
                 </div>
                 
                 <div><Tags tags={ItemTags.getStrings(props.itemData.tags).split(',')} ></Tags></div>
@@ -26,10 +26,12 @@ export const ItemModal = (props) => {
             </Modal.Header>
             
             <Modal.Body>
-                <div><b>{props.itemData.desc}</b></div>
-                <div>{props.itemData.images.length !== 0 ? <Card.Img variant="bottom" src={ `/api/fetch_image/${props.itemData.images[0].imageData}` } /> : <span></span>}</div>
-                <text style={{textAlign: 'right'}} className="text-muted">Location of this item</text>
-                <div style={{marginBottom: '310px', position: 'relative', zIndex: '0'}}><GoogleMap clickable={false} loc={props.itemData.location}/></div>
+                <h5>{props.itemData.desc}</h5>
+                <div style={{marginTop: '20px'}}>{props.itemData.images.length !== 0 ? <Card.Img variant="bottom" src={ `/api/fetch_image/${props.itemData.images[0].imageData}` } /> : <span></span>}</div>
+                <div style={{marginBottom: '250px', marginLeft: '430px', marginTop: '20px'}}>
+                    <b>Location of item</b>
+                    <GoogleMap style={{width: '0%'}} clickable={false} loc={props.itemData.location}/>
+                </div>
             </Modal.Body>
             <Modal.Dialog>
                 <b className="text-muted">{"Contact: " + props.itemData.username + " " + props.itemData.email}</b>
