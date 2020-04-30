@@ -5,7 +5,6 @@ import Search from "./components/pages/Search";
 import UserInfo from "./components/pages/UserInfo";
 import Logout from "./components/pages/Logout";
 import Facebook from './components/Users/Facebook';
-import Errorpage from './components/pages/Errorpage';
 import Navigation from './components/layout/Navigation';
 import Add from './components/pages/Add';
 
@@ -24,7 +23,6 @@ const App = () => {
             {/* <ProtectedRoute path="/add" user={false} component={Add} /> */}
             <Route exact path="/" component={Search} />
             <Route path="/add" component={Add} />
-            <Route path="/unauthorized" component={Errorpage}/>
             {/* Temporarily using Login component instead of Facebook Component */}
             <Route path="/login" component={Facebook}/>  
             

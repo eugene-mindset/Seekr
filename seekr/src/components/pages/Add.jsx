@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import AddItem from '../item/AddItem';
 import SubmissionModal from '../item/SubmissionModal';
-import Errorpage from './Errorpage';
 import Facebook from "../Users/Facebook"
 
 function getCookieValue(a) {
