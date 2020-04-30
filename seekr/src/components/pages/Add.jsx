@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import AddItem from '../item/AddItem';
 import SubmissionModal from '../item/SubmissionModal';
-import Errorpage from './Errorpage';
+import Facebook from "../Users/Facebook"
 
 function getCookieValue(a) {
 	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
@@ -126,7 +126,13 @@ export default class Add extends Component {
 
     if (userID === "null") {
       return (
-        <Errorpage></Errorpage>
+        //<Errorpage></Errorpage>
+        <React.Fragment>
+        <h1>Add Item</h1><br/>
+        <AddItem submitForm={this.submitForm}/>
+        <SubmissionModal showModal={this.state.showModal} handleClose={this.closeModal} simItems={this.state.similarItems}/>
+        <Facebook></Facebook>
+      </React.Fragment>
       )
     }
     
