@@ -21,13 +21,16 @@ export const AuthContextProvider = ({children}) => {
 
 	const prevProfilePic = getCookieValue("profilePic") || null;
 
-	const prevAdmin = false;
+	const prevAdmin = getCookieValue("isAdmin") || null;
+	const prevModal = getCookieValue("modal") || null;
+
 	
 	const [name, setName] = useState(prevName);
 	const [email, setEmail] = useState(prevEmail);
 	const [userID, setUserID] = useState(prevUserID);
 	const [profilePic, setProfilePic] = useState(prevProfilePic);
 	const [isAdmin, setAdmin] = useState(prevAdmin);
+	const [modal, setModal] = useState(prevModal)
 
 	useEffect(
 		// this anonymous function will automatically update the cookies
@@ -37,10 +40,9 @@ export const AuthContextProvider = ({children}) => {
 			document.cookie = "userID=" + userID + "; path=/";
 			document.cookie = "profilePic=" + profilePic +"; path=/";
 			document.cookie = "isAdmin=" + isAdmin +"; path=/";
-			// adminEmails.includes(email) ? setAdmin('true') : setAdmin('false');
-			
+			document.cookie = "modal=" + modal + "; path=/";
 		},
-		[name, email, userID, isAdmin, profilePic]
+		[name, email, userID, profilePic, isAdmin, modal]
 	)
 	
 	const defaultContext = {
@@ -53,7 +55,9 @@ export const AuthContextProvider = ({children}) => {
 		profilePic,
 		setProfilePic,
 		isAdmin,
-		setAdmin
+		setAdmin,
+		modal,
+		setModal
 	}
 
 	return (

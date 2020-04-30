@@ -48,6 +48,7 @@ export class SearchItem extends Component {
       toggleCheckbox={this.toggleCheckbox}
       key={tag.label}
       getState={() => {}}
+      
     />
   );
 

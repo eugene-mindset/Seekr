@@ -8,10 +8,11 @@ const Logout = () => {
 		setEmail,
 		userID,
 		setUserID,
-		setProfilePic
+		setProfilePic,
+		setAdmin
 	} = useContext(AuthContext)
 
-	const onClick = () => {
+	const Logout = () => {
 		console.log("logging out!");
 		
 		// log out
@@ -19,17 +20,15 @@ const Logout = () => {
 		setEmail(null);
 		setUserID(null);
 		setProfilePic(null);
+		setAdmin(false);
 		window.location.reload(false);
 
 	}
 	
 	if (userID != 'null' && userID != 'undefined') {
+		Logout()
 		return (
-			<div style={{marginTop: "100px"}}>			
-				<button onClick={onClick} >
-					Click me to log out
-				</button>
-			</div>
+			<Redirect to="/" />
 		);
 	} else {
 		return ( 

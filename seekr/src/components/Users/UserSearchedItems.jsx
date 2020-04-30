@@ -15,11 +15,7 @@ function UserSearchedItems() {
   const { email } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("/api/items/user=" + email);
-      setItems(result.data);
-    };
-    fetchData();
+    axios.get("/api/items/user=" + email).then((result) => setItems(result.data));
     console.log("done");
   }, []);
 
