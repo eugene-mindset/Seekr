@@ -46,11 +46,15 @@ def update_user():
     # print(optIn)
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
 
-    user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
-
-    mongo_user_dao.update(user)
-    return jsonify(user.toDict()), 200
-
+    if (isinstance(matchingUser[0], Admin)):
+        user = Admin(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn, listOfItemIds=matchingUser[0].listOfItemIds)
+        mongo_user_dao.update(user)
+        return jsonify(user.toDict()), 200
+    else:
+        user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn, listOfItemIds=matchingUser[0].listOfItemIds)
+        mongo_user_dao.update(user)
+        return jsonify(user.toDict()), 200
+    
 @users_router.route('/api/userinfo/<Id>', methods=['DELETE'])
 def delete_user(Id):
     numDeleted = mongo_user_dao.remove(Id)
