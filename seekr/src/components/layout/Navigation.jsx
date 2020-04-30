@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { AuthContext } from "../helper/AuthContext";
-import LoginModal from "../Users/LoginModal";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Facebook from "../Users/Facebook";

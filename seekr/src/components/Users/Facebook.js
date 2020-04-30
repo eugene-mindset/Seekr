@@ -14,9 +14,13 @@ const Facebook = () => {
     AuthContext
   );
 
-  const closeModal = () => setModal(false);
+  const closeModal = () => {
+    setModal(false);
+  }
 
-  const startModal = () => setModal(true);
+  const startModal = () => {
+    setModal(true);
+  }
 
   const columnStyle = {
     display: "flex",
@@ -102,7 +106,7 @@ const Facebook = () => {
       onFailure={responseGoogle}
       />
     );
-    return <div>
+    return (<React.Fragment>
       <Modal size="sm" show={modal} centered={true}>
     <Modal.Header>
       <Modal.Title>Sign In Authentication</Modal.Title>
@@ -111,12 +115,12 @@ const Facebook = () => {
     {faceContent}<br /> <br /> {googleContent}
     </Modal.Body>
     <Modal.Footer>
-      <Button variant="secondary" onClick={closeModal}>
+      <Button variant="secondary" onClick={closeModal} href="/">
         Close
       </Button>
     </Modal.Footer>
   </Modal>
-  </div>;
+   </React.Fragment>);
   }
   else {
     setModal(false)
