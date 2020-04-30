@@ -1,11 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { AuthContext } from "../helper/AuthContext";
+import LoginModal from "../Users/LoginModal";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Facebook from "../Users/Facebook";
+
+
 
 const Navigation = () => {
-  const { userID } = useContext(AuthContext);
+  const { userID, modal, setModal } = useContext(AuthContext);
+
   return (
-    <div>
+    //<div>
+    <React.Fragment>
       <Navbar expand="lg" fixed="top">
         <Navbar.Brand href="/">Seekr: Lost and Found</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -22,9 +30,14 @@ const Navigation = () => {
               <Nav.Link href="/login">Login</Nav.Link>
             )}
           </Nav>
+          
         </Navbar.Collapse>
       </Navbar>
-    </div>
+      
+    </React.Fragment>
+
+
+    //</div>  {model_on == true ? <LoginModal showModal={model_on} handleClose={closeModal}/> : null}
   );
 };
 

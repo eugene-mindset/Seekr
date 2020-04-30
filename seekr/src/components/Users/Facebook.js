@@ -4,13 +4,28 @@ import GoogleLogin from "react-google-login";
 import { Redirect } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import axios from "axios";
 
 
 const Facebook = () => {
-  const { setName, setEmail, userID, setUserID, setProfilePic } = useContext(
+  const { setName, setEmail, userID, setUserID, setProfilePic, modal, setModal } = useContext(
     AuthContext
   );
+
+  const closeModal = () => setModal(false);
+
+  const startModal = () => setModal(true);
+
+  const columnStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: "70px",
+    marginLeft: "10px"
+  
+  };
 
   const componentClicked = () => {
     console.log("CLICK!!!!");
@@ -37,7 +52,7 @@ const Facebook = () => {
         data: data,
         headers: { "Content-Type": "multipart/form-data" },
       });
-    
+      
       return <Redirect to="/" />;
   };
 
@@ -87,9 +102,24 @@ const Facebook = () => {
       onFailure={responseGoogle}
       />
     );
-    return <div>{faceContent}<br /> <br /> {googleContent}</div>;
+    return <div>
+      <Modal size="sm" show={modal} centered={true}>
+    <Modal.Header>
+      <Modal.Title>Sign In Authentication</Modal.Title>
+    </Modal.Header>
+    <Modal.Body> 
+    {faceContent}<br /> <br /> {googleContent}
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={closeModal}>
+        Close
+      </Button>
+    </Modal.Footer>
+  </Modal>
+  </div>;
   }
   else {
+    setModal(false)
     return (
       <Redirect to="/userinfo" />
     )

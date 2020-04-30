@@ -17,6 +17,7 @@
 
 a, .navbar-nav, .nav-link {
   color: #ffffff !important;
+  border-width: 0ch;
 
   &:hover {
     color: white;
