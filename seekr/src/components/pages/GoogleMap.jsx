@@ -59,13 +59,13 @@ export class GoogleMap extends Component {
 
   render() {
     return (
-      <div>
         <Map
           google={this.props.google}
           style={{ width: "250px", height:"250px"}}
           zoom={15}
           onClick={this.onClick}
           initialCenter={this.state.markers.length !== 0 ? this.state.markers[0].position : [ 39.3299, -76.6205 ]}
+          containerStyle={{ width: '250px', height: '250px' }}
         >
           {this.state.markers.map((marker, index) => (
             <Marker
@@ -76,7 +76,6 @@ export class GoogleMap extends Component {
             />
           ))}
         </Map>
-      </div>
     );
   }
 }

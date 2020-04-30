@@ -14,7 +14,7 @@ const Navigation = () => {
     //<div>
     <React.Fragment>
       <Navbar expand="lg" fixed="top">
-        <Navbar.Brand href="/">Seekr: Lost and Found</Navbar.Brand>
+        <Navbar.Brand href="/">Seekr: <text style={{color:'#ffc107'}}>Lost</text> and <text style={{color:'#5cb85c'}}>Found</text></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
