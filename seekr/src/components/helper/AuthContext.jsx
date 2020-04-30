@@ -21,17 +21,9 @@ export const AuthContextProvider = ({children}) => {
 
 	const prevProfilePic = getCookieValue("profilePic") || null;
 
-	const prevAdmin = getCookieValue("isAdmin") || null;
+	const prevAdmin = false;
 	
 	const [name, setName] = useState(prevName);
-	/**
-	 * state {
-	 * 	auth: prevAuth
-	 * }
-	 * 
-	 * this.setState{ auth: hello } == setAuth(hello)
-	 * 
-	 */
 	const [email, setEmail] = useState(prevEmail);
 	const [userID, setUserID] = useState(prevUserID);
 	const [profilePic, setProfilePic] = useState(prevProfilePic);

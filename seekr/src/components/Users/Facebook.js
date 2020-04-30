@@ -68,7 +68,7 @@ const Facebook = () => {
   }
   else {
     return (
-      <Redirect to="/userinfo" />
+      <Redirect to="/" />
     )
   }
 };
