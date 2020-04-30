@@ -222,7 +222,20 @@ def add_item():
                 radius=radius, tags=tags, images=images,
                 timestamp=timestamp, username=username, email=email)
 
+    # add the item to the database
     mongo_item_dao.insert(item)
+    
+    # get the user who added
+    matchingUser = mongo_user_dao.findAllMatchingEmail(email)
+    
+    # add the item to their user
+    matchingUser[0].listOfItemIds.append(item.Id)
+    print("item id: " + item.Id)
+    
+    # update the info on the databse
+    mongo_user_dao.update(matchingUser[0])
+    
+
 
     # want to check whenever an item is added if their are similar items to send notifications to
     listOfItems = mongo_item_dao.findAll(tags)
@@ -270,9 +283,15 @@ def update_item(Id):
 def delete_item(Id):
     userDoc = mongo_user_dao.findAllMatchingEmail(request.args.get('email'))
     
-    numDeleted = mongo_item_dao.remove(Id, userDoc)
+    if userDoc == None:
+        output = {'message': 'not deleted'}
+        return jsonify({'result': output}), 200
+    
+    numDeleted = mongo_item_dao.remove(Id, userDoc[0])
 
     if numDeleted == 1:
+        userDoc[0].listOfItemIds.remove(Id)
+        mongo_user_dao.update(userDoc[0])
         output = {'message': 'deleted'}
     else:
         output = {'message': 'not deleted'}

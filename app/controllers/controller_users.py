@@ -20,22 +20,20 @@ def add_user():
     
     # Find a matching user
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
+    listOfItemIds = []
     
     # If a user already exists upon login, then don't create a new user
     if matchingUser:
-        user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn)
-        return jsonify(user.toDict()), 200
+        # user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn, listOfItemIds=matchingUser[0].listOfItemIds)
+        return 'OK', 200
     
-    print("isAdmin? " + (isAdmin))
-    # if is admin
+
     if (isAdmin == 'true'):
-        print(isAdmin + " is admin")
-        user = Admin(name=name, email=email, optIn=optIn)
+        user = Admin(name=name, email=email, optIn=optIn, listOfItemIds=listOfItemIds)
         mongo_user_dao.insert(user)
         return jsonify(user.toDict()), 200
     else:
-        print("not admin")
-        user = User(name=name, email=email, optIn=optIn)
+        user = User(name=name, email=email, optIn=optIn, listOfItemIds=listOfItemIds)
         mongo_user_dao.insert(user)
         return jsonify(user.toDict()), 200
         

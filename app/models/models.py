@@ -156,7 +156,7 @@ class ItemDao(DatabaseObject):
         toDelete = self.findById(Id)
         
 
-        if user[0].canDelete(toDelete):
+        if user.canDelete(toDelete):
                 # delete associated images
             for img in toDelete.images:
                 pathToFile = IMAGE_FOLDER / img.imageData
@@ -417,6 +417,7 @@ class UserDao(DatabaseObject):
 
         return user # TODO: The returned item is never used, remove this line at some point
 
+        
     def update(self, user):
         Id = user.Id
         data = user.toDict() # Get item info formatted in a JSON friendly manner
@@ -436,12 +437,13 @@ class UserDao(DatabaseObject):
         return returned.deleted_count
 
 class AbstractUser(ABC):
-    def __init__(self, Id=None, name=None, email=None, optIn=None):
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
         self.Id = Id
-        self.name = name        # Should be a string
-        self.email = email      # Should be a string
-        self.optIn = optIn      # Should be a boolean
-
+        self.name = name                # Should be a string
+        self.email = email              # Should be a string
+        self.optIn = optIn              # Should be a boolean
+        self.listOfItemIds = listOfItemIds  # Should be a list of strings
+        
     @classmethod
     def fromDict(cls, doc):
         abstractUser = cls()
@@ -449,6 +451,7 @@ class AbstractUser(ABC):
         abstractUser.name = doc['name']
         abstractUser.email = doc['email']
         abstractUser.optIn = doc['optIn']
+        abstractUser.listOfItemIds = doc['listOfItemIds']
         return abstractUser 
 
     @abstractmethod
@@ -488,6 +491,17 @@ class AbstractUser(ABC):
     def optIn(self, optIn):
         self.__optIn = optIn
     
+    @property
+    def listOfItemIds(self):
+        return self.__listOfItemIds
+    
+    @listOfItemIds.setter
+    def listOfItemIds(self, listOfItemIds):
+        self.__listOfItemIds = listOfItemIds
+    
+    def addItem(self, itemId):
+        self.__listOfItemIds.append(itemId)
+    
     def __eq__(self, otherUser):
         if self.Id != otherUser.Id:
             return False
@@ -497,10 +511,12 @@ class AbstractUser(ABC):
             return False
         if self.optIn != otherUser.optIn:
             return False
+        if self.listOfItemIds != otherUser.listOfItemIds:
+            return False
         return True
     
     def __str__(self):
-        return self.name + ': ' + self.email + ', ' + self.optIn
+        return self.name + ': ' + self.email + ', ' + self.optIn + ', ' + self.listOfItemIds
 
     def __repr__(self):
         return str(self)
@@ -512,8 +528,8 @@ class AbstractUser(ABC):
     
 class User(AbstractUser):
 
-    def __init__(self, Id=None, name=None, email=None, optIn=None):
-        super().__init__(Id, name, email, optIn)
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
+        super().__init__(Id, name, email, optIn, listOfItemIds)
 
     @classmethod
     def fromDict(cls, doc):
@@ -522,26 +538,30 @@ class User(AbstractUser):
         user.name = doc['name']
         user.email = doc['email']
         user.optIn = doc['optIn']
+        user.listOfItemIds = doc['listOfItemIds']
+
         return user 
     
     # when convert to dict, set isAdmin to false
     def toDict(self):
         output = {
-            'id'        : self.Id,
-            'name'      : self.name,
-            'email'     : self.email,
-            'optIn'     : self.optIn,
-            'isAdmin'   : False
+            'id'            : self.Id,
+            'name'          : self.name,
+            'email'         : self.email,
+            'optIn'         : self.optIn,
+            'isAdmin'       : False,
+            'listOfItemIds' : self.listOfItemIds
         }
         return output
     
     def canDelete(self, item):
-        return self.email == item.email
+        return item.id in self.listOfItemIds
+        # return self.email == item.email
 
 
 class Admin(AbstractUser):
-    def __init__(self, Id=None, name=None, email=None, optIn=None):
-        super().__init__(Id, name, email, optIn)
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
+        super().__init__(Id, name, email, optIn, listOfItemIds)
 
     @classmethod
     def fromDict(cls, doc):
@@ -550,16 +570,20 @@ class Admin(AbstractUser):
         admin.name = doc['name']
         admin.email = doc['email']
         admin.optIn = doc['optIn']
+        admin.listOfItemIds = doc['listOfItemIds']
+
         return admin 
 
     # when convert to dict, set isAdmin to true
     def toDict(self):
         output = {
-            'id'        : self.Id,
-            'name'      : self.name,
-            'email'     : self.email,
-            'optIn'     : self.optIn,
-            'isAdmin'   : True
+            'id'            : self.Id,
+            'name'          : self.name,
+            'email'         : self.email,
+            'optIn'         : self.optIn,
+            'isAdmin'       : True,
+            'listOfItemIds' : self.listOfItemIds
+
         }
         return output
     
