@@ -49,7 +49,6 @@
 * [X] Improve design of the website
   * [X] Improve navbar (Jason)
   * [X] Get rid of ugly fonts and colors (Collaboration)
-  * [ ] Logo for the project (Eugene)
   * [X] Footer for page, get rid of the about page (Jason)
 * [ ] Document existing code (Everyone)
 * [X] Delete any unused code (Eugene)
