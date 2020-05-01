@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Tags from './Tags'
 import ItemTags from '../helper/ItemTags'
 import ItemModal from "../item/ItemModal"
+import "../../../public/css/Item.css";
 
 export class Item extends Component {
 
@@ -14,7 +15,7 @@ export class Item extends Component {
 
   getImage = images => {
     // Only returns the first image for the card
-    return(<Card.Img variant="bottom" src={ `/fetch_image/${images[0].imageData}` } />)
+    return(<Card.Img variant="bottom" src={ `/api/fetch_image/${images[0].imageData}` } />)
   };
 
 
@@ -28,7 +29,6 @@ export class Item extends Component {
         isShowing: show
     });
   }
-
   
   render() {
     const { id, name, found, desc, location, images, timestamp, tags, username, email} = this.props.item;
@@ -37,8 +37,8 @@ export class Item extends Component {
 
     var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
-      <div onClick={() => this.modalHandler(true)} style={{}}>
-        <Card border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em', borderWidth: '0.25em'}}>
+      <div style={{}}>
+        <Card id='my-card' onClick={() => this.modalHandler(true)} border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em', borderWidth: '0.25em'}}>
           <Card.Title style={{ margin: '1em 0.8em 0.5em'}}>{ name }</Card.Title>
           <Tags tags={ItemTags.getStrings(tags).split(',')} ></Tags> 
           {((email === this.props.cur_email) || this.props.isAdmin === 'true') ?  <Button style={{ margin: '1em 0.5em 1em 1em'}} variant="danger" onClick={this.props.deleteItem.bind(this, id)}>Delete</Button> : null}

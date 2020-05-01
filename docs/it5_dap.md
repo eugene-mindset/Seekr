@@ -40,16 +40,15 @@
 ### User Accounts
 
 * [X] Add user authentication (Shaurya, Andrew)
-* [ ] Provide the option to opt out of email notifications for users (Shaurya, Andrew)
+* [X] Provide the option to opt out of email notifications for users (Shaurya, Andrew)
 * [X] Users can only delete their own post (Shaurya, Andrew)
 * [X] Add the button for authentication (Shaurya, Andrew)
 
 ### General
 
 * [X] Improve design of the website
-  * [ ] Improve navbar (Jason)
-  * [ ] Get rid of ugly fonts and colors (Collaboration)
-  * [ ] Logo for the project (Eugene)
+  * [X] Improve navbar (Jason)
+  * [X] Get rid of ugly fonts and colors (Collaboration)
   * [X] Footer for page, get rid of the about page (Jason)
 * [ ] Document existing code (Everyone)
 * [X] Delete any unused code (Eugene)
