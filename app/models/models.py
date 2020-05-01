@@ -250,9 +250,7 @@ class ItemDao(DatabaseObject):
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
         data.pop('timestamp') # remove the timestamp, shouldn't be updating it
-        #data.pop('imageName') # remove imageName, don't know how we would handle an update to an image???
-        # TODO: handle image updates
-
+        
         # find the item in our mongodb collection by its id,
         # update it with the new data
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
