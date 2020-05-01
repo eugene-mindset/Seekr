@@ -14,7 +14,7 @@ function getCookieValue(a) {
 
 export default class Search extends Component {
   componentDidMount() {
-    name="%20";
+    const name="%20";
     axios.get("/api/items/timesearch=" + name).then((res) =>
       res.data.map((item) => {
         return this.setState({ items: [...this.state.items, item], loading:false });
@@ -71,7 +71,7 @@ export default class Search extends Component {
   };
 
   deleteItem = (id) => {
-    axios.delete(`/api/items/${id}` + "?email=" + getCookieValue("email")).then((res) =>
+    axios.delete(`/api/items/${id}?email=` + getCookieValue("email")).then((res) =>
       this.setState({
         items: [...this.state.items.filter((item) => item.id !== id)],
       })
@@ -80,7 +80,7 @@ export default class Search extends Component {
 
   render() {
     var mainCardView;
-    if(this.state.items.length == 0 && this.state.loading == false){
+    if(this.state.items.length === 0 && this.state.loading === false){
       mainCardView = 
       <Jumbotron fluid style={{marginLeft: '350px', border: '5px', borderColor: 'red', borderStyle: 'solid'}}>
         <Container>

@@ -23,7 +23,7 @@ const Logout = () => {
 
 	}
 	
-	if (userID != 'null' && userID != 'undefined') {
+	if (userID !== 'null' && userID !== 'undefined') {
 		Logout()
 		return (
 			<Redirect to="/" />
