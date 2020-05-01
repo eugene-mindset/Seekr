@@ -33,5 +33,18 @@ it('renders without crashing', () => {
     phone: "",
   };
 
-  //ReactDOM.render(<AddItem submitForm={this.setState}/>, div);
+  submitForm = (name, found, desc, location, tags, img, radius, username, email, phone) => {
+    state.name=name
+    state.desc=desc
+    state.found=found
+    state.location=location
+    state.radius=radius
+    state.tags=tags
+    state.img=img
+    state.username=username
+    state.email=email
+    state.phone=phone
+  }
+
+  ReactDOM.render(<AddItem submitForm={submitForm}/>, div);
 });
