@@ -10,7 +10,7 @@ const Navigation = () => {
     //<div>
     <React.Fragment>
       <Navbar expand="lg" fixed="top">
-        <Navbar.Brand href="/">Seekr: <em style={{color:'#ffc107'}}>Lost</em> and <em style={{color:'#5cb85c'}}>Found</em></Navbar.Brand>
+        <Navbar.Brand href="/">Seekr: <em style={{color:'#ffc107', fontStyle: 'normal'}}>Lost</em> and <em style={{color:'#5cb85c', fontStyle: 'normal'}}>Found</em></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">

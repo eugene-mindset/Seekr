@@ -24,7 +24,7 @@ function UserSearchedItems() {
 
   const deleteItem = (id) => {
     axios
-      .delete(`/api/items/${id}` + "?email=" + getCookieValue("email"))
+      .delete(`/api/items/${id}?email=` + getCookieValue("email"))
       .then((res) =>
         setItems((items) => [...items.filter((item) => item.id !== id)])
       );
