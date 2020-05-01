@@ -33,11 +33,8 @@ export class Item extends Component {
   }
 
   render() {
-    const { id, name, found, desc, location, images, timestamp, tags, username, email} = this.props.item;
-    var lat = location.coordinates[0]
-    var lng = location.coordinates[1]
+    const { id, name, found, location, images, timestamp, tags, email} = this.props.item;
 
-    var url = "https://www.google.com/maps/place/" + lat.toString(10) + "+" + lng.toString(10)
     return (
       <div style={{}}>
         <Card id='my-card' onClick={() => this.modalHandler(true)} border={found ? 'success' : 'warning'} style={{ textAlign: 'left', width: "16rem", margin: '1em', borderWidth: '0.25em'}}>
