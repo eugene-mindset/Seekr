@@ -555,7 +555,7 @@ class User(AbstractUser):
         return output
     
     def canDelete(self, item):
-        return item.id in self.listOfItemIds
+        return item.Id in self.listOfItemIds
         # return self.email == item.email
 
 
