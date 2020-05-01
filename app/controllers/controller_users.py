@@ -9,6 +9,8 @@ users_router = Blueprint("user", __name__)
 users = mongo.db.users # our items collection in mongodb
 mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
+adminEmails = ['yifanandrew@yahoo.com', 'andrewzhang26@gmail.com', 'seekr.oose@gmail.com']
+
 @users_router.route('/api/userinfo', methods=['POST'])
 def add_user():
     name = request.form['username']
@@ -16,7 +18,7 @@ def add_user():
     optIn = request.form['optIn']
     
     # frontend will send if user is an admin
-    isAdmin = request.form['isAdmin']
+    # isAdmin = request.form['isAdmin']
     
     # Find a matching user
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
@@ -24,11 +26,10 @@ def add_user():
     
     # If a user already exists upon login, then don't create a new user
     if matchingUser:
-        # user = User(Id=matchingUser[0].Id, name=name, email=email, optIn=optIn, listOfItemIds=matchingUser[0].listOfItemIds)
-        return 'OK', 200
+        return jsonify(matchingUser[0].toDict()), 200
     
 
-    if (isAdmin == 'true'):
+    if (email in adminEmails):
         user = Admin(name=name, email=email, optIn=optIn, listOfItemIds=listOfItemIds)
         mongo_user_dao.insert(user)
         return jsonify(user.toDict()), 200

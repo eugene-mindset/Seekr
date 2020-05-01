@@ -281,17 +281,24 @@ def update_item(Id):
 
 @items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    userDoc = mongo_user_dao.findAllMatchingEmail(request.args.get('email'))
     
-    if userDoc == None:
+    # find matching email
+    users = mongo_user_dao.findAllMatchingEmail(request.args.get('email'))
+    
+    if users == None:
         output = {'message': 'not deleted'}
         return jsonify({'result': output}), 200
     
-    numDeleted = mongo_item_dao.remove(Id, userDoc[0])
+    itemToDelete = mongo_item_dao.findById(Id)
+    
+    # delete item from email
+    numDeleted = mongo_item_dao.remove(Id, users[0])
 
     if numDeleted == 1:
-        userDoc[0].listOfItemIds.remove(Id)
-        mongo_user_dao.update(userDoc[0])
+        # remove the item from the item's user
+        users = mongo_user_dao.findAllMatchingEmail(itemToDelete.email)
+        users[0].listOfItemIds.remove(Id)
+        mongo_user_dao.update(users[0])
         output = {'message': 'deleted'}
     else:
         output = {'message': 'not deleted'}
