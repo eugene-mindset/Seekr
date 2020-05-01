@@ -18,24 +18,11 @@ const Facebook = () => {
     setProfilePic,
     modal,
     setModal,
-    isAdmin,
     setAdmin,
   } = useContext(AuthContext);
 
   const closeModal = () => {
     setModal(false);
-  };
-
-  const startModal = () => {
-    setModal(true);
-  };
-
-  const columnStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginTop: "70px",
-    marginLeft: "10px",
   };
 
   const componentClicked = () => {
