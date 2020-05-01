@@ -13,8 +13,6 @@ const Logout = () => {
 	} = useContext(AuthContext)
 
 	const Logout = () => {
-		console.log("logging out!");
-		
 		// log out
 		setName(null);
 		setEmail(null);
