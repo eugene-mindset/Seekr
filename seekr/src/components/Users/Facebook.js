@@ -130,7 +130,7 @@ const Facebook = () => {
     );
   } else {
     setModal(false);
-    setTimeout(() => {console.log("waiting 0.5 seconds")}, 500);
+    // setTimeout(() => {console.log("waiting 0.5 seconds")}, 500);
     return <Redirect to="/userinfo" />;
   }
 };

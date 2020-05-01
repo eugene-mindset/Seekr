@@ -20,7 +20,7 @@ function UserSearchedItems() {
         .then((result) => setItems(result.data)),
       console.log("done")
     );
-  }, []);
+  }, [email]);
 
   const deleteItem = (id) => {
     axios
