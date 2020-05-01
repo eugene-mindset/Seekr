@@ -32,7 +32,6 @@ def sendMail(user_item, similar_items, found, matching):
         message["From"] = sender_email
         message["To"] = similar_item.email
         
-        
         # Create the plain-text and HTML version of your message
         text = """\
         Hi {similar_item.username}!
@@ -87,7 +86,6 @@ def sendMail(user_item, similar_items, found, matching):
             print(e)
 
         smtp_serv.quit()
-        # print("Sent email to: " + similar_item.email)
 
 
 def distance(item1, item2):
@@ -98,7 +96,6 @@ def distance(item1, item2):
 
     dist = 3958.8 * math.acos(math.sin(slat)*math.sin(elat)
                               + math.cos(slat)*math.cos(elat)*math.cos(slon - elon))
-    # dist = 6371.01 * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
     return dist
 
 
@@ -136,10 +133,5 @@ def getSimItems(queriedItem, simMatch):
     for item in similar_items:
         if imageMatch(queriedItem, item) < 35:  # Under 35 key point matches
             similar_items.remove(item)
-
-    # for item in similar_items:
-    #     matches = mongo_user_dao.findAllMatchingEmail(item.email)
-    #     if matches[0].optIn == 'true':
-    #         sendMail(queriedItem, item, found)
 
     return similar_items, found
