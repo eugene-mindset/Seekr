@@ -6,7 +6,6 @@ import GoogleMap from "../pages/GoogleMap";
 import Card from 'react-bootstrap/Card'
 import Tags from './Tags'
 import ItemTags from '../helper/ItemTags'
-import "../../../public/css/Modal.css";
 
 export const ItemModal = (props) => {
       

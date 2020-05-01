@@ -4,14 +4,17 @@ import GoogleLogin from "react-google-login";
 import { Redirect } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../helper/AuthContext";
+import Logout from "../pages/Logout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 
 
 const Facebook = () => {
   const {
     setName,
+    email,
     setEmail,
     userID,
     setUserID,
@@ -52,8 +55,10 @@ const Facebook = () => {
   };
 
   const responseFacebook = (response) => {
+    console.log("facebook sends: "+typeof response.email);
     setUserID(response.userID);
-    setEmail(response.email);
+    (typeof response.email == undefined) ? setEmail("undefined") : setEmail(response.email);
+    console.log(typeof email);
     setName(response.name);
     setProfilePic(response.picture.data.url);
 
@@ -79,8 +84,8 @@ const Facebook = () => {
   if (userID === "null" || userID === "undefined") {
     faceContent = (
       <FacebookLogin
-        appId="2484603928503868" //prod mode app id
-        // appId="232984641269662" //dev mode app id
+        //appId="2484603928503868" //prod mode app id
+        appId="232984641269662" //dev mode app id
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}

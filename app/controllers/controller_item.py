@@ -14,18 +14,20 @@ from gensim.models.keyedvectors import Word2VecKeyedVectors as word2vec
 import gensim.downloader as gens_api
 
 from app import mongo
-from app.models.models import Item, ItemDao, ItemImage, ItemLocation, ItemTags, User, UserDao
 from app.controllers.notifications import getSimItems, sendMail
 from app.models.similarity import ItemSimilarity
 
+from app.models.models import Item, ItemImage, ItemLocation, ItemTags, User, DaoFactory
 from app.controllers.controller_users import get_user_by_email
 
 items_router = Blueprint("items", __name__)
 
-users = mongo.db.users
-mongo_user_dao = UserDao(users)
-items = mongo.db.items # our items collection in mongodb
-mongo_item_dao = ItemDao(items) # initialize a DAO with the collection
+daoFactory = DaoFactory()
+usersColl = mongo.db.users # our users collection in mongodb
+itemsColl = mongo.db.items # our items collection in mongodb
+
+mongo_user_dao = daoFactory.getDao('user', usersColl) # initialize a DAO with the collection
+mongo_item_dao = daoFactory.getDao('item', itemsColl) # initialize a DAO with the collection
 
 # Location of where images for items are stored
 IMAGE_FOLDER = Path('./uploadedImages/')
@@ -239,8 +241,6 @@ def add_item():
     # update the info on the databse
     mongo_user_dao.update(matchingUser[0])
     
-
-
     # want to check whenever an item is added if their are similar items to send notifications to
     listOfItems = mongo_item_dao.findAll(tags)
     if item.found is True:
@@ -264,9 +264,6 @@ def add_item():
 
 @items_router.route('/api/items/<Id>', methods=['PUT'])
 def update_item(Id):
-    # TODO: Update this to match the new architecture of objects
-    # Actually let the user update items on the frontend
-
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
@@ -285,7 +282,6 @@ def update_item(Id):
 
 @items_router.route('/api/items/<Id>', methods=['DELETE'])
 def delete_item(Id):
-    
     # find matching email
     users = mongo_user_dao.findAllMatchingEmail(request.args.get('email'))
     

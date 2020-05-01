@@ -46,11 +46,8 @@ class ItemSimilarity():
         """
             Creates the class.
 
-            Parameters
-            ----------
-
-            modelName:str
-                name of the model to download through gensim
+            Args:
+                modelName: name of the model to download through gensim
         """
 
         # public properties
@@ -77,11 +74,8 @@ class ItemSimilarity():
         """
             Add `item` to use for computing its similarity to queried items.
 
-            Parameters
-            ----------
-
-            item: Item
-                item to add to 'self'
+            Args:
+                item: item to add to 'self'
         """
 
         # create new ItemScore and dictionary entries from ItemScore
@@ -97,11 +91,8 @@ class ItemSimilarity():
             Add every item in `items` to use for computing its similarity
             to queried items.
 
-            Parameters
-            ----------
-
-            items: list of Item
-                items to add to 'self'
+            Args:
+                items: items to add to 'self'
         """
 
         # create new ItemScores and dictionary entries from ItemScore
@@ -145,10 +136,8 @@ class ItemSimilarity():
             Compute the sentences (or the bag of words) for every item listing
             in self.
 
-            Parameters
-            ----------
-            corpus: corpora.Dictionary
-                dictionary to use to create bag of words for each item
+            Args:
+                corpus: dictionary to use to create bag of words for each item
         """
 
         for itemScore in self.itemScores:
@@ -160,14 +149,11 @@ class ItemSimilarity():
         """
             Compute the similarity matrix of the model
 
-            Parameters
-            ----------
-            corpus: corpora.Dictionary
-                dictionary to use to create index
+            Args:
+                corpus: dictionary to use to create index
 
-            Return
-            ------
-            SoftCosineSimilarity instance
+            Returns:
+                SoftCosineSimilarity instance
         """
 
         if self.wordEmbedding is None:
@@ -182,10 +168,8 @@ class ItemSimilarity():
             Score every item listing in self. The score is how similar that item
             is to `itemToCompare`.
 
-            Parameters
-            ----------
-            itemToCompare: Item
-                item to see how similar it is to other items
+            Args:
+                itemToCompare: item to see how similar it is to other items
         """
 
         # make itemToCompare's bag of words
@@ -213,9 +197,8 @@ class ItemSimilarity():
         """
             Get the items in self by how well they scored.
 
-            Return
-            ------
-            list of items sorted by similarity to last compared item
+            Returns:
+                list of items sorted by similarity to last compared item
         """
 
         results = [itemScore for itemScore in self.itemScores]
