@@ -61,9 +61,8 @@ class ItemDao(DatabaseObject):
         """
             Initialize ItemDao instance.
 
-            Parameters
-            ----------
-            collection: the mongo DB to access
+            Args:
+                collection: the mongo DB to access
         """
 
         super().__init__(collection)
@@ -79,13 +78,11 @@ class ItemDao(DatabaseObject):
         """
             Get an item listing in self.collection by id.
 
-            Parameters
-            ----------
-            Id: the corresponding id of the item listing to retrieve
+            Args:
+                Id: the corresponding id of the item listing to retrieve
 
-            Return
-            ------
-            Item instance
+            Returns:
+                Item instance
         """
         # Get the item from our mongodb collection
         itemDoc = self.collection.find_one({"_id": ObjectId(Id)})
@@ -100,13 +97,11 @@ class ItemDao(DatabaseObject):
             Get all listings in self.collection that have the corresponding
             tags.
 
-            Parameters
-            ----------
-            tags: the tags that every Item will have for it to be returned
+            Args:
+                tags: the tags that every Item will have for it to be returned
 
-            Return
-            ------
-            A list of Item instances
+            Returns:
+                A list of Item instances
         """
 
         # Mongo query to get the items that have the specified tags from our
@@ -124,13 +119,11 @@ class ItemDao(DatabaseObject):
         """
             Get all listings sorted by proximity to a location.
 
-            Parameters
-            ----------
-            tags: the tags that every Item will have for it to be returned
+            Args:
+                tags: the tags that every Item will have for it to be returned
 
-            Return
-            ------
-            A list of Item instances
+            Returns:
+                A list of Item instances
         """
         # Mongo query to retrieve the items sorted by proximty to the
         # latitude and longitude and also have the specified tags
@@ -156,14 +149,12 @@ class ItemDao(DatabaseObject):
         """
             Get all listings sorted by recency in creation.
 
-            Parameters
-            ----------
-            tags: the tags that every Item will have for it to be returned
-            query: words in query must appear in returned results
+            Args:
+                tags: the tags that every Item will have for it to be returned
+                query: words in query must appear in returned results
 
-            Return
-            ------
-            A list of Item instances
+            Returns:
+                A list of Item instances
         """
 
         # Mongo query to retrieve the items sorted by their timestamp in
@@ -198,13 +189,11 @@ class ItemDao(DatabaseObject):
         """
             Get all listings that match the query.
 
-            Parameters
-            ----------
-            query: words in query must appear in returned results
+            Args:
+                query: words in query must appear in returned results
 
-            Return
-            ------
-            A list of Item instances
+            Returns:
+                A list of Item instances
         """
 
         queriedItems = self.collection.find(query)
@@ -216,9 +205,8 @@ class ItemDao(DatabaseObject):
         """
             Add an Item to self.collection.
 
-            Parameters
-            ----------
-            item: the Item to be added
+            Args:
+                item: the Item to be added
 
         """
 
@@ -235,9 +223,8 @@ class ItemDao(DatabaseObject):
         """
             Update Item in self.collection.
 
-            Parameters
-            ----------
-            item: the Item to be updated
+            Args:
+                item: the Item to be updated
         """
 
         Id = item.Id
@@ -257,14 +244,12 @@ class ItemDao(DatabaseObject):
         """
             Remove an Item from self.collection by its id.
 
-            Parameters
-            ----------
-            Id: the id of the listing to remove
-            user: the user that is trying to remove the item
+            Args:
+                Id: the id of the listing to remove
+                user: the user that is trying to remove the item
 
-            Return
-            ------
-            0 if unsuccesful in deletion, otherwise 1
+            Returns:
+                0 if unsuccesful in deletion, otherwise 1
         """
 
 
@@ -283,10 +268,32 @@ class ItemDao(DatabaseObject):
 
 
 class Item:
+    """
+        Represents the items in the database.
+    """
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
-                 radius=None, tags=None, images=[], timestamp=None, username=None,
-                 email=None):
+        radius=None, tags=None, images=[], timestamp=None, username=None,
+        email=None):
+        """
+            Initialize Item instance.
+
+            Args:
+                Id: the assigned id of self
+                name: name of self
+                desc: description of self
+                found: If true, this indicates that self is a found item
+                location: an ItemLocation instance representing the location of
+                    self in long/lat
+                radius: how far the search range of the listing should be
+                tags: an ItemTags instance representing the tags of self
+                images: the ItemImages belonging to self
+                timestamp: the time self was made
+                username: the username of the creator of self
+                email: the email associated with self
+
+        """
+
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -301,6 +308,15 @@ class Item:
 
     @classmethod
     def fromDict(cls, doc):
+        """
+            Take a dictionary and convert it into an Item
+
+            Args:
+                doc: the dictionary to convert
+
+            Returns:
+                the Item instance
+        """
         item = cls()
         item.Id = str(doc['_id'])
         item.name = doc['name']
@@ -436,6 +452,12 @@ class Item:
         return str(self)
 
     def toDict(self):
+        """
+            Get dictionary representation of Item
+
+            Returns:
+                a dictionary
+        """
         output = {
             'id'        : self.Id,
             'name'      : self.name,
