@@ -479,8 +479,18 @@ class Item:
 #     User       Admin
 
 class UserDao(DatabaseObject):
+    """
+        DAO converts user information from results given from MongoDB queries to
+        their corresponding class representation.
+    """
 
     def __init__(self, collection):
+        """
+            Initialize DAO
+
+            Args:
+                collection: the DB to access
+        """
         super().__init__(collection)
 
         # Register the location attribute for documents in mongo to be used as a
@@ -488,6 +498,16 @@ class UserDao(DatabaseObject):
         self.collection.create_index([('location', '2dsphere' )])
 
     def findById(self, Id):
+        """
+            Find user by Id in self.collection
+
+            Args:
+                Id: the id of the user to find
+
+            Retuns:
+                an AbstractUser instance
+        """
+
         # Get the item from our mongodb collection
         userDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
@@ -501,6 +521,16 @@ class UserDao(DatabaseObject):
         # return [User.fromDict(userDoc) for userDoc in filteredUsers]
 
     def findAllMatchingEmail(self, email):
+        """
+            Get all users with matching emails in self.collection.
+
+            Args:
+                email: the email to filter by
+
+            Returns:
+                list of AbstractUser instances
+        """
+
         filteredUsers = self.collection.find({
             'email' : email
         })
@@ -517,6 +547,17 @@ class UserDao(DatabaseObject):
     
         
     def findAllOptIn(self, email):
+        """
+            Get all users with matching emails in self.collection that opt-in
+            to email notifications.
+
+            Args:
+                email: the email to filter by
+
+            Returns:
+                a list of User instances
+        """
+
         filteredUsers = self.collection.find({
             'email' : email,
             'optIn' : "true"
@@ -526,6 +567,13 @@ class UserDao(DatabaseObject):
             return User.fromDict(userDoc).email
 
     def findAll(self):
+        """
+            Get all users in self.collection.
+
+            Returns:
+                a list of AbstractUsers
+        """
+
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
         filteredUsers = self.collection.find()
@@ -541,6 +589,12 @@ class UserDao(DatabaseObject):
     
     
     def insert(self, user):
+        """
+            Add an User to self.collection
+
+            Args:
+                user: the user that is being inserted
+        """
         data = user.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id field
 
@@ -550,10 +604,14 @@ class UserDao(DatabaseObject):
         new_user = self.collection.find_one({'_id': user_id})
         user.Id = str(new_user['_id'])
 
-        return user # TODO: The returned item is never used, remove this line at some point
-
-        
     def update(self, user):
+        """
+            Update a users information in self.collection.
+
+            Args:
+                user: the user that is being updated
+        """
+
         Id = user.Id
         data = user.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
@@ -564,9 +622,18 @@ class UserDao(DatabaseObject):
             "$set": data
         }, upsert=False)
 
-        return user # TODO: The returned item is never used, remove this line at some point
 
     def remove(self, Id):
+        """
+            Remove a User from self.collection by its id.
+
+            Args:
+                Id: the id of the listing to remove
+
+            Returns:
+                The number of users deleted
+        """
+
         # Delete the item frmo our mongodb collection by its id
         returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
