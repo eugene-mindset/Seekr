@@ -7,9 +7,9 @@ threshold = 0.85
 # Location of where images for items are stored
 IMAGE_FOLDER = './uploadedImages/'
 
-# TODO: the doc comment needs to be updated
 def imageMatch(item1, item2):
-    """Compares the similarities of the images between two items.
+    """
+    Compares the similarities of the images between two items.
 
     Pairwise compares all the images of two given items using SIFT.
 
