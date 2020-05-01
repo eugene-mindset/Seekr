@@ -3,25 +3,24 @@ import CardColumns from "react-bootstrap/CardColumns";
 import Items from "../item/Items";
 import axios from "axios";
 import { AuthContext } from "../helper/AuthContext";
-
+import { trackPromise } from "react-promise-tracker";
 const columnStyle = {
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "left",
 };
-
 function UserSearchedItems() {
   const [items, setItems] = useState([]);
   const { email } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get("/api/items/user=" + email);
-      setItems(result.data);
-    };
-    fetchData();
-    console.log("done");
-  }, []);
+    trackPromise(
+      axios
+        .get("/api/items/user=" + email)
+        .then((result) => setItems(result.data)),
+      console.log("done")
+    );
+  }, [email]);
 
   const deleteItem = (id) => {
     axios
@@ -30,7 +29,6 @@ function UserSearchedItems() {
         setItems((items) => [...items.filter((item) => item.id !== id)])
       );
   };
-
 
   return (
     <div className="user-results">

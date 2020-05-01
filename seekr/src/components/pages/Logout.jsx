@@ -8,17 +8,17 @@ const Logout = () => {
 		setEmail,
 		userID,
 		setUserID,
-		setProfilePic
+		setProfilePic,
+		setAdmin
 	} = useContext(AuthContext)
 
 	const Logout = () => {
-		console.log("logging out!");
-		
 		// log out
 		setName(null);
 		setEmail(null);
 		setUserID(null);
 		setProfilePic(null);
+		setAdmin(false);
 		window.location.reload(false);
 
 	}

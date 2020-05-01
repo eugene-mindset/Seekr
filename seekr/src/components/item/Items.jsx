@@ -1,12 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Item from './Item';
 import { AuthContext } from "../helper/AuthContext";
 
-const Items = ({items, deleteItem}) => {
-  const { email } = useContext(AuthContext);
 
+const adminEmails = ['yifanandrew@yahoo.com', 'seekr.oose@gmail.com']
+
+const Items = ({items, deleteItem}) => {
+
+  const { email, isAdmin } = useContext(AuthContext);
+  
+  
+  
   return items.map((item) => (
-    <Item key={item.id} item={item} deleteItem={deleteItem} cur_email={email} />
+    <Item key={item.id} item={item} deleteItem={deleteItem} cur_email={email} isAdmin={adminEmails.includes(email)} />
   ));
 };
 

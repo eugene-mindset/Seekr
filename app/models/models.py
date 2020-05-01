@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from enum import IntFlag
 from pathlib import Path
 
@@ -7,30 +7,31 @@ from bson.objectid import ObjectId
 from app.mongo_inst import mongo
 
 
+
 # Location of where images for items are stored
 IMAGE_FOLDER = Path('./uploadedImages/')
 
 
-class DatabaseObject:
-
+class DatabaseObject(ABC):
+    
     def __init__(self, collection):
         self.collection = collection
 
     @abstractmethod
     def findById(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def insert(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def update(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def remove(self):
-        raise NotImplementedError
+        pass
 
 
 class ItemDao(DatabaseObject):
@@ -150,16 +151,21 @@ class ItemDao(DatabaseObject):
 
         return item # TODO: The returned item is never used, remove this line at some point
 
-    def remove(self, Id, email):
+    def remove(self, Id, user):
         # Delete the item from our mongodb collection by its id if it matches the sender's email
         toDelete = self.findById(Id)
-        if (email == toDelete.email):
-            # delete associated images
+        
+
+        if user.canDelete(toDelete):
+                # delete associated images
             for img in toDelete.images:
                 pathToFile = IMAGE_FOLDER / img.imageData
                 pathToFile.unlink()
             returned = self.collection.delete_one({'_id': ObjectId(Id)})
             return returned.deleted_count
+        
+        # if (userDoc['isAdmin'] or userDoc['email'] == toDelete.email):
+        
         return 0
 
 
@@ -333,6 +339,10 @@ class Item:
 
         return output
 
+# <<Interface>> AbstractUser
+#      ^          ^
+#     User       Admin
+
 class UserDao(DatabaseObject):
 
     def __init__(self, collection):
@@ -344,20 +354,33 @@ class UserDao(DatabaseObject):
 
     def findById(self, Id):
         # Get the item from our mongodb collection
-        UserDoc = self.collection.find_one({"_id": ObjectId(Id)})
+        userDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
-        # Serialize it into an Item object
+        # Serialize it into an User object
         newUser = User.fromDict(UserDoc)
-
-        return newUser
+        
+        if (userDoc['isAdmin']):
+            return Admin.fromDict(userDoc)
+        else:
+            return User.fromDict(userDoc)
+        # return [User.fromDict(userDoc) for userDoc in filteredUsers]
 
     def findAllMatchingEmail(self, email):
         filteredUsers = self.collection.find({
             'email' : email
         })
         
-        return [User.fromDict(userDoc) for userDoc in filteredUsers]
-
+        output = []
+        # Serialize documents into Item objects and return them in a list
+        for userDoc in filteredUsers:
+            if (userDoc['isAdmin']):
+                output.append(Admin.fromDict(userDoc))
+            else:
+                output.append(User.fromDict(userDoc))
+        return output
+    
+    
+        
     def findAllOptIn(self, email):
         filteredUsers = self.collection.find({
             'email' : email,
@@ -366,27 +389,35 @@ class UserDao(DatabaseObject):
         
         for userDoc in filteredUsers:
             return User.fromDict(userDoc).email
-        # return User.fromDict(userDoc).email for userDoc in filteredUsers
+
     def findAll(self):
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
         filteredUsers = self.collection.find()
 
+        output = []
         # Serialize documents into Item objects and return them in a list
-        return [User.fromDict(userDoc) for userDoc in filteredUsers]
-
+        for userDoc in filteredUsers:
+            if (userDoc['isAdmin']):
+                output.append(Admin.fromDict(userDoc))
+            else:
+                output.append(User.fromDict(userDoc))
+        return output
+    
+    
     def insert(self, user):
         data = user.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id field
 
-        # Insert the item into our mongodb collection,
-        # get the ID it was assigned, give the item that id
+        # Insert the user into our mongodb collection,
+        # get the ID it was assigned, give the user that id
         user_id = self.collection.insert_one(data).inserted_id
         new_user = self.collection.find_one({'_id': user_id})
         user.Id = str(new_user['_id'])
 
         return user # TODO: The returned item is never used, remove this line at some point
 
+        
     def update(self, user):
         Id = user.Id
         data = user.toDict() # Get item info formatted in a JSON friendly manner
@@ -405,25 +436,29 @@ class UserDao(DatabaseObject):
         returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
 
-
-class User:
-
-    def __init__(self, Id=None, name=None, email=None, optIn=None):
+class AbstractUser(ABC):
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
         self.Id = Id
-        self.name = name    # Should be a string
-        self.email = email  # Should be a string
-        self.optIn = optIn  # Should be a boolean
-
+        self.name = name                # Should be a string
+        self.email = email              # Should be a string
+        self.optIn = optIn              # Should be a boolean
+        self.listOfItemIds = listOfItemIds  # Should be a list of strings
+        
     @classmethod
     def fromDict(cls, doc):
-        user = cls()
-        user.Id = str(doc['_id'])
-        user.name = doc['name']
-        user.email = doc['email']
-        user.optIn = doc['optIn']
+        abstractUser = cls()
+        abstractUser.Id = str(doc['_id'])
+        abstractUser.name = doc['name']
+        abstractUser.email = doc['email']
+        abstractUser.optIn = doc['optIn']
+        abstractUser.listOfItemIds = doc['listOfItemIds']
+        return abstractUser 
 
-        return user
-
+    @abstractmethod
+    def toDict(self):
+        # current instance (self) and converts to dictionary
+        pass
+    
     @property
     def Id(self):
         return self.__Id
@@ -455,7 +490,18 @@ class User:
     @optIn.setter
     def optIn(self, optIn):
         self.__optIn = optIn
-
+    
+    @property
+    def listOfItemIds(self):
+        return self.__listOfItemIds
+    
+    @listOfItemIds.setter
+    def listOfItemIds(self, listOfItemIds):
+        self.__listOfItemIds = listOfItemIds
+    
+    def addItem(self, itemId):
+        self.__listOfItemIds.append(itemId)
+    
     def __eq__(self, otherUser):
         if self.Id != otherUser.Id:
             return False
@@ -465,25 +511,86 @@ class User:
             return False
         if self.optIn != otherUser.optIn:
             return False
+        if self.listOfItemIds != otherUser.listOfItemIds:
+            return False
         return True
-
+    
     def __str__(self):
-        return self.name + ': ' + self.email + ', ' + self.optIn
+        return self.name + ': ' + self.email + ', ' + self.optIn + ', ' + self.listOfItemIds
 
     def __repr__(self):
         return str(self)
+    
+    @abstractmethod
+    def canDelete(self, item):
+        pass
+        
+    
+class User(AbstractUser):
 
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
+        super().__init__(Id, name, email, optIn, listOfItemIds)
+
+    @classmethod
+    def fromDict(cls, doc):
+        user = cls()
+        user.Id = str(doc['_id'])
+        user.name = doc['name']
+        user.email = doc['email']
+        user.optIn = doc['optIn']
+        user.listOfItemIds = doc['listOfItemIds']
+
+        return user 
+    
+    # when convert to dict, set isAdmin to false
     def toDict(self):
         output = {
-            'id'    : self.Id,
-            'name'  : self.name,
-            'email' : self.email,
-            'optIn' : self.optIn
+            'id'            : self.Id,
+            'name'          : self.name,
+            'email'         : self.email,
+            'optIn'         : self.optIn,
+            'isAdmin'       : False,
+            'listOfItemIds' : self.listOfItemIds
         }
-
         return output
+    
+    def canDelete(self, item):
+        return item.id in self.listOfItemIds
+        # return self.email == item.email
 
 
+class Admin(AbstractUser):
+    def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
+        super().__init__(Id, name, email, optIn, listOfItemIds)
+
+    @classmethod
+    def fromDict(cls, doc):
+        admin = cls()
+        admin.Id = str(doc['_id'])
+        admin.name = doc['name']
+        admin.email = doc['email']
+        admin.optIn = doc['optIn']
+        admin.listOfItemIds = doc['listOfItemIds']
+
+        return admin 
+
+    # when convert to dict, set isAdmin to true
+    def toDict(self):
+        output = {
+            'id'            : self.Id,
+            'name'          : self.name,
+            'email'         : self.email,
+            'optIn'         : self.optIn,
+            'isAdmin'       : True,
+            'listOfItemIds' : self.listOfItemIds
+
+        }
+        return output
+    
+    # Admin can always delete other people's items
+    def canDelete(self, item):
+        return True
+    
 class ItemLocation:
 
     def __init__(self, coordinates=None):

@@ -21,21 +21,15 @@ export const AuthContextProvider = ({children}) => {
 
 	const prevProfilePic = getCookieValue("profilePic") || null;
 
+	const prevAdmin = getCookieValue("isAdmin") || null;
 	const prevModal = getCookieValue("modal") || null;
 
 	
 	const [name, setName] = useState(prevName);
-	/**
-	 * state {
-	 * 	auth: prevAuth
-	 * }
-	 * 
-	 * this.setState{ auth: hello } == setAuth(hello)
-	 * 
-	 */
 	const [email, setEmail] = useState(prevEmail);
 	const [userID, setUserID] = useState(prevUserID);
 	const [profilePic, setProfilePic] = useState(prevProfilePic);
+	const [isAdmin, setAdmin] = useState(prevAdmin);
 	const [modal, setModal] = useState(prevModal)
 
 	useEffect(
@@ -45,9 +39,10 @@ export const AuthContextProvider = ({children}) => {
 			document.cookie = "email=" + email + "; path=/";
 			document.cookie = "userID=" + userID + "; path=/";
 			document.cookie = "profilePic=" + profilePic +"; path=/";
+			document.cookie = "isAdmin=" + isAdmin +"; path=/";
 			document.cookie = "modal=" + modal + "; path=/";
 		},
-		[name, email, userID, profilePic, modal]
+		[name, email, userID, profilePic, isAdmin, modal]
 	)
 	
 	const defaultContext = {
@@ -59,6 +54,8 @@ export const AuthContextProvider = ({children}) => {
 		setUserID,
 		profilePic,
 		setProfilePic,
+		isAdmin,
+		setAdmin,
 		modal,
 		setModal
 	}
