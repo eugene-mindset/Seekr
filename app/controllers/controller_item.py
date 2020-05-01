@@ -132,7 +132,7 @@ def get_all_items_sorted(query):
 
     if len(items) == 0:
         items = simMatch.getSortedItems()
-        items = [(item, 0) for item in items if str(item).lower().find(query) >= 0]
+        items = [(item, 0) for item in items if str(item).lower().find(query.lower()) >= 0]
 
     output = [item[0].toDict() for item in items]
 
