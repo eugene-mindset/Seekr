@@ -250,9 +250,7 @@ class ItemDao(DatabaseObject):
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
         data.pop('timestamp') # remove the timestamp, shouldn't be updating it
-        #data.pop('imageName') # remove imageName, don't know how we would handle an update to an image???
-        # TODO: handle image updates
-
+        
         # find the item in our mongodb collection by its id,
         # update it with the new data
         self.collection.find_one_and_update({'_id': ObjectId(Id)}, {
@@ -414,7 +412,7 @@ class Item:
     @images.setter
     def images(self, images):
         self.__images = images
-    
+
     @property
     def timestamp(self):
         return self.__timestamp
@@ -426,15 +424,15 @@ class Item:
     @property
     def username(self):
         return self.__username
-    
+
     @username.setter
     def username(self, username):
         self.__username = username
-        
+
     @property
     def email(self):
         return self.__email
-    
+
     @email.setter
     def email(self, email):
         self.__email = email
@@ -532,7 +530,7 @@ class UserDao(DatabaseObject):
 
         # Serialize it into an User object
         newUser = User.fromDict(UserDoc)
-        
+
         if (userDoc['isAdmin']):
             return Admin.fromDict(userDoc)
         else:
@@ -553,7 +551,7 @@ class UserDao(DatabaseObject):
         filteredUsers = self.collection.find({
             'email' : email
         })
-        
+
         output = []
         # Serialize documents into Item objects and return them in a list
         for userDoc in filteredUsers:
@@ -562,9 +560,9 @@ class UserDao(DatabaseObject):
             else:
                 output.append(User.fromDict(userDoc))
         return output
-    
-    
-        
+
+
+
     def findAllOptIn(self, email):
         """
             Get all users with matching emails in self.collection that opt-in
@@ -581,7 +579,7 @@ class UserDao(DatabaseObject):
             'email' : email,
             'optIn' : "true"
         })
-        
+
         for userDoc in filteredUsers:
             return User.fromDict(userDoc).email
 
@@ -605,8 +603,8 @@ class UserDao(DatabaseObject):
             else:
                 output.append(User.fromDict(userDoc))
         return output
-    
-    
+
+
     def insert(self, user):
         """
             Add an User to self.collection
@@ -658,32 +656,59 @@ class UserDao(DatabaseObject):
         return returned.deleted_count
 
 class AbstractUser(ABC):
+    """
+        An abstract class representing what a basic user should be able to do.
+        Should not be instantiated.
+    """
     def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
+        """
+            Initialize self.
+
+            Args:
+                Id: the id of self
+                name: the name of self
+                email: the email of self
+                optIn: Whether or not self opts into email notifications
+                listOfItemIds: list of the ids of the items that belong to user
+        """
         self.Id = Id
         self.name = name                # Should be a string
         self.email = email              # Should be a string
         self.optIn = optIn              # Should be a boolean
         self.listOfItemIds = listOfItemIds  # Should be a list of strings
-        
+
     @classmethod
     def fromDict(cls, doc):
+        """
+            Creates an Abstract User instance from a dictioanry
+
+            Args:
+                doc: the dictionary to convert
+
+            Returns:
+                a AbstractUser instance
+        """
         abstractUser = cls()
         abstractUser.Id = str(doc['_id'])
         abstractUser.name = doc['name']
         abstractUser.email = doc['email']
         abstractUser.optIn = doc['optIn']
         abstractUser.listOfItemIds = doc['listOfItemIds']
-        return abstractUser 
+        return abstractUser
 
     @abstractmethod
     def toDict(self):
+        """
+            Convert self to a dictionary.
+        """
+
         # current instance (self) and converts to dictionary
         pass
-    
+
     @property
     def Id(self):
         return self.__Id
-    
+
     @Id.setter
     def Id(self, Id):
         self.__Id = Id
@@ -707,22 +732,29 @@ class AbstractUser(ABC):
     @property
     def optIn(self):
         return self.__optIn
-    
+
     @optIn.setter
     def optIn(self, optIn):
         self.__optIn = optIn
-    
+
     @property
     def listOfItemIds(self):
         return self.__listOfItemIds
-    
+
     @listOfItemIds.setter
     def listOfItemIds(self, listOfItemIds):
         self.__listOfItemIds = listOfItemIds
-    
+
     def addItem(self, itemId):
+        """
+            Add an item id to the current list of item ids.
+
+            Args:
+                itemId: the id to add
+        """
+
         self.__listOfItemIds.append(itemId)
-    
+
     def __eq__(self, otherUser):
         if self.Id != otherUser.Id:
             return False
@@ -735,18 +767,24 @@ class AbstractUser(ABC):
         if self.listOfItemIds != otherUser.listOfItemIds:
             return False
         return True
-    
+
     def __str__(self):
         return self.name + ': ' + self.email + ', ' + self.optIn + ', ' + self.listOfItemIds
 
     def __repr__(self):
         return str(self)
-    
+
     @abstractmethod
     def canDelete(self, item):
+        """
+            Check if self can delete item.
+
+            Args:
+                item: item to check permissions for
+        """
         pass
-        
-    
+
+
 class User(AbstractUser):
 
     def __init__(self, Id=None, name=None, email=None, optIn=None, listOfItemIds=None):
@@ -761,8 +799,8 @@ class User(AbstractUser):
         user.optIn = doc['optIn']
         user.listOfItemIds = doc['listOfItemIds']
 
-        return user 
-    
+        return user
+
     # when convert to dict, set isAdmin to false
     def toDict(self):
         output = {
@@ -774,7 +812,7 @@ class User(AbstractUser):
             'listOfItemIds' : self.listOfItemIds
         }
         return output
-    
+
     def canDelete(self, item):
         return item.Id in self.listOfItemIds
         # return self.email == item.email
@@ -793,7 +831,7 @@ class Admin(AbstractUser):
         admin.optIn = doc['optIn']
         admin.listOfItemIds = doc['listOfItemIds']
 
-        return admin 
+        return admin
 
     # when convert to dict, set isAdmin to true
     def toDict(self):
@@ -807,18 +845,37 @@ class Admin(AbstractUser):
 
         }
         return output
-    
+
     # Admin can always delete other people's items
     def canDelete(self, item):
         return True
-    
+
 class ItemLocation:
+    """
+        Represents the item locations in longitude and latitude coordinates.
+    """
 
     def __init__(self, coordinates=None):
+        """
+            Initializes the coordinates of self.
+
+            Args:
+                coordinates: the coordinates of self w.r.t. Earth
+        """
         self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats
 
     @classmethod
     def fromDict(cls, doc):
+        """
+            Converts a dictionary to a cls instance.
+
+            Args:
+                doc: the dictionary to convert
+
+            Returns:
+                a ItemLocation instance
+        """
+
         location = cls()
         location.coordinates = doc['coordinates']
 
@@ -844,6 +901,13 @@ class ItemLocation:
         return str(self)
 
     def toDict(self):
+        """
+            Converts self to a dictionary representation.
+
+            Returns:
+                A dictionary
+        """
+
         output = {
             'type'        : 'Point',
             'coordinates' : self.coordinates
@@ -853,14 +917,35 @@ class ItemLocation:
 
 
 class ItemImage:
+    """
+        Holds information in getting information and data on images.
+    """
 
     def __init__(self, imageName=None, imageType=None, imageData=None):
+        """
+            Initialize self.
+
+            Args:
+                imageName: name of image
+                imageType: type of image format
+                imageData: the bytes of the image
+        """
+
         self.imageName = imageName  # Should be a string
         self.imageType = imageType  # Should be a string (image/png or image/jpeg)
         self.imageData = imageData  # Should be a string (path to file)
 
     @classmethod
     def fromDict(cls, doc):
+        """
+            Converts a dictionary to an image representation.
+
+            Args:
+                doc: dictionary to convert
+
+            Returns:
+                an ItemImage Instance
+        """
         image = cls()
         image.imageName = doc['imageName']
         image.imageType = doc['imageType']
@@ -908,6 +993,12 @@ class ItemImage:
         return str(self)
 
     def toDict(self):
+        """
+            Convert self to a dictionary representation.
+
+            Returns:
+                A dictionary.
+        """
         output = {
             'imageName' : self.imageName,
             'imageType' : self.imageType,
@@ -918,6 +1009,10 @@ class ItemImage:
 
 
 class ItemTags(IntFlag):
+    """
+        A derived class of IntFlags that describes the tags of an item listing.
+    """
+
     NONE        = 0b0000_0000
     TECH        = 0b0000_0001
     CLOTHING    = 0b0000_0010
@@ -929,6 +1024,15 @@ class ItemTags(IntFlag):
 
     @staticmethod
     def get(x):
+        """
+            Get the ItemTags representation of some value.
+
+            Args:
+                x: the value to convert
+            
+            Returns:
+                ItemTags
+        """
         val = ItemTags.NONE
         try:
             val = ItemTags(int(x))
@@ -940,6 +1044,16 @@ class ItemTags(IntFlag):
 
     @staticmethod
     def toInt(x):
+        """
+            Converts some value to an integer that represents its ItemTags
+            representation.
+
+            Args:
+                x: the value to convert
+
+            Returns:
+                an int
+        """
         val = ItemTags.NONE
         try:
             val = ItemTags(int(x))

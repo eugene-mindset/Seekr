@@ -18,9 +18,6 @@ def add_user():
     email = request.form['email']
     optIn = request.form['optIn']
     
-    # frontend will send if user is an admin
-    # isAdmin = request.form['isAdmin']
-    
     # Find a matching user
     matchingUser = mongo_user_dao.findAllMatchingEmail(email)
     listOfItemIds = []
