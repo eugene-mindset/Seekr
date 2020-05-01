@@ -62,3 +62,24 @@ class UserTest(TestCase):
         self.assertEqual(len(response_dict), 1)
         self.assertEqual(response_dict[0]['name'], "Ben")
         
+    # TODO: 
+    def test_add_new_user(self):
+        data = {
+            'username': 'Seek R',
+            'email' : 'seekr.oose@gmail.com',
+            'optIn' : 'false'
+            }
+        
+        response = self.app.post(
+            '/api/userinfo',
+            data=data
+        )
+        
+        response_dict = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response_dict), 1)
+        self.assertEqual(response_dict[0]['name'], "Seek R")
+        
+    # delete user
+    # update user
+    # get user opt in
