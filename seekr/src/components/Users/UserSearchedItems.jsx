@@ -24,7 +24,7 @@ function UserSearchedItems() {
 
   const deleteItem = (id) => {
     axios
-      .delete(`/api/items/${id}`)
+      .delete(`/api/items/${id}` + "?email=" + getCookieValue("email"))
       .then((res) =>
         setItems((items) => [...items.filter((item) => item.id !== id)])
       );
@@ -40,6 +40,11 @@ function UserSearchedItems() {
       </div>
     </div>
   );
+}
+
+function getCookieValue(a) {
+	let b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+	return b ? b.pop() : null;
 }
 
 export default UserSearchedItems;
