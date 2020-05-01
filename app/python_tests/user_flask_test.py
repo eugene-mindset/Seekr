@@ -59,7 +59,7 @@ class UserTest(TestCase):
         response = self.app.get('/api/userinfo/ben@gmail.com')
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response_dict), 1)
+        self.assertEqual(len(response_dict), 6)
         self.assertEqual(response_dict[0]['name'], "Ben")
         
     # TODO: 
@@ -77,8 +77,12 @@ class UserTest(TestCase):
         
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response_dict), 1)
-        self.assertEqual(response_dict[0]['name'], "Seek R.")
+        self.assertEqual(len(response_dict), 6)
+        self.assertEqual(response_dict[0], "Seek R")
+        # self.assertEqual(response_dict[0]['name'], "Seek R")
+        # self.assertEqual(response_dict[0]['name'], "Seek R")
+        # self.assertEqual(response_dict[0]['name'], "Seek R")
+        
     
     def test_add_existing_user(self):
         data = {
