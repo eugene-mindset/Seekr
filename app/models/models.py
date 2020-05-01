@@ -32,30 +32,58 @@ class DaoFactory():
 
 
 class DatabaseObject(ABC):
-    
+    """
+        Interface that defines important methods for DAOs to implement. Cannot
+        be instantiated.
+    """
+
     def __init__(self, collection):
         self.collection = collection
 
     @abstractmethod
     def findById(self):
+        """
+            Get an object by id from self.collection.
+        """
+
         pass
 
     @abstractmethod
     def insert(self):
+        """
+            Add an object to self.collection.
+        """
         pass
 
     @abstractmethod
     def update(self):
+        """
+            Update object in self.collection.
+        """
         pass
 
     @abstractmethod
     def remove(self):
+        """
+            Remove object from self.collection.
+        """
         pass
 
 
 class ItemDao(DatabaseObject):
+    """
+        Class acts as a DAO to convert MongoDB results to their abstract
+        representation.
+    """
 
     def __init__(self, collection):
+        """
+            Initialize ItemDao instance.
+
+            Args:
+                collection: the mongo DB to access
+        """
+
         super().__init__(collection)
 
         # Register the location attribute for documents in mongo to be used as a
@@ -66,6 +94,15 @@ class ItemDao(DatabaseObject):
         self.collection.create_index([('name', 'text'), ('desc', 'text')])
 
     def findById(self, Id):
+        """
+            Get an item listing in self.collection by id.
+
+            Args:
+                Id: the corresponding id of the item listing to retrieve
+
+            Returns:
+                Item instance
+        """
         # Get the item from our mongodb collection
         itemDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
@@ -75,6 +112,17 @@ class ItemDao(DatabaseObject):
         return newItem
 
     def findAll(self, tags):
+        """
+            Get all listings in self.collection that have the corresponding
+            tags.
+
+            Args:
+                tags: the tags that every Item will have for it to be returned
+
+            Returns:
+                A list of Item instances
+        """
+
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
         filteredItems = self.collection.find({
@@ -87,6 +135,15 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByLocation(self, tags, lat, lon):
+        """
+            Get all listings sorted by proximity to a location.
+
+            Args:
+                tags: the tags that every Item will have for it to be returned
+
+            Returns:
+                A list of Item instances
+        """
         # Mongo query to retrieve the items sorted by proximty to the
         # latitude and longitude and also have the specified tags
         filteredItems = self.collection.find({
@@ -108,6 +165,17 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByMostRecent(self, tags, query):
+        """
+            Get all listings sorted by recency in creation.
+
+            Args:
+                tags: the tags that every Item will have for it to be returned
+                query: words in query must appear in returned results
+
+            Returns:
+                A list of Item instances
+        """
+
         # Mongo query to retrieve the items sorted by their timestamp in
         # descending order and also have the speicifed tags
         if (query.isspace()):
@@ -137,12 +205,30 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByQuery(self, query):
+        """
+            Get all listings that match the query.
+
+            Args:
+                query: words in query must appear in returned results
+
+            Returns:
+                A list of Item instances
+        """
+
         queriedItems = self.collection.find(query)
 
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in queriedItems]
 
     def insert(self, item):
+        """
+            Add an Item to self.collection.
+
+            Args:
+                item: the Item to be added
+
+        """
+
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id field
 
@@ -152,9 +238,14 @@ class ItemDao(DatabaseObject):
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
 
-        return item # TODO: The returned item is never used, remove this line at some point
-
     def update(self, item):
+        """
+            Update Item in self.collection.
+
+            Args:
+                item: the Item to be updated
+        """
+
         Id = item.Id
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
@@ -168,12 +259,21 @@ class ItemDao(DatabaseObject):
             "$set": data
         }, upsert=False)
 
-        return item # TODO: The returned item is never used, remove this line at some point
-
     def remove(self, Id, user):
+        """
+            Remove an Item from self.collection by its id.
+
+            Args:
+                Id: the id of the listing to remove
+                user: the user that is trying to remove the item
+
+            Returns:
+                0 if unsuccesful in deletion, otherwise 1
+        """
+
+
         # Delete the item from our mongodb collection by its id if it matches the sender's email
         toDelete = self.findById(Id)
-        
 
         if user.canDelete(toDelete):
                 # delete associated images
@@ -182,17 +282,37 @@ class ItemDao(DatabaseObject):
                 pathToFile.unlink()
             returned = self.collection.delete_one({'_id': ObjectId(Id)})
             return returned.deleted_count
-        
-        # if (userDoc['isAdmin'] or userDoc['email'] == toDelete.email):
-        
+
         return 0
 
 
 class Item:
+    """
+        Represents the items in the database.
+    """
 
     def __init__(self, Id=None, name=None, desc=None, found=None, location=None,
-                 radius=None, tags=None, images=[], timestamp=None, username=None,
-                 email=None):
+        radius=None, tags=None, images=[], timestamp=None, username=None,
+        email=None):
+        """
+            Initialize Item instance.
+
+            Args:
+                Id: the assigned id of self
+                name: name of self
+                desc: description of self
+                found: If true, this indicates that self is a found item
+                location: an ItemLocation instance representing the location of
+                    self in long/lat
+                radius: how far the search range of the listing should be
+                tags: an ItemTags instance representing the tags of self
+                images: the ItemImages belonging to self
+                timestamp: the time self was made
+                username: the username of the creator of self
+                email: the email associated with self
+
+        """
+
         self.Id = Id                # Should be a string
         self.name = name            # Should be a string
         self.desc = desc            # Should be a string
@@ -207,6 +327,15 @@ class Item:
 
     @classmethod
     def fromDict(cls, doc):
+        """
+            Take a dictionary and convert it into an Item
+
+            Args:
+                doc: the dictionary to convert
+
+            Returns:
+                the Item instance
+        """
         item = cls()
         item.Id = str(doc['_id'])
         item.name = doc['name']
@@ -342,6 +471,12 @@ class Item:
         return str(self)
 
     def toDict(self):
+        """
+            Get dictionary representation of Item
+
+            Returns:
+                a dictionary
+        """
         output = {
             'id'        : self.Id,
             'name'      : self.name,
@@ -363,8 +498,18 @@ class Item:
 #     User       Admin
 
 class UserDao(DatabaseObject):
+    """
+        DAO converts user information from results given from MongoDB queries to
+        their corresponding class representation.
+    """
 
     def __init__(self, collection):
+        """
+            Initialize DAO
+
+            Args:
+                collection: the DB to access
+        """
         super().__init__(collection)
 
         # Register the location attribute for documents in mongo to be used as a
@@ -372,6 +517,16 @@ class UserDao(DatabaseObject):
         self.collection.create_index([('location', '2dsphere' )])
 
     def findById(self, Id):
+        """
+            Find user by Id in self.collection
+
+            Args:
+                Id: the id of the user to find
+
+            Retuns:
+                an AbstractUser instance
+        """
+
         # Get the item from our mongodb collection
         userDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
@@ -385,6 +540,16 @@ class UserDao(DatabaseObject):
         # return [User.fromDict(userDoc) for userDoc in filteredUsers]
 
     def findAllMatchingEmail(self, email):
+        """
+            Get all users with matching emails in self.collection.
+
+            Args:
+                email: the email to filter by
+
+            Returns:
+                list of AbstractUser instances
+        """
+
         filteredUsers = self.collection.find({
             'email' : email
         })
@@ -401,6 +566,17 @@ class UserDao(DatabaseObject):
     
         
     def findAllOptIn(self, email):
+        """
+            Get all users with matching emails in self.collection that opt-in
+            to email notifications.
+
+            Args:
+                email: the email to filter by
+
+            Returns:
+                a list of User instances
+        """
+
         filteredUsers = self.collection.find({
             'email' : email,
             'optIn' : "true"
@@ -410,6 +586,13 @@ class UserDao(DatabaseObject):
             return User.fromDict(userDoc).email
 
     def findAll(self):
+        """
+            Get all users in self.collection.
+
+            Returns:
+                a list of AbstractUsers
+        """
+
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
         filteredUsers = self.collection.find()
@@ -425,6 +608,12 @@ class UserDao(DatabaseObject):
     
     
     def insert(self, user):
+        """
+            Add an User to self.collection
+
+            Args:
+                user: the user that is being inserted
+        """
         data = user.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id field
 
@@ -434,10 +623,14 @@ class UserDao(DatabaseObject):
         new_user = self.collection.find_one({'_id': user_id})
         user.Id = str(new_user['_id'])
 
-        return user # TODO: The returned item is never used, remove this line at some point
-
-        
     def update(self, user):
+        """
+            Update a users information in self.collection.
+
+            Args:
+                user: the user that is being updated
+        """
+
         Id = user.Id
         data = user.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
@@ -448,9 +641,18 @@ class UserDao(DatabaseObject):
             "$set": data
         }, upsert=False)
 
-        return user # TODO: The returned item is never used, remove this line at some point
 
     def remove(self, Id):
+        """
+            Remove a User from self.collection by its id.
+
+            Args:
+                Id: the id of the listing to remove
+
+            Returns:
+                The number of users deleted
+        """
+
         # Delete the item frmo our mongodb collection by its id
         returned = self.collection.delete_one({'_id': ObjectId(Id)})
         return returned.deleted_count
