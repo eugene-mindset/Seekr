@@ -4,7 +4,7 @@ import Checkbox from "./Checkbox";
 import GoogleMap from "../pages/GoogleMap";
 import ItemTags from "../helper/ItemTags";
 import "../../../public/css/Search.css";
-import { Form, Button, FormControl, InputGroup } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
