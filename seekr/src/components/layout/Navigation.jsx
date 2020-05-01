@@ -1,14 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { AuthContext } from "../helper/AuthContext";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Facebook from "../Users/Facebook";
-
 
 
 const Navigation = () => {
-  const { userID, modal, setModal } = useContext(AuthContext);
+  const { userID } = useContext(AuthContext);
 
   return (
     //<div>
@@ -20,10 +16,10 @@ const Navigation = () => {
           <Nav className="ml-auto">
             <Nav.Link href="/add">Add</Nav.Link>
             <Nav.Link href="/">Search</Nav.Link>
-            {userID != "null" && userID != "undefined" ? (
+            {userID !== "null" && userID !== "undefined" ? (
               <Nav.Link href="/userinfo">User Info</Nav.Link>
             ) : null}
-            {userID != "null" && userID != "undefined" ? (
+            {userID !== "null" && userID !== "undefined" ? (
               <Nav.Link href="/logout">Log Out</Nav.Link>
             ) : (
               <Nav.Link href="/login">Login</Nav.Link>
