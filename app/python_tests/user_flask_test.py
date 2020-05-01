@@ -79,7 +79,39 @@ class UserTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 1)
         self.assertEqual(response_dict[0]['name'], "Seek R.")
+    
+    def test_add_existing_user(self):
+        data = {
+            'username': 'Ben',
+            'email' : 'ben@gmail.com',
+            'optIn' : 'false'
+            }
         
+        response = self.app.post(
+            '/api/userinfo',
+            data=data
+        )
+        
+        response_dict = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response_dict), 1)
+        self.assertEqual(response_dict[0]['name'], "Ben")
+    
     # delete user
+    def test_delete_user(self):
+        data = {
+            'username': 'Ben',
+            'email' : 'ben@gmail.com',
+            'optIn' : 'false'
+            }
+        
+        response = self.app.delete(
+            '/api/userinfo',
+            data=data
+        )
+        
+        response_dict = json.loads(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual()
     # update user
     # get user opt in
