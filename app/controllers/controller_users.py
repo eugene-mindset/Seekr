@@ -9,7 +9,7 @@ users_router = Blueprint("user", __name__)
 users = mongo.db.users # our items collection in mongodb
 mongo_user_dao = UserDao(users) # initialize a DAO with the collection
 
-adminEmails = ['yifanandrew@yahoo.com', 'andrewzhang26@gmail.com', 'seekr.oose@gmail.com']
+adminEmails = ['yifanandrew@yahoo.com', 'seekr.oose@gmail.com']
 
 @users_router.route('/api/userinfo', methods=['POST'])
 def add_user():
