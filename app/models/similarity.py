@@ -18,6 +18,9 @@ class ItemSimilarity():
         their name and description using soft cosine similarity.
     """
 
+    uselessWords = ['there', 'the',' where', 'lost', 'missing', 'found',
+        'location', 'mine', 'time', 'this']
+
     class ItemScore():
         """
             Is a wrapper class for item listings passed into the class, as well
@@ -56,9 +59,17 @@ class ItemSimilarity():
         self.model = model
         self.wordEmbedding = WordEmbeddingSimilarityIndex(self.model)
 
+    def isUsefulWord(self, word):
+        if len(word) > 2:
+            return True
+        elif word not in self.uselessWords:
+            return True
+
+        return False
+
     def preprocess(self, preStr):
         processed = "".join(l if l not in punct else " " for l in preStr)
-        tokenized = processed.split()
+        tokenized = [token for token in processed.split() if self.isUsefulWord(token)]
 
         return tokenized
 

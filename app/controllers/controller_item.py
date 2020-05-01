@@ -120,7 +120,7 @@ def get_all_items_sorted(query):
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
     items = simMatch.getSortedItems(getScores=True)
-    
+
     index = len(items)
 
     for i, (_, score) in enumerate(items):
@@ -129,7 +129,11 @@ def get_all_items_sorted(query):
             break
 
     items = items[0:index]
-    print(items)
+
+    if len(items) == 0:
+        items = simMatch.getSortedItems()
+        items = [(item, 0) for item in items if str(item).find(query) >= 0]
+
     output = [item[0].toDict() for item in items]
 
     return jsonify(output), 200
