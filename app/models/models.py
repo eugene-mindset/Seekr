@@ -13,30 +13,59 @@ IMAGE_FOLDER = Path('./uploadedImages/')
 
 
 class DatabaseObject(ABC):
-    
+    """
+        Interface that defines important methods for DAOs to implement. Cannot
+        be instantiated.
+    """
+
     def __init__(self, collection):
         self.collection = collection
 
     @abstractmethod
     def findById(self):
+        """
+            Get an object by id from self.collection.
+        """
+
         pass
 
     @abstractmethod
     def insert(self):
+        """
+            Add an object to self.collection.
+        """
         pass
 
     @abstractmethod
     def update(self):
+        """
+            Update object in self.collection.
+        """
         pass
 
     @abstractmethod
     def remove(self):
+        """
+            Remove object from self.collection.
+        """
         pass
 
 
 class ItemDao(DatabaseObject):
+    """
+        Class acts as a DAO to convert MongoDB results to their abstract
+        representation.
+    """
 
     def __init__(self, collection):
+        """
+            Initialize ItemDao instance.
+
+            Parameters
+            ----------
+            collection: the mongo DB to access
+        """
+
         super().__init__(collection)
 
         # Register the location attribute for documents in mongo to be used as a
@@ -47,6 +76,17 @@ class ItemDao(DatabaseObject):
         self.collection.create_index([('name', 'text'), ('desc', 'text')])
 
     def findById(self, Id):
+        """
+            Get an item listing in self.collection by id.
+
+            Parameters
+            ----------
+            Id: the corresponding id of the item listing to retrieve
+
+            Return
+            ------
+            Item instance
+        """
         # Get the item from our mongodb collection
         itemDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
@@ -56,6 +96,19 @@ class ItemDao(DatabaseObject):
         return newItem
 
     def findAll(self, tags):
+        """
+            Get all listings in self.collection that have the corresponding
+            tags.
+
+            Parameters
+            ----------
+            tags: the tags that every Item will have for it to be returned
+
+            Return
+            ------
+            A list of Item instances
+        """
+
         # Mongo query to get the items that have the specified tags from our
         # mongodb collection
         filteredItems = self.collection.find({
@@ -68,6 +121,17 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByLocation(self, tags, lat, lon):
+        """
+            Get all listings sorted by proximity to a location.
+
+            Parameters
+            ----------
+            tags: the tags that every Item will have for it to be returned
+
+            Return
+            ------
+            A list of Item instances
+        """
         # Mongo query to retrieve the items sorted by proximty to the
         # latitude and longitude and also have the specified tags
         filteredItems = self.collection.find({
@@ -89,6 +153,19 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByMostRecent(self, tags, query):
+        """
+            Get all listings sorted by recency in creation.
+
+            Parameters
+            ----------
+            tags: the tags that every Item will have for it to be returned
+            query: words in query must appear in returned results
+
+            Return
+            ------
+            A list of Item instances
+        """
+
         # Mongo query to retrieve the items sorted by their timestamp in
         # descending order and also have the speicifed tags
         if (query.isspace()):
@@ -118,12 +195,33 @@ class ItemDao(DatabaseObject):
         return [Item.fromDict(itemDoc) for itemDoc in filteredItems]
 
     def findByQuery(self, query):
+        """
+            Get all listings that match the query.
+
+            Parameters
+            ----------
+            query: words in query must appear in returned results
+
+            Return
+            ------
+            A list of Item instances
+        """
+
         queriedItems = self.collection.find(query)
 
         # Serialize documents into Item objects and return them in a list
         return [Item.fromDict(itemDoc) for itemDoc in queriedItems]
 
     def insert(self, item):
+        """
+            Add an Item to self.collection.
+
+            Parameters
+            ----------
+            item: the Item to be added
+
+        """
+
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # Remove the id field
 
@@ -133,9 +231,15 @@ class ItemDao(DatabaseObject):
         new_item = self.collection.find_one({'_id': item_id})
         item.Id = str(new_item['_id'])
 
-        return item # TODO: The returned item is never used, remove this line at some point
-
     def update(self, item):
+        """
+            Update Item in self.collection.
+
+            Parameters
+            ----------
+            item: the Item to be updated
+        """
+
         Id = item.Id
         data = item.toDict() # Get item info formatted in a JSON friendly manner
         data.pop('id') # remove the id, shouldn't be updating it
@@ -149,12 +253,23 @@ class ItemDao(DatabaseObject):
             "$set": data
         }, upsert=False)
 
-        return item # TODO: The returned item is never used, remove this line at some point
-
     def remove(self, Id, user):
+        """
+            Remove an Item from self.collection by its id.
+
+            Parameters
+            ----------
+            Id: the id of the listing to remove
+            user: the user that is trying to remove the item
+
+            Return
+            ------
+            0 if unsuccesful in deletion, otherwise 1
+        """
+
+
         # Delete the item from our mongodb collection by its id if it matches the sender's email
         toDelete = self.findById(Id)
-        
 
         if user.canDelete(toDelete):
                 # delete associated images
@@ -163,9 +278,7 @@ class ItemDao(DatabaseObject):
                 pathToFile.unlink()
             returned = self.collection.delete_one({'_id': ObjectId(Id)})
             return returned.deleted_count
-        
-        # if (userDoc['isAdmin'] or userDoc['email'] == toDelete.email):
-        
+
         return 0
 
 
