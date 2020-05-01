@@ -33,7 +33,7 @@ export class Item extends Component {
   }
 
   render() {
-    const { id, name, found, location, images, timestamp, tags, email} = this.props.item;
+    const { id, name, found, images, timestamp, tags, email} = this.props.item;
 
     return (
       <div style={{}}>
