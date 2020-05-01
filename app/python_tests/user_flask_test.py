@@ -78,7 +78,7 @@ class UserTest(TestCase):
         response_dict = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response_dict), 1)
-        self.assertEqual(response_dict[0]['name'], "Seek R")
+        self.assertEqual(response_dict[0]['name'], "Seek R.")
         
     # delete user
     # update user
