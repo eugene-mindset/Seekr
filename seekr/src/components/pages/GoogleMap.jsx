@@ -38,7 +38,6 @@ export class GoogleMap extends Component {
       const lat = latLng.lat();
       const lng = latLng.lng();
       this.state.markers.pop();
-      this.props.updateParent;
       this.setState({location: [ lat, lng ]});
       this.sendData();
       this.setState(previousState => {
