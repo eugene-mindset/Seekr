@@ -6,10 +6,18 @@ from bson.objectid import ObjectId
 
 from app.mongo_inst import mongo
 
-
-
 # Location of where images for items are stored
 IMAGE_FOLDER = Path('./uploadedImages/')
+
+
+class DaoFactory():
+    def getDao(self, obj, args):
+        if obj == 'item':
+            return ItemDao(args)
+        elif obj == 'user':
+            return UserDao(args)
+        else:
+            return None
 
 
 class DatabaseObject(ABC):
