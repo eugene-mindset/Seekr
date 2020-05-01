@@ -3,17 +3,16 @@ import Item from './Item';
 import { AuthContext } from "../helper/AuthContext";
 
 
-
+const adminEmails = ['yifanandrew@yahoo.com', 'seekr.oose@gmail.com']
 
 const Items = ({items, deleteItem}) => {
 
   const { email, isAdmin } = useContext(AuthContext);
   
   
-  console.log(isAdmin)
   
   return items.map((item) => (
-    <Item key={item.id} item={item} deleteItem={deleteItem} cur_email={email} isAdmin={isAdmin} />
+    <Item key={item.id} item={item} deleteItem={deleteItem} cur_email={email} isAdmin={adminEmails.includes(email)} />
   ));
 };
 
