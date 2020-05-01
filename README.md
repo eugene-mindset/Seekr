@@ -2,7 +2,7 @@
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
 
 # Deployed At:
-http://ec2-54-83-146-52.compute-1.amazonaws.com/
+https://andrewzhang.dev/
 
 # Running the App
 
@@ -43,7 +43,7 @@ http://ec2-54-83-146-52.compute-1.amazonaws.com/
 2. Enter the command `mongod --dbpath=./data/db/`
 
 ## Deployment (AWS)
-1. ssh -i /path/to/your/seekr.pem ubuntu@ec2-54-83-146-52.compute-1.amazonaws.com
+1. ssh -i /path/to/your/seekr.pem ubuntu@andrewzhang.dev
 2. cd (into project folder)
 3. git pull (currently due to hot reloading from being in dev mode)
 4. tmux a (to open up the background terminals running the app, use tmux commands)
