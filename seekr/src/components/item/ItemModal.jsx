@@ -3,9 +3,10 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import GoogleMap from "../pages/GoogleMap";
-import Card from 'react-bootstrap/Card'
-import Tags from './Tags'
-import ItemTags from '../helper/ItemTags'
+import Tags from './Tags';
+import ItemTags from '../helper/ItemTags';
+import Image from 'react-bootstrap/Image';
+import Carousel from 'react-bootstrap/Carousel';
 
 export const ItemModal = (props) => {
       
@@ -26,7 +27,7 @@ export const ItemModal = (props) => {
             
             <Modal.Body>
                 <h5>{props.itemData.desc}</h5>
-                <div style={{marginTop: '20px'}}>{props.itemData.images.length !== 0 ? <Card.Img variant="bottom" src={ `/api/fetch_image/${props.itemData.images[0].imageData}` } /> : <span></span>}</div>
+                <div style={{marginTop: '20px'}}> {displayImage(props.itemData.images)}</div>
                 <div style={{marginBottom: '250px', marginLeft: '430px', marginTop: '20px'}}>
                     <b>Location of item</b>
                     <GoogleMap style={{width: '0%'}} clickable={false} loc={props.itemData.location}/>
@@ -43,6 +44,25 @@ export const ItemModal = (props) => {
         </Modal>
         </div>
   )
+}
+
+function displayImage(imgArray) {
+    if (imgArray.length === 0) {
+        return (<span></span>);
+    }
+    else if (imgArray.length === 1) {
+        return (<Image src={ `/api/fetch_image/${imgArray[0].imageData}` } fluid />);
+    } else {
+        return (
+            <Carousel>
+                {imgArray.map((img => (
+                    <Carousel.Item>
+                        <Image src={ `/api/fetch_image/${img.imageData}` } fluid />
+                    </Carousel.Item>
+                )))}
+            </Carousel>
+        )
+    }
 }
 
 ItemModal.propTypes = {
