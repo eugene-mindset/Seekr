@@ -66,6 +66,7 @@ export default function Profile() {
   }
 
 
+  console.log(typeof email);
   return (
     <div className="profile">
       <Jumbotron>

@@ -55,8 +55,10 @@ const Facebook = () => {
   };
 
   const responseFacebook = (response) => {
+    console.log("facebook sends: "+typeof response.email);
     setUserID(response.userID);
-    setEmail(response.email);
+    (typeof response.email == undefined) ? setEmail("undefined") : setEmail(response.email);
+    console.log(typeof email);
     setName(response.name);
     setProfilePic(response.picture.data.url);
 
@@ -82,8 +84,8 @@ const Facebook = () => {
   if (userID === "null" || userID === "undefined") {
     faceContent = (
       <FacebookLogin
-        appId="2484603928503868" //prod mode app id
-        //  appId="232984641269662" //dev mode app id
+        //appId="2484603928503868" //prod mode app id
+        appId="232984641269662" //dev mode app id
         autoLoad={false}
         fields="name,email,picture"
         onClick={componentClicked}
@@ -120,25 +122,6 @@ const Facebook = () => {
     );
   } else {
     setModal(false);
-    if (email == "null" || email == "undefined") {
-      return (
-        <React.Fragment>
-          <Modal size="lg" show={true} centered={true}>
-          <Modal.Header>
-            <Modal.Title>Login Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          <Alert variant="danger">You must have an email linked to account for you to log in</Alert>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModal} href="/logout">
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        </React.Fragment>
-      )
-    }
     // setTimeout(() => {console.log("waiting 0.5 seconds")}, 500);
     return <Redirect to="/userinfo" />;
   }
