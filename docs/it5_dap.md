@@ -56,3 +56,8 @@
 * [X] Remove all python wildcard imports and replace them with exact imports (Eugene)
 * [X] Add more test cases (Eugene, Anderson, Jacob, Shaurya)
 * [X] Update dependencies (Jason)
+
+
+### Retrospective
+
+In this iteration we put the final touches on our app. We were able to implement the original vision we had for our application in this iteration. One of the biggest changes we made was to the frontend, in order to make the user experience as good as possible. We feel we have delievered on all our original goals. The biggest challenge was doing this during this difficult time.
