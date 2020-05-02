@@ -60,4 +60,4 @@
 
 ### Retrospective
 
-In this iteration we put the final touches on our app. We were able to implement the original vision we had for our application in this iteration. One of the biggest changes we made was to the frontend, in order to make the user experience as good as possible. We feel we have delievered on all our original goals. The biggest challenge was doing this during this difficult time.
+In this iteration we put the final touches on our app. We were able to implement the original vision we had for our application in this iteration. One of the biggest changes we made was to the frontend, in order to make the user experience as good as possible. We feel we have delievered on all our original goals. The biggest challenge was doing this during this difficult time. We also had difficulty of doing a full deployment with SSL, a domain name, and nginx on AWS. It turned out well all things considered, and we believe we have a fully functional application and learned a tremendous amount about various web technologies and development practices along the way.
