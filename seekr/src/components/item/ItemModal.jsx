@@ -25,7 +25,7 @@ export const ItemModal = (props) => {
             </Modal.Title>
             </Modal.Header>
             
-            <Modal.Body>
+            <Modal.Body style={{backgroundColor: '#f8f8ff'}}>
                 <h5>{props.itemData.desc}</h5>
                 <div style={{marginTop: '20px'}}> {displayImage(props.itemData.images)}</div>
                 <div style={{marginBottom: '250px', marginLeft: '430px', marginTop: '20px'}}>
@@ -36,7 +36,7 @@ export const ItemModal = (props) => {
             <Modal.Dialog>
                 <b className="text-muted">{"Contact: " + props.itemData.username + " " + props.itemData.email}</b>
             </Modal.Dialog>
-            <Modal.Footer>
+            <Modal.Footer style={{backgroundColor: '#f8f8ff'}}>
             <Button variant="secondary" onClick={() => props.handleClose(false)}>
                 Close
             </Button>
