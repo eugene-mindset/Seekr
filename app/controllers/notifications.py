@@ -89,13 +89,26 @@ def sendMail(user_item, similar_items, found, matching):
 
 
 def distance(item1, item2):
-    slat = math.radians(item1.location.coordinates[0])
-    slon = math.radians(item1.location.coordinates[1])
-    elat = math.radians(item2.location.coordinates[0])
-    elon = math.radians(item2.location.coordinates[1])
+    """Haversine formula for computing distance between two locations on the 
+    surface of the earth, in feet.
+    """
+    lat1 = item1.location.coordinates[0]
+    lon1 = item1.location.coordinates[1]
+    lat2 = item2.location.coordinates[0]
+    lon2 = item2.location.coordinates[1]
 
-    dist = 3958.8 * math.acos(math.sin(slat)*math.sin(elat)
-                              + math.cos(slat)*math.cos(elat)*math.cos(slon - elon))
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+
+    a = math.sin(dphi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2.0) ** 2
+
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    dist = 2.0902e7*c
+
     return dist
 
 
@@ -103,7 +116,7 @@ def radiusCutOff(items, queriedItem):
     results = []
 
     for item in items:
-        if distance(queriedItem, item) <= queriedItem.radius:  # miles
+        if distance(queriedItem, item) <= queriedItem.radius:
             results.append(item)
     return results
 
