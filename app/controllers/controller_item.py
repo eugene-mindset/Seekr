@@ -191,6 +191,9 @@ def find_similar_items():
     else:
         listOfItems = [item for item in listOfItems if item.found is True]
 
+    if len(listOfItems) == 0:
+        return
+
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
 

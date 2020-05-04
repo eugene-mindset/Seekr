@@ -131,6 +131,10 @@ def getSimItems(queriedItem, simMatch):
         return [], ''
 
     listOfItems = radiusCutOff(simMatch.getSortedItems(), queriedItem)
+
+    if len(listOfItems) == 0:
+        return[], ''
+
     simMatch.clearItems()
     simMatch.addItems(listOfItems)
     simMatch.scoreItems(queriedItem)
