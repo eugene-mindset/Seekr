@@ -30,7 +30,7 @@ it('renders without crashing', () => {
   let timestamp=0;
   let tags='';
   let email='';
-  let location=[0, 0]
+  let location={ coordinates: [0, 0]}
 
   ReactDOM.render(<ItemModal showModal={true} handleClose={() => handleClose()} itemData={{id, name, found, images, timestamp, tags, email, location}}/>, div);
 });
