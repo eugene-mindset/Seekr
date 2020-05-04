@@ -32,5 +32,5 @@ it('renders without crashing', () => {
   let email='';
   let location=[0, 0]
 
-  ReactDOM.render(<ItemModal showModal={true} handleClose={() => handleClose()} itemData={{id, name, found, images, timestamp, tags, email}}/>, div);
+  ReactDOM.render(<ItemModal showModal={true} handleClose={() => handleClose()} itemData={{id, name, found, images, timestamp, tags, email, location}}/>, div);
 });
