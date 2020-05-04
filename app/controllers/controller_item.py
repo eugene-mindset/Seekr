@@ -183,7 +183,7 @@ def find_similar_items():
         listOfItems = [item for item in listOfItems if item.found is True]
 
     if len(listOfItems) == 0:
-        return
+        return jsonify([]), 200
 
     simMatch = ItemSimilarity(simModel)
     simMatch.addItems(listOfItems)
