@@ -92,10 +92,10 @@ def distance(item1, item2):
     """Haversine formula for computing distance between two locations on the 
     surface of the earth, in feet.
     """
-    lat1 = item1.location.coordinates[0]
-    lon1 = item1.location.coordinates[1]
-    lat2 = item2.location.coordinates[0]
-    lon2 = item2.location.coordinates[1]
+    lat1 = item1.location.coordinates[1]
+    lon1 = item1.location.coordinates[0]
+    lat2 = item2.location.coordinates[1]
+    lon2 = item2.location.coordinates[0]
 
     phi1 = math.radians(lat1)
     phi2 = math.radians(lat2)

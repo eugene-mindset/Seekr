@@ -150,7 +150,7 @@ class ItemDao(DatabaseObject):
             '$and': [
                 {
                     "location": {
-                        '$nearSphere': [float(lat), float(lon)]
+                        '$nearSphere': [float(lon), float(lat)]
                     }
                 },
                 {
@@ -491,6 +491,221 @@ class Item:
 
         return output
 
+
+class ItemImage:
+    """
+        Holds information in getting information and data on images.
+    """
+
+    def __init__(self, imageName=None, imageType=None, imageData=None):
+        """
+            Initialize self.
+
+            Args:
+                imageName: name of image
+                imageType: type of image format
+                imageData: the bytes of the image
+        """
+
+        self.imageName = imageName  # Should be a string
+        self.imageType = imageType  # Should be a string (image/png or image/jpeg)
+        self.imageData = imageData  # Should be a string (path to file)
+
+    @classmethod
+    def fromDict(cls, doc):
+        """
+            Converts a dictionary to an image representation.
+
+            Args:
+                doc: dictionary to convert
+
+            Returns:
+                an ItemImage Instance
+        """
+        image = cls()
+        image.imageName = doc['imageName']
+        image.imageType = doc['imageType']
+        image.imageData = doc['imageData']
+
+        return image
+
+    @property
+    def imageName(self):
+        return self.__imageName
+
+    @imageName.setter
+    def imageName(self, imageName):
+        self.__imageName = imageName
+
+    @property
+    def imageType(self):
+        return self.__imageType
+
+    @imageType.setter
+    def imageType(self, imageType):
+        self.__imageType = imageType
+
+    @property
+    def imageData(self):
+        return self.__imageData
+
+    @imageData.setter
+    def imageData(self, imageData):
+        self.__imageData = imageData
+
+    def __eq__(self, otherItemImage):
+        if self.imageName != otherItemImage.imageName:
+            return False
+        if self.imageType != otherItemImage.imageType:
+            return False
+        if self.imageData != otherItemImage.imageData:
+            return False
+        return True
+
+    def __str__(self):
+        return self.imageName
+
+    def __rept__(self):
+        return str(self)
+
+    def toDict(self):
+        """
+            Convert self to a dictionary representation.
+
+            Returns:
+                A dictionary.
+        """
+        output = {
+            'imageName' : self.imageName,
+            'imageType' : self.imageType,
+            'imageData' : self.imageData
+        }
+
+        return output
+
+
+class ItemLocation:
+    """
+        Represents the item locations in longitude and latitude coordinates.
+    """
+
+    def __init__(self, coordinates=None):
+        """
+            Initializes the coordinates of self.
+
+            Args:
+                coordinates: the coordinates of self w.r.t. Earth. [lng, lat]
+        """
+        self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats
+
+    @classmethod
+    def fromDict(cls, doc):
+        """
+            Converts a dictionary to a cls instance.
+
+            Args:
+                doc: the dictionary to convert
+
+            Returns:
+                a ItemLocation instance
+        """
+
+        location = cls()
+        location.coordinates = doc['coordinates']
+
+        return location
+
+    @property
+    def coordinates(self):
+        return self.__coordinates
+
+    @coordinates.setter
+    def coordinates(self, coordinates):
+        self.__coordinates = coordinates
+
+    def __eq__(self, otherLoc):
+        if self.coordinates != otherLoc.coordinates:
+            return False
+        return True
+
+    def __str__(self):
+        return 'Point at: ' + self.coordinates
+
+    def __repr__(self):
+        return str(self)
+
+    def toDict(self):
+        """
+            Converts self to a dictionary representation.
+
+            Returns:
+                A dictionary
+        """
+
+        output = {
+            'type'        : 'Point',
+            'coordinates' : self.coordinates
+        }
+
+        return output
+
+
+class ItemTags(IntFlag):
+    """
+        A derived class of IntFlags that describes the tags of an item listing.
+    """
+
+    NONE        = 0b0000_0000
+    TECH        = 0b0000_0001
+    CLOTHING    = 0b0000_0010
+    JEWELRY     = 0b0000_0100
+    PET         = 0b0000_1000
+    PERSONAL    = 0b0001_0000
+    APPAREL     = 0b0010_0000
+    OTHER       = 0b0100_0000
+
+    @staticmethod
+    def get(x):
+        """
+            Get the ItemTags representation of some value.
+
+            Args:
+                x: the value to convert
+            
+            Returns:
+                ItemTags
+        """
+        val = ItemTags.NONE
+        try:
+            val = ItemTags(int(x))
+            return val
+        except ValueError:
+            return ItemTags.NONE
+        except TypeError:
+            return ItemTags.NONE
+
+    @staticmethod
+    def toInt(x):
+        """
+            Converts some value to an integer that represents its ItemTags
+            representation.
+
+            Args:
+                x: the value to convert
+
+            Returns:
+                an int
+        """
+        val = ItemTags.NONE
+        try:
+            val = ItemTags(int(x))
+            return int(val)
+        except ValueError:
+            return 0
+        except TypeError:
+            return ItemTags.NONE
+
+
 # <<Interface>> AbstractUser
 #      ^          ^
 #     User       Admin
@@ -529,8 +744,6 @@ class UserDao(DatabaseObject):
         userDoc = self.collection.find_one({"_id": ObjectId(Id)})
 
         # Serialize it into an User object
-        newUser = User.fromDict(UserDoc)
-
         if (userDoc['isAdmin']):
             return Admin.fromDict(userDoc)
         else:
@@ -849,216 +1062,3 @@ class Admin(AbstractUser):
     # Admin can always delete other people's items
     def canDelete(self, item):
         return True
-
-class ItemLocation:
-    """
-        Represents the item locations in longitude and latitude coordinates.
-    """
-
-    def __init__(self, coordinates=None):
-        """
-            Initializes the coordinates of self.
-
-            Args:
-                coordinates: the coordinates of self w.r.t. Earth
-        """
-        self.coordinates = coordinates  # Should be a list or tuple with two elements, both floats
-
-    @classmethod
-    def fromDict(cls, doc):
-        """
-            Converts a dictionary to a cls instance.
-
-            Args:
-                doc: the dictionary to convert
-
-            Returns:
-                a ItemLocation instance
-        """
-
-        location = cls()
-        location.coordinates = doc['coordinates']
-
-        return location
-
-    @property
-    def coordinates(self):
-        return self.__coordinates
-
-    @coordinates.setter
-    def coordinates(self, coordinates):
-        self.__coordinates = coordinates
-
-    def __eq__(self, otherLoc):
-        if self.coordinates != otherLoc.coordinates:
-            return False
-        return True
-
-    def __str__(self):
-        return 'Point at: ' + self.coordinates
-
-    def __repr__(self):
-        return str(self)
-
-    def toDict(self):
-        """
-            Converts self to a dictionary representation.
-
-            Returns:
-                A dictionary
-        """
-
-        output = {
-            'type'        : 'Point',
-            'coordinates' : self.coordinates
-        }
-
-        return output
-
-
-class ItemImage:
-    """
-        Holds information in getting information and data on images.
-    """
-
-    def __init__(self, imageName=None, imageType=None, imageData=None):
-        """
-            Initialize self.
-
-            Args:
-                imageName: name of image
-                imageType: type of image format
-                imageData: the bytes of the image
-        """
-
-        self.imageName = imageName  # Should be a string
-        self.imageType = imageType  # Should be a string (image/png or image/jpeg)
-        self.imageData = imageData  # Should be a string (path to file)
-
-    @classmethod
-    def fromDict(cls, doc):
-        """
-            Converts a dictionary to an image representation.
-
-            Args:
-                doc: dictionary to convert
-
-            Returns:
-                an ItemImage Instance
-        """
-        image = cls()
-        image.imageName = doc['imageName']
-        image.imageType = doc['imageType']
-        image.imageData = doc['imageData']
-
-        return image
-
-    @property
-    def imageName(self):
-        return self.__imageName
-
-    @imageName.setter
-    def imageName(self, imageName):
-        self.__imageName = imageName
-
-    @property
-    def imageType(self):
-        return self.__imageType
-
-    @imageType.setter
-    def imageType(self, imageType):
-        self.__imageType = imageType
-
-    @property
-    def imageData(self):
-        return self.__imageData
-
-    @imageData.setter
-    def imageData(self, imageData):
-        self.__imageData = imageData
-
-    def __eq__(self, otherItemImage):
-        if self.imageName != otherItemImage.imageName:
-            return False
-        if self.imageType != otherItemImage.imageType:
-            return False
-        if self.imageData != otherItemImage.imageData:
-            return False
-        return True
-
-    def __str__(self):
-        return self.imageName
-
-    def __rept__(self):
-        return str(self)
-
-    def toDict(self):
-        """
-            Convert self to a dictionary representation.
-
-            Returns:
-                A dictionary.
-        """
-        output = {
-            'imageName' : self.imageName,
-            'imageType' : self.imageType,
-            'imageData' : self.imageData
-        }
-
-        return output
-
-
-class ItemTags(IntFlag):
-    """
-        A derived class of IntFlags that describes the tags of an item listing.
-    """
-
-    NONE        = 0b0000_0000
-    TECH        = 0b0000_0001
-    CLOTHING    = 0b0000_0010
-    JEWELRY     = 0b0000_0100
-    PET         = 0b0000_1000
-    PERSONAL    = 0b0001_0000
-    APPAREL     = 0b0010_0000
-    OTHER       = 0b0100_0000
-
-    @staticmethod
-    def get(x):
-        """
-            Get the ItemTags representation of some value.
-
-            Args:
-                x: the value to convert
-            
-            Returns:
-                ItemTags
-        """
-        val = ItemTags.NONE
-        try:
-            val = ItemTags(int(x))
-            return val
-        except ValueError:
-            return ItemTags.NONE
-        except TypeError:
-            return ItemTags.NONE
-
-    @staticmethod
-    def toInt(x):
-        """
-            Converts some value to an integer that represents its ItemTags
-            representation.
-
-            Args:
-                x: the value to convert
-
-            Returns:
-                an int
-        """
-        val = ItemTags.NONE
-        try:
-            val = ItemTags(int(x))
-            return int(val)
-        except ValueError:
-            return 0
-        except TypeError:
-            return ItemTags.NONE

@@ -167,21 +167,12 @@ def find_similar_items():
     name = request.args.get('name')
     desc = request.args.get('desc')
     found = request.args.get('found') == 'true'
-    location = ItemLocation([float(request.args.get('lat')), float(request.args.get('long'))])
+    location = ItemLocation([float(request.args.get('long')), float(request.args.get('lat'))])
     radius = float(request.args.get('radius'))
     tags = ItemTags.get(request.args.get('tags'))
-    
-    # TODO: This isn't even used at all here. If it is, it's going to have to be updated
-    # Get the list of uploaded images and convert them to ItemImage objects
-    uploadedImages = request.files.getlist('image')
-    images = []
-    """ for img in uploadedImages:
-        encoded = standard_b64encode(img.read())
-        encodedAsStr = encoded.decode()
-        images.append(ItemImage(img.filename, img.mimetype, encodedAsStr)) """
 
     item = Item(name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, images=images,
+                radius=radius, tags=tags, images=[],
                 timestamp=None, username=None, email=None)
 
     # want to check whenever an item is added if their are similar items to send notifications to
@@ -209,8 +200,7 @@ def add_item():
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
-    location = ItemLocation([float(request.form['latitude']),
-                             float(request.form['longitude'])])
+    location = ItemLocation([float(request.form['longitude']), float(request.form['latitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
 
@@ -270,14 +260,13 @@ def update_item(Id):
     name = request.form['name']
     desc = request.form['desc']
     found = request.form['found'] == 'true'
-    location = ItemLocation([float(request.form['latitude']),
-                             float(request.form['longitude'])])
+    location = ItemLocation([float(request.form['longitude']), float(request.form['latitude'])])
     radius = float(request.form['radius'])
     tags = ItemTags.get(request.form['tags'])
     user = User(request.form['username'], request.form['email'], request.form['optIn'])
 
     item = Item(Id=Id, name=name, desc=desc, found=found, location=location,
-                radius=radius, tags=tags, user=user)
+                radius=radius, tags=tags, username=user)
 
     mongo_item_dao.update(item)
     return jsonify(item.toDict()), 200

@@ -58,7 +58,6 @@ export class AddItem extends Component {
       desc: '',
       location: [39.3299, -76.6205],
       img: [],
-      radius: 0,
       username: "",
       email: "",
     });
