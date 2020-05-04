@@ -36,7 +36,7 @@ class ApiTest(TestCase):
         name = "Phone"
         found = True
         desc = "It is a phone"
-        location = ItemLocation([39.3299, -76.6205])
+        location = ItemLocation([-76.6205, 39.3299])
         item = Item(name=name, found=found, desc=desc, location=location, timestamp=3)
         mongo_item_dao.insert(item)
 

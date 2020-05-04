@@ -30,7 +30,7 @@ export const ItemModal = (props) => {
                 <div style={{marginTop: '20px'}}> {displayImage(props.itemData.images)}</div>
                 <div style={{marginBottom: '250px', marginLeft: '430px', marginTop: '20px'}}>
                     <b>Location of item</b>
-                    <GoogleMap style={{width: '0%'}} clickable={false} loc={props.itemData.location}/>
+                    <GoogleMap style={{width: '0%'}} clickable={false} loc={swapLatLng(props.itemData.location)}/>
                 </div>
             </Modal.Body>
             <Modal.Dialog>
@@ -63,6 +63,15 @@ function displayImage(imgArray) {
             </Carousel>
         )
     }
+}
+
+function swapLatLng(locObject) {
+    let lng = locObject.coordinates[0];
+    let lat = locObject.coordinates[1];
+    let loc = {
+        coordinates: [lat, lng]
+    };
+    return loc;
 }
 
 ItemModal.propTypes = {
