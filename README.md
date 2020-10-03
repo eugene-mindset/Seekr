@@ -1,3 +1,7 @@
+# NOTICE
+
+This a mirror of the last state of our project repository. All the code should work, however some things are outdated or are missing because of this.
+
 # Seekr: JHU OOSE PROJECT SPRING 2020
 [![Build status](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr.svg?token=Vxy2zEXxUQmZnx9hqykp&branch=master)](https://travis-ci.com/jhu-oose/2020-spring-group-Seekr)
 
